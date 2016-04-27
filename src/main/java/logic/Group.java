@@ -26,6 +26,6 @@ public class Group {
 
     @Override
     public String toString() {
-        return "groupName='" + groupName + '\'';
+        return groupName;
     }
 }

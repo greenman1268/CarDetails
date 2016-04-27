@@ -17,13 +17,13 @@ public class GroupDialog extends JDialog implements ActionListener {
 
     private static final int D_HEIGHT = 150;   // высота
     private final static int D_WIDTH = 200;   // ширина
-    private JSpinner spYear;
+   // private JSpinner spYear;
     private JComboBox groupList;
     private JButton btnOk = new JButton("OK");
     private JButton btnCancel = new JButton("Cancel");
     private boolean result = false;
 
-    public GroupDialog(int year, List<Group> groups) {
+    public GroupDialog(List<Group> groups) {
         // Установить заголовок
         setTitle("Перенос группы");
 
@@ -61,7 +61,7 @@ public class GroupDialog extends JDialog implements ActionListener {
         // Добавляем компонент
         getContentPane().add(groupList);
 
-        // Третий элемент - заголовок для поля выбора года
+     /*   // Третий элемент - заголовок для поля выбора года
         l = new JLabel("Новый год:");
         // После него можно будет еще помещать компоненты
         c.gridwidth = GridBagConstraints.RELATIVE;
@@ -72,10 +72,10 @@ public class GroupDialog extends JDialog implements ActionListener {
         // Устанавливаем это правило для нашего компонета
         gbl.setConstraints(l, c);
         // Добавляем компонент
-        getContentPane().add(l);
+        getContentPane().add(l);*/
 
-        // Сразу увеличиваем группу на один год - для перевода
-        spYear = new JSpinner(new SpinnerNumberModel(year + 1, 1900, 2100, 1));
+   /*     // Сразу увеличиваем группу на один год - для перевода
+      //  spYear = new JSpinner(new SpinnerNumberModel(year + 1, 1900, 2100, 1));
         // Элемент занимает всю оставшуюся ширину
         c.gridwidth = GridBagConstraints.REMAINDER;
         // Растягиваем компонент по всему пространству для него
@@ -85,7 +85,7 @@ public class GroupDialog extends JDialog implements ActionListener {
         // Устанавливаем это правило для нашего компонета
         gbl.setConstraints(spYear, c);
         // Добавляем компонент
-        getContentPane().add(spYear);
+        getContentPane().add(spYear);*/
 
         c.gridwidth = GridBagConstraints.RELATIVE;
         c.fill = GridBagConstraints.BOTH;
@@ -106,7 +106,7 @@ public class GroupDialog extends JDialog implements ActionListener {
         getContentPane().add(btnCancel);
 
         // Устанавливаем поведение формы при закрытии - не закрывать совсем.
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         // Получаем размеры экрана
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -116,9 +116,9 @@ public class GroupDialog extends JDialog implements ActionListener {
     }
 
     // Возврат года, который установлен на форме
-    public int getYear() {
+  /*  public int getYear() {
         return ((SpinnerNumberModel) spYear.getModel()).getNumber().intValue();
-    }
+    }*/
 
     // Возврат группы, которая установлена на форме
     public Group getGroup() {

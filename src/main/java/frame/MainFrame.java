@@ -33,12 +33,12 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     private static final String ALL_ITEMS = "allItems";
     private ManagementSystem ms = null;
     private JList grpList;
-    private JTable stdList;
+    private JTable itemList;
     private JSpinner spYear;
 
     public MainFrame() throws Exception{
 
-        // СОЗДАЕМ СТРОКУ МЕНЮ
+       /* // СОЗДАЕМ СТРОКУ МЕНЮ
         JMenuBar menuBar = new JMenuBar();
         // Создаем выпадающее меню
         JMenu menu = new JMenu("Отчеты");
@@ -52,23 +52,24 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         // Вставляем выпадающее меню в строку меню
         menuBar.add(menu);
         // Устанавливаем меню для формы
-        setJMenuBar(menuBar);
+        setJMenuBar(menuBar);*/
 
         // Создаем верхнюю панель, где будет поле для ввода года
         JPanel top = new JPanel();
         // Устанавливаем для нее layout
         top.setLayout(new FlowLayout(FlowLayout.LEFT));
 
+/*
         // Вставляем пояснительную надпись
         top.add(new JLabel("Год обучения:"));
         // Делаем спин-поле
         // 1. Задаем модель поведения - только цифры
-        // 2. Вставляем в панель */
+        // 2. Вставляем в панель *//*
         SpinnerModel sm = new SpinnerNumberModel(2006, 1900, 2100, 1);
         spYear = new JSpinner(sm);
         // Добавляем листенер
         spYear.addChangeListener(this);
-        top.add(spYear);
+        top.add(spYear);*/
 
         // Создаем нижнюю панель и задаем ей layout
         JPanel bot = new JPanel();
@@ -120,8 +121,8 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         // панель, которую в свою очередь уже кладем на панель right
         // Наша таблица пока ничего не умеет - просто положим ее как заготовку
         // Сделаем в ней 4 колонки - Номер, Дата последнего изменения, Количество в наличии, Количество проданых
-        stdList = new JTable(1, 4);
-        right.add(new JScrollPane(stdList), BorderLayout.CENTER);
+        itemList = new JTable(1, 4);
+        right.add(new JScrollPane(itemList), BorderLayout.CENTER);
         // Создаем кнопки для деталей
         JButton btnAddSt = new JButton("Добавить");
         btnAddSt.setName(INSERT_IT);
@@ -195,7 +196,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
             // Переопределяем в нем метод run
 
             public void run() {
-                if (stdList != null) {
+                if (itemList != null) {
                     // Получаем выделенную группу
                     Group g = (Group) grpList.getSelectedValue();
                     // Получаем число из спинера
@@ -204,7 +205,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                         // Получаем список деталей
                         Collection<Item> s = ms.getItemsFromGroup(g);
                         // И устанавливаем модель для таблицы с новыми данными
-                        stdList.setModel(new ItemTableModel(new Vector<Item>(s)));
+                        itemList.setModel(new ItemTableModel(new Vector<Item>(s)));
                     } catch (SQLException e) {
                         JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
                     }
@@ -231,9 +232,9 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                     // Получаем выделенную группу
                     Group g = (Group) grpList.getSelectedValue();
                     // Получаем число из спинера
-                    int y = ((SpinnerNumberModel) spYear.getModel()).getNumber().intValue();
+                   // int y = ((SpinnerNumberModel) spYear.getModel()).getNumber().intValue();
                     // Создаем наш диалог
-                    GroupDialog gd = new GroupDialog(y, ms.getGroups());
+                    GroupDialog gd = new GroupDialog( ms.getGroups());
                     // Задаем ему режим модальности - нельзя ничего кроме него выделить
                     gd.setModal(true);
                     // Показываем диалог
@@ -311,12 +312,12 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         Thread t = new Thread() {
 
             public void run() {
-                if (stdList != null) {
-                    ItemTableModel stm = (ItemTableModel) stdList.getModel();
+                if (itemList != null) {
+                    ItemTableModel stm = (ItemTableModel) itemList.getModel();
                     // Проверяем - выделен ли хоть какая-нибудь деталь
-                    if (stdList.getSelectedRow() >= 0) {
+                    if (itemList.getSelectedRow() >= 0) {
                         // Вот где нам пригодился метод getItem(int rowIndex)
-                        Item s = stm.getItem(stdList.getSelectedRow());
+                        Item s = stm.getItem(itemList.getSelectedRow());
                         try {
                             // Исправляем данные на деталь - поэтому false
                             // Также заметим, что необходимо указать не просто this, а MainFrame.this
@@ -344,20 +345,55 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         t.start();
     }
 
+    private void moveGroup(){
+        Thread t = new Thread(){
+            
+            public void run(){
+                if (itemList != null){
+                    ItemTableModel stm = (ItemTableModel) itemList.getModel();
+                    // Проверяем - выделена ли хоть какая-нибудь деталь
+                    if(itemList.getSelectedRows().length > 0){
+                        if(itemList.getSelectedRows().length == 1){
+                            if (JOptionPane.showConfirmDialog(MainFrame.this,
+                                    "Вы хотите переместить деталь?", "Перемещение детали",
+                                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                                // Вот где нам пригодился метод getItem(int rowIndex)
+                                for (int i = 0; i < itemList.getSelectedRows().length; i++) {
+                                    Item s = stm.getItem(itemList.getSelectedRows()[i]);
+                                    try {
+                                        ms.moveItemsToGroup(s);
+                                        reloadItems();
+                                    } catch (SQLException e) {
+                                        JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
+                                    }
+                                }
+
+
+                            }
+                        }
+                    }
+                    // Если деталь не выделена - сообщаем пользователю, что это необходимо
+                    else {
+                        JOptionPane.showMessageDialog(MainFrame.this, "Необходимо выделить деталь в списке");
+                    }
+                }
+            }
+        };
+    }
     // метод для удаления детали
     private void deleteItem() {
         Thread t = new Thread() {
 
             public void run() {
-                if (stdList != null) {
-                    ItemTableModel stm = (ItemTableModel) stdList.getModel();
+                if (itemList != null) {
+                    ItemTableModel stm = (ItemTableModel) itemList.getModel();
                     // Проверяем - выделена ли хоть какая-нибудь деталь
-                    if (stdList.getSelectedRow() >= 0) {
+                    if (itemList.getSelectedRow() >= 0) {
                         if (JOptionPane.showConfirmDialog(MainFrame.this,
                                 "Вы хотите удалить деталь?", "Удаление детали",
                                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                             // Вот где нам пригодился метод getItem(int rowIndex)
-                            Item s = stm.getItem(stdList.getSelectedRow());
+                            Item s = stm.getItem(itemList.getSelectedRow());
                             try {
                                 ms.deleteItem(s);
                                 reloadItems();
