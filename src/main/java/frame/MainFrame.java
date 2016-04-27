@@ -38,7 +38,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
     public MainFrame() throws Exception{
 
-        // Создаем строку меню
+        // СОЗДАЕМ СТРОКУ МЕНЮ
         JMenuBar menuBar = new JMenuBar();
         // Создаем выпадающее меню
         JMenu menu = new JMenu("Отчеты");
@@ -54,7 +54,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         // Устанавливаем меню для формы
         setJMenuBar(menuBar);
 
-        // Создаем верхнюю панель, где будет поле дл/* я ввода года
+        // Создаем верхнюю панель, где будет поле для ввода года
         JPanel top = new JPanel();
         // Устанавливаем для нее layout
         top.setLayout(new FlowLayout(FlowLayout.LEFT));

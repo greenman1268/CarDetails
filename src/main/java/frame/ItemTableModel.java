@@ -7,6 +7,7 @@ package frame;
 import logic.Item;
 
 import javax.swing.table.AbstractTableModel;
+import java.text.DateFormat;
 import java.util.Vector;
 
 public class ItemTableModel extends AbstractTableModel {
@@ -47,10 +48,8 @@ public class ItemTableModel extends AbstractTableModel {
             switch (columnIndex) {
                 case 0:
                     return item.getItemName();
-                case 1:
-                    /*return DateFormat.getDateInstance(DateFormat.SHORT).format(
-                            item.getChangeDate());*/
-                    return 0;
+                case 1:return DateFormat.getDateInstance(DateFormat.SHORT).format(
+                            item.getChangeDate());
                 case 2:
                     return 0;
                 case 3:

@@ -32,7 +32,6 @@ public class ItemDialog extends JDialog implements ActionListener {
     private int itemId = 0;
     private JTextField itemName = new JTextField();
     private JSpinner changeDate = new JSpinner(new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_MONTH));
-    private ButtonGroup sex = new ButtonGroup();
     private JSpinner year = new JSpinner(new SpinnerNumberModel(2006, 1900, 2100, 1));
     private JComboBox groupList;
 
@@ -119,7 +118,7 @@ public class ItemDialog extends JDialog implements ActionListener {
         item.setItemId(itemId);
         item.setItemName(itemName.getText());
         Date d = ((SpinnerDateModel) changeDate.getModel()).getDate();
-        item.setChangeDate2(d);
+        item.setChangeDate(d);
        /* for (Enumeration e = sex.getElements(); e.hasMoreElements();) {
             AbstractButton ab = (AbstractButton) e.nextElement();
             if (ab.isSelected()) {

@@ -41,7 +41,6 @@ public class ManagementSystem {
 
     public List<Group> getGroups() throws SQLException {
         List<Group> groups = new ArrayList<Group>();
-
         Statement stmt = null;
         ResultSet rs = null;
         try {
@@ -153,7 +152,7 @@ public class ManagementSystem {
                 + "VALUES( ?, ?, ?, ?)");
         stmt.setInt(1, item.getItemId());
         stmt.setString(2, item.getItemName());
-        stmt.setDate(3, new java.sql.Date(item.getChangeDate().getTimeInMillis()));
+        stmt.setDate(3, new Date(item.getChangeDate().getTime()));
         stmt.setInt(4, item.getGroupId());
         stmt.execute();
     }
@@ -163,7 +162,7 @@ public class ManagementSystem {
                 + "SET itemName=?, changeDate=?, group_id=? WHERE item_id=?");
 
         stmt.setString(1, item.getItemName());
-        stmt.setDate(2, new java.sql.Date(item.getChangeDate().getTimeInMillis()));
+        stmt.setDate(2, new Date(item.getChangeDate().getTime()));
         stmt.setInt(3, item.getGroupId());
         stmt.execute();
     }
