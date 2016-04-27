@@ -24,24 +24,36 @@ import java.util.Vector;
 public class MainFrame extends JFrame implements ActionListener, ListSelectionListener, ChangeListener {
 
     // Введем сразу имена для кнопок - потом будем их использовать в обработчиках
-
     private static final String MOVE_GR = "moveGroup";
     private static final String CLEAR_GR = "clearGroup";
     private static final String INSERT_IT = "insertItem";
     private static final String UPDATE_IT = "updateItem";
     private static final String DELETE_IT = "deleteItem";
     private static final String ALL_ITEMS = "allItems";
+    private static final String SEARCH_IT = "searchItem";
     private ManagementSystem ms = null;
     private JList grpList;
     private JTable itemList;
+    private JTextField search = new JTextField();
 
     public MainFrame() throws Exception{
 
         // Создаем верхнюю панель, где будет поле для ввода года
         JPanel top = new JPanel();
         // Устанавливаем для нее layout
-        top.setLayout(new FlowLayout(FlowLayout.LEFT));
+        top.setLayout(null);
+        // Устанавливаем поиск
+        search.setBounds(5,10,100,20);
+                //кнопка поиска
+        JButton btnSrch = new JButton("Поиск");
+        btnSrch.setName(SEARCH_IT);
+        btnSrch.setBounds(105,9,70,20);
+        btnSrch.addActionListener(this);
 
+        top.add(search);
+        top.add(btnSrch);
+
+        top.setPreferredSize(new Dimension(300,30));
         // Создаем нижнюю панель и задаем ей layout
         JPanel bot = new JPanel();
         bot.setLayout(new BorderLayout());
@@ -92,7 +104,12 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         // панель, которую в свою очередь уже кладем на панель right
         // Наша таблица пока ничего не умеет - просто положим ее как заготовку
         // Сделаем в ней 4 колонки - Номер, Дата последнего изменения, Количество в наличии, Количество проданых
+        //itemList = new JTable(1, 4).;
         itemList = new JTable(1, 4);
+        itemList.setColumnSelectionAllowed(true);
+        itemList.setRowSelectionAllowed(true);
+        JScrollPane scrollPane = new JScrollPane(itemList);
+
         right.add(new JScrollPane(itemList), BorderLayout.CENTER);
         // Создаем кнопки для деталей
         JButton btnAddSt = new JButton("Добавить");
@@ -144,6 +161,9 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
             }
             if (c.getName().equals(DELETE_IT)) {
                 deleteItem();
+            }
+            if (c.getName().equals(SEARCH_IT)) {
+                searchItem();
             }
         }
     }
@@ -360,6 +380,20 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         JOptionPane.showMessageDialog(this, "showAllItems");
     }
 
+    private void searchItem(){
+        Thread t = new Thread(){
+
+            public void run(){
+                if(itemList != null){
+                    ItemTableModel itemtm = (ItemTableModel) itemList.getModel();
+                        itemList.setRowSelectionInterval(1,1);
+                        itemList.scrollRectToVisible(itemList.getCellRect(itemList.getSelectedRow(),itemList.getSelectedColumn(),false));
+                }
+            }
+        };
+        t.start();
+    }
+
     public static void main(String args[]) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -380,6 +414,6 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     // Наш внутренний класс - переопределенная панель.
     class GroupPanel extends JPanel {
         public Dimension getPreferredSize() {
-            return new Dimension(250, 0);
+            return new Dimension(225, 0);
         }
 }}

@@ -116,14 +116,14 @@ public class ManagementSystem {
         return items;
     }
 
-    public Item getItemById(int itemId) throws SQLException {
+    public Item getItemByName(String itemName) throws SQLException {
         Item item = null;
-        PreparedStatement stmt = con.prepareStatement("SELECT item_id, itemName, changeDate, group_id FROM items WHERE item_id = ?");
-        stmt.setInt(1, itemId);
+        PreparedStatement stmt = con.prepareStatement("SELECT item_id, itemName, changeDate, group_id, in_stock, sold FROM items WHERE itemName = ?");
+        stmt.setString(1, itemName);
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
             item = new Item(rs);
-            //System.out.println(person);
+
         }
         rs.close();
         stmt.close();
