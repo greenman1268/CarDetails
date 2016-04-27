@@ -36,9 +36,9 @@ public class ItemDialog extends JDialog implements ActionListener {
     private JSpinner year = new JSpinner(new SpinnerNumberModel(2006, 1900, 2100, 1));
     private JComboBox groupList;
 
-    // Второй параметр содержит знак - добавление студента или исправление
+    // Второй параметр содержит знак - добавление детали или исправление
     public ItemDialog(List<Group> groups, boolean newItem, MainFrame owner) {
-        // После вставки студента без закрытия окна нам потребуется перегрузка списка
+        // После вставки детали без закрытия окна нам потребуется перегрузка списка
         // А для этого нам надо иметь доступ к этому методу в главной форме
         this.owner = owner;
         // Установить заголовок
@@ -94,7 +94,7 @@ public class ItemDialog extends JDialog implements ActionListener {
                 ItemDialog.D_WIDTH, ItemDialog.D_HEIGHT);
     }
 
-    // Установить поля соответственно переданным данным о студенте
+    // Установить поля соответственно переданным данным о детале
     public void setItem(Item item) {
         itemId = item.getItemId();
         itemName.setText(item.getItemName());
@@ -113,7 +113,7 @@ public class ItemDialog extends JDialog implements ActionListener {
         }
     }
 
-    // Вернуть данные в виде нового студента с соотвтествующими полями
+    // Вернуть данные в виде новой детали с соотвтествующими полями
     public Item getItem() {
         Item item = new Item();
         item.setItemId(itemId);
@@ -146,7 +146,7 @@ public class ItemDialog extends JDialog implements ActionListener {
             result = true;
             try {
                 ManagementSystem.getInstance().insertItem(getItem());
-                owner.reloadStudents();
+                owner.reloadItems();
                 itemName.setText("");
             } catch (Exception sql_e) {
                 JOptionPane.showMessageDialog(this, sql_e.getMessage());

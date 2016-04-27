@@ -122,7 +122,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         // Сделаем в ней 4 колонки - Номер, Дата последнего изменения, Количество в наличии, Количество проданых
         stdList = new JTable(1, 4);
         right.add(new JScrollPane(stdList), BorderLayout.CENTER);
-        // Создаем кнопки для студентов
+        // Создаем кнопки для деталей
         JButton btnAddSt = new JButton("Добавить");
         btnAddSt.setName(INSERT_IT);
         btnAddSt.addActionListener(this);
@@ -239,7 +239,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                     // Показываем диалог
                     gd.setVisible(true);
                     // Если нажали кнопку OK - перемещаем в новую группу с новым годом
-                    // и перегружаем список студентов
+                    // и перегружаем список деталей
                     if (gd.getResult()) {
                         ms.moveItemsToGroup(g, gd.getGroup());
                         reloadItems();
@@ -260,16 +260,16 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                 // Проверяем - выделена ли группа
                 if (grpList.getSelectedValue() != null) {
                     if (JOptionPane.showConfirmDialog(MainFrame.this,
-                            "Вы хотите удалить студентов из группы?", "Удаление студентов",
+                            "Вы хотите удалить детали из группы?", "Удаление деталей",
                             JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                         // Получаем выделенную группу
                         Group g = (Group) grpList.getSelectedValue();
                         // Получаем число из спинера
                         int y = ((SpinnerNumberModel) spYear.getModel()).getNumber().intValue();
                         try {
-                            // Удалили студентов из группы
+                            // Удалили детали из группы
                             ms.removeItemsFromGroup(g, String.valueOf(y));
-                            // перегрузили список студентов
+                            // перегрузили список деталей
                             reloadItems();
                         } catch (SQLException e) {
                             JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
@@ -281,14 +281,14 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         t.start();
     }
 
-    // метод для добавления студента
+    // метод для добавления детали
     private void insertItem() {
         Thread t = new Thread() {
 
             public void run() {
                 try {
-                    // Добавляем нового студента - поэтому true
-                    // Также заметим, что необходимо указать не просто this, а StudentsFrame.this
+                    // Добавляем новую деталь - поэтому true
+                    // Также заметим, что необходимо указать не просто this, а MainFrame.this
                     // Иначе класс не будет воспринят - он же другой - анонимный
                     ItemDialog sd = new ItemDialog(ms.getGroups(), true, MainFrame.this);
                     sd.setModal(true);
@@ -306,20 +306,20 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         t.start();
     }
 
-    // метод для редактирования студента
+    // метод для редактирования детали
     private void updateItem() {
         Thread t = new Thread() {
 
             public void run() {
                 if (stdList != null) {
                     ItemTableModel stm = (ItemTableModel) stdList.getModel();
-                    // Проверяем - выделен ли хоть какой-нибудь студент
+                    // Проверяем - выделен ли хоть какая-нибудь деталь
                     if (stdList.getSelectedRow() >= 0) {
-                        // Вот где нам пригодился метод getStudent(int rowIndex)
+                        // Вот где нам пригодился метод getItem(int rowIndex)
                         Item s = stm.getItem(stdList.getSelectedRow());
                         try {
-                            // Исправляем данные на студента - поэтому false
-                            // Также заметим, что необходимо указать не просто this, а StudentsFrame.this
+                            // Исправляем данные на деталь - поэтому false
+                            // Также заметим, что необходимо указать не просто this, а MainFrame.this
                             // Иначе класс не будет воспринят - он же другой - анонимный
                             ItemDialog sd = new ItemDialog(ms.getGroups(), false, MainFrame.this);
                             sd.setItem(s);
@@ -333,10 +333,10 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                         } catch (SQLException e) {
                             JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
                         }
-                    } // Если студент не выделен - сообщаем пользователю, что это необходимо
+                    } // Если деталь не выделена - сообщаем пользователю, что это необходимо
                     else {
                         JOptionPane.showMessageDialog(MainFrame.this,
-                                "Необходимо выделить студента в списке");
+                                "Необходимо выделить деталь в списке");
                     }
                 }
             }
@@ -344,19 +344,19 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         t.start();
     }
 
-    // метод для удаления студента
+    // метод для удаления детали
     private void deleteItem() {
         Thread t = new Thread() {
 
             public void run() {
                 if (stdList != null) {
                     ItemTableModel stm = (ItemTableModel) stdList.getModel();
-                    // Проверяем - выделен ли хоть какой-нибудь студент
+                    // Проверяем - выделена ли хоть какая-нибудь деталь
                     if (stdList.getSelectedRow() >= 0) {
                         if (JOptionPane.showConfirmDialog(MainFrame.this,
-                                "Вы хотите удалить студента?", "Удаление студента",
+                                "Вы хотите удалить деталь?", "Удаление детали",
                                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                            // Вот где нам пригодился метод getStudent(int rowIndex)
+                            // Вот где нам пригодился метод getItem(int rowIndex)
                             Item s = stm.getItem(stdList.getSelectedRow());
                             try {
                                 ms.deleteItem(s);
@@ -365,7 +365,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                                 JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
                             }
                         }
-                    } // Если студент не выделен - сообщаем пользователю, что это необходимо
+                    } // Если деталь не выделена - сообщаем пользователю, что это необходимо
                     else {
                         JOptionPane.showMessageDialog(MainFrame.this, "Необходимо выделить деталь в списке");
                     }
@@ -375,9 +375,9 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         t.start();
     }
 
-    // метод для показа всех студентов
+    // метод для показа всех деталей
     private void showAllItems() {
-        JOptionPane.showMessageDialog(this, "showAllStudents");
+        JOptionPane.showMessageDialog(this, "showAllItems");
     }
 
     public static void main(String args[]) {
