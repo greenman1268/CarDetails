@@ -70,7 +70,7 @@ public class ManagementSystem {
         ResultSet rs = null;
         try {
             stmt = con.createStatement();
-            rs = stmt.executeQuery("SELECT item_id, itemName, changeDate, group_id FROM items " +
+            rs = stmt.executeQuery("SELECT item_id, itemName, changeDate, group_id, in_stock, sold FROM items " +
                             "ORDER BY item_id");
             while (rs.next()) {
                 Item item = new Item(rs);
@@ -94,7 +94,7 @@ public class ManagementSystem {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = con.prepareStatement("SELECT item_id, itemName, changeDate, group_id FROM items " +
+            stmt = con.prepareStatement("SELECT item_id, itemName, changeDate, group_id, in_stock, sold FROM items " +
                             "WHERE group_id= ? " +
                             "ORDER BY item_id");
             stmt.setInt(1, group.getGroup_id());
@@ -102,7 +102,6 @@ public class ManagementSystem {
             rs = stmt.executeQuery();
             while (rs.next()) {
                 Item item = new Item(rs);
-
                 items.add(item);
             }
         } finally {
@@ -131,39 +130,43 @@ public class ManagementSystem {
         return item;
     }
 
-    public void moveItemsToGroup(Group oldGroup, Group newGroup) throws SQLException {
+    public void moveItemsToGroup(Item item, Group newGroup) throws SQLException {
         PreparedStatement stmt = con.prepareStatement("UPDATE items SET group_id = ? "
-                + "WHERE group_id = ? ");
+                + "WHERE item_id = ? ");
         stmt.setInt(1, newGroup.getGroup_id());
-        stmt.setInt(2, oldGroup.getGroup_id());
+        stmt.setInt(2, item.getItemId());
         stmt.execute();
     }
 
-    public void removeItemsFromGroup(Group group, String year) throws SQLException {
-        PreparedStatement stmt = con.prepareStatement("DELETE FROM items WHERE group_id = ? AND (YEAR(changeDate)) = ?");
+    public void removeItemsFromGroup(Group group) throws SQLException {
+        PreparedStatement stmt = con.prepareStatement("DELETE FROM items WHERE group_id = ?");
         stmt.setInt(1, group.getGroup_id());
-        stmt.setString(2, year);
         stmt.execute();
     }
 
     public void insertItem(Item item) throws SQLException {
         PreparedStatement stmt = con.prepareStatement("INSERT INTO items "
-                + "(item_id, itemName, changeDate, group_id)"
-                + "VALUES( ?, ?, ?, ?)");
+                + "(item_id, itemName, changeDate, group_id, in_stock, sold)"
+                + "VALUES( ?, ?, ?, ?, ?, ?)");
         stmt.setInt(1, item.getItemId());
         stmt.setString(2, item.getItemName());
         stmt.setDate(3, new Date(item.getChangeDate().getTime()));
         stmt.setInt(4, item.getGroupId());
+        stmt.setInt(5, item.getIn_stock());
+        stmt.setInt(6, item.getSold());
         stmt.execute();
     }
 
     public void updateItem(Item item) throws SQLException {
         PreparedStatement stmt = con.prepareStatement("UPDATE items "
-                + "SET itemName=?, changeDate=?, group_id=? WHERE item_id=?");
+                + "SET itemName=?, changeDate=?, group_id=? , in_stock=?, sold=? WHERE item_id=?");
 
         stmt.setString(1, item.getItemName());
         stmt.setDate(2, new Date(item.getChangeDate().getTime()));
         stmt.setInt(3, item.getGroupId());
+        stmt.setInt(4, item.getIn_stock());
+        stmt.setInt(5, item.getSold());
+        stmt.setInt(6, item.getItemId());
         stmt.execute();
     }
 

@@ -34,42 +34,13 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     private ManagementSystem ms = null;
     private JList grpList;
     private JTable itemList;
-    private JSpinner spYear;
 
     public MainFrame() throws Exception{
-
-       /* // СОЗДАЕМ СТРОКУ МЕНЮ
-        JMenuBar menuBar = new JMenuBar();
-        // Создаем выпадающее меню
-        JMenu menu = new JMenu("Отчеты");
-        // Создаем пункт в выпадающем меню
-        JMenuItem menuItem = new JMenuItem("Все детали");
-        menuItem.setName(ALL_ITEMS);
-        // Добавляем листенер
-        menuItem.addActionListener(this);
-        // Вставляем пункт меню в выпадающее меню
-        menu.add(menuItem);
-        // Вставляем выпадающее меню в строку меню
-        menuBar.add(menu);
-        // Устанавливаем меню для формы
-        setJMenuBar(menuBar);*/
 
         // Создаем верхнюю панель, где будет поле для ввода года
         JPanel top = new JPanel();
         // Устанавливаем для нее layout
         top.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-/*
-        // Вставляем пояснительную надпись
-        top.add(new JLabel("Год обучения:"));
-        // Делаем спин-поле
-        // 1. Задаем модель поведения - только цифры
-        // 2. Вставляем в панель *//*
-        SpinnerModel sm = new SpinnerNumberModel(2006, 1900, 2100, 1);
-        spYear = new JSpinner(sm);
-        // Добавляем листенер
-        spYear.addChangeListener(this);
-        top.add(spYear);*/
 
         // Создаем нижнюю панель и задаем ей layout
         JPanel bot = new JPanel();
@@ -157,7 +128,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         if (e.getSource() instanceof Component) {
             Component c = (Component) e.getSource();
             if (c.getName().equals(MOVE_GR)) {
-                moveGroup();
+                moveTOGroup();
             }
             if (c.getName().equals(CLEAR_GR)) {
                 clearGroup();
@@ -199,8 +170,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                 if (itemList != null) {
                     // Получаем выделенную группу
                     Group g = (Group) grpList.getSelectedValue();
-                    // Получаем число из спинера
-                   // int y = ((SpinnerNumberModel) spYear.getModel()).getNumber().intValue();
+
                     try {
                         // Получаем список деталей
                         Collection<Item> s = ms.getItemsFromGroup(g);
@@ -220,35 +190,44 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     }
 
     // метод для переноса группы
-    private void moveGroup() {
+    private void moveTOGroup() {
         Thread t = new Thread() {
 
             public void run() {
                 // Если группа не выделена - выходим. Хотя это крайне маловероятно
-                if (grpList.getSelectedValue() == null) {
+                if (itemList.getSelectedRows().length == 0) {
+                    JOptionPane.showMessageDialog(MainFrame.this,
+                            "Необходимо выделить деталь в списке");
                     return;
                 }
-                try {
-                    // Получаем выделенную группу
-                    Group g = (Group) grpList.getSelectedValue();
-                    // Получаем число из спинера
-                   // int y = ((SpinnerNumberModel) spYear.getModel()).getNumber().intValue();
-                    // Создаем наш диалог
-                    GroupDialog gd = new GroupDialog( ms.getGroups());
-                    // Задаем ему режим модальности - нельзя ничего кроме него выделить
-                    gd.setModal(true);
-                    // Показываем диалог
-                    gd.setVisible(true);
-                    // Если нажали кнопку OK - перемещаем в новую группу с новым годом
-                    // и перегружаем список деталей
-                    if (gd.getResult()) {
-                        ms.moveItemsToGroup(g, gd.getGroup());
-                        reloadItems();
+                if(itemList.getSelectedRows().length > 0){
+                    GroupDialog gd = null;
+                    try {
+                        gd = new GroupDialog(ms.getGroups());
+                        // Задаем ему режим модальности - нельзя ничего кроме него выделить
+                        gd.setModal(true);
+                        // Показываем диалог
+                        gd.setVisible(true);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
                     }
-                } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
-                }
+                    if (gd.getResult()) {
+
+                    ItemTableModel itm = (ItemTableModel) itemList.getModel();
+                    Item item = null;
+
+                    for (int i = 0; i < itemList.getSelectedRows().length; i++) {
+                        try {
+                             item = itm.getItem(itemList.getSelectedRows()[i]);
+                             ms.moveItemsToGroup(item, gd.getGroup());
+                        } catch (SQLException e) {
+                            JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
+                        }
+                    }}
+                    reloadItems();
             }
+            }
+
         };
         t.start();
     }
@@ -265,11 +244,9 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                             JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                         // Получаем выделенную группу
                         Group g = (Group) grpList.getSelectedValue();
-                        // Получаем число из спинера
-                        int y = ((SpinnerNumberModel) spYear.getModel()).getNumber().intValue();
                         try {
                             // Удалили детали из группы
-                            ms.removeItemsFromGroup(g, String.valueOf(y));
+                            ms.removeItemsFromGroup(g);
                             // перегрузили список деталей
                             reloadItems();
                         } catch (SQLException e) {
@@ -333,6 +310,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                             }
                         } catch (SQLException e) {
                             JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
+                            e.printStackTrace();
                         }
                     } // Если деталь не выделена - сообщаем пользователю, что это необходимо
                     else {
@@ -345,41 +323,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         t.start();
     }
 
-    private void moveGroup(){
-        Thread t = new Thread(){
-            
-            public void run(){
-                if (itemList != null){
-                    ItemTableModel stm = (ItemTableModel) itemList.getModel();
-                    // Проверяем - выделена ли хоть какая-нибудь деталь
-                    if(itemList.getSelectedRows().length > 0){
-                        if(itemList.getSelectedRows().length == 1){
-                            if (JOptionPane.showConfirmDialog(MainFrame.this,
-                                    "Вы хотите переместить деталь?", "Перемещение детали",
-                                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                                // Вот где нам пригодился метод getItem(int rowIndex)
-                                for (int i = 0; i < itemList.getSelectedRows().length; i++) {
-                                    Item s = stm.getItem(itemList.getSelectedRows()[i]);
-                                    try {
-                                        ms.moveItemsToGroup(s);
-                                        reloadItems();
-                                    } catch (SQLException e) {
-                                        JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
-                                    }
-                                }
 
-
-                            }
-                        }
-                    }
-                    // Если деталь не выделена - сообщаем пользователю, что это необходимо
-                    else {
-                        JOptionPane.showMessageDialog(MainFrame.this, "Необходимо выделить деталь в списке");
-                    }
-                }
-            }
-        };
-    }
     // метод для удаления детали
     private void deleteItem() {
         Thread t = new Thread() {
@@ -418,7 +362,6 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
     public static void main(String args[]) {
         SwingUtilities.invokeLater(new Runnable() {
-
             public void run() {
                 try {
                     // Мы сразу отменим продолжение работы, если не сможем получить
@@ -430,14 +373,12 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-
             }
         });
     }
 
     // Наш внутренний класс - переопределенная панель.
     class GroupPanel extends JPanel {
-
         public Dimension getPreferredSize() {
             return new Dimension(250, 0);
         }

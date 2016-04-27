@@ -14,6 +14,8 @@ public class Item implements Comparable{
     private String itemName ;
     private Date changeDate = new Date();
     private int groupId;
+    private int in_stock;
+    private int sold;
 
     public Item() {
     }
@@ -23,7 +25,13 @@ public class Item implements Comparable{
         setItemName(rs.getString(2));
         setChangeDate(rs.getDate(3));
         setGroupId(rs.getInt(4));
+        setIn_stock(rs.getInt(5));
+        setSold(rs.getInt(6));
     }
+
+    public int getIn_stock() { return in_stock; }
+
+    public int getSold() { return sold; }
 
     public int getItemId() {
         return itemId;
@@ -53,6 +61,9 @@ public class Item implements Comparable{
         this.changeDate = date;
     }
 
+    public void setIn_stock(int in_stock) { this.in_stock = in_stock; }
+
+    public void setSold(int sold) { this.sold = sold; }
 
     public void setGroupId(int groupId) {
         this.groupId = groupId;
@@ -66,7 +77,9 @@ public class Item implements Comparable{
         return  "groupId: " + groupId +
                 "\nitemId: " + itemId +
                 "\nitemName: " + itemName +
-                "\nchangeDate: " + btoS();
+                "\nchangeDate: " + btoS() +
+                "\nin_stock: " + in_stock +
+                "\nsold: " + sold;
     }
 
     public int compareTo(Object obj) {

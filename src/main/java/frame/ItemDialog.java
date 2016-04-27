@@ -31,8 +31,9 @@ public class ItemDialog extends JDialog implements ActionListener {
     // Параметры детали
     private int itemId = 0;
     private JTextField itemName = new JTextField();
+    private JTextField in_stock = new JTextField();
+    private JTextField sold = new JTextField();
     private JSpinner changeDate = new JSpinner(new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_MONTH));
-    private JSpinner year = new JSpinner(new SpinnerNumberModel(2006, 1900, 2100, 1));
     private JComboBox groupList;
 
     // Второй параметр содержит знак - добавление детали или исправление
@@ -57,10 +58,22 @@ public class ItemDialog extends JDialog implements ActionListener {
         itemName.setBounds(L_X + L_W + 10, 30, C_W, 20);
         getContentPane().add(itemName);
 
-        l = new JLabel("Дата изменения:", JLabel.RIGHT);
+        l = new JLabel("В наличии:", JLabel.RIGHT);
+        l.setBounds(L_X, 60, L_W, 20);
+        getContentPane().add(l);
+        in_stock.setBounds(L_X + L_W + 10, 60, C_W, 20);
+        getContentPane().add(in_stock);
+
+        l = new JLabel("Продано:", JLabel.RIGHT);
         l.setBounds(L_X, 90, L_W, 20);
         getContentPane().add(l);
-        changeDate.setBounds(L_X + L_W + 10, 90, C_W, 20);
+        sold.setBounds(L_X + L_W + 10, 90, C_W, 20);
+        getContentPane().add(sold);
+
+        l = new JLabel("Дата изменения:", JLabel.RIGHT);
+        l.setBounds(L_X, 120, L_W, 20);
+        getContentPane().add(l);
+        changeDate.setBounds(L_X + L_W + 10, 120, C_W, 20);
         getContentPane().add(changeDate);
 
         JButton btnOk = new JButton("OK");
@@ -74,14 +87,6 @@ public class ItemDialog extends JDialog implements ActionListener {
         btnCancel.addActionListener(this);
         btnCancel.setBounds(L_X + L_W + C_W + 10 + 50, 40, 100, 25);
         getContentPane().add(btnCancel);
-
-        if (newItem) {
-            JButton btnNew = new JButton("New");
-            btnNew.setName("New");
-            btnNew.addActionListener(this);
-            btnNew.setBounds(L_X + L_W + C_W + 10 + 50, 70, 100, 25);
-            getContentPane().add(btnNew);
-        }
 
         // Устанавливаем поведение формы при закрытии - не закрывать совсем.
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -98,11 +103,9 @@ public class ItemDialog extends JDialog implements ActionListener {
         itemId = item.getItemId();
         itemName.setText(item.getItemName());
         changeDate.getModel().setValue(item.getChangeDate());
-        /*for (Enumeration e = sex.getElements(); e.hasMoreElements();) {
-            AbstractButton ab = (AbstractButton) e.nextElement();
-            ab.setSelected(ab.getActionCommand().equals(new String("" + st.getSex())));
-        }*/
-       // year.getModel().setValue(new Integer(item.getChangeDate()));
+        in_stock.setText(Integer.toString(item.getIn_stock()));
+        sold.setText(Integer.toString(item.getSold()));
+
         for (int i = 0; i < groupList.getModel().getSize(); i++) {
             Group g = (Group) groupList.getModel().getElementAt(i);
             if (g.getGroup_id() == item.getGroupId()) {
@@ -119,15 +122,15 @@ public class ItemDialog extends JDialog implements ActionListener {
         item.setItemName(itemName.getText());
         Date d = ((SpinnerDateModel) changeDate.getModel()).getDate();
         item.setChangeDate(d);
-       /* for (Enumeration e = sex.getElements(); e.hasMoreElements();) {
-            AbstractButton ab = (AbstractButton) e.nextElement();
-            if (ab.isSelected()) {
-                item.setSex(ab.getActionCommand().charAt(0));
-            }
-        }*/
-        int y = ((SpinnerNumberModel) year.getModel()).getNumber().intValue();
-       // item.setEducationYear(y);
+
+        if(in_stock.getText().equals("")){ item.setIn_stock(0); }
+        else {item.setIn_stock(Integer.parseInt(in_stock.getText())); }
+
+        if(sold.getText().equals("")){ item.setSold(0); }
+        else { item.setSold(Integer.parseInt(sold.getText())); }
+
         item.setGroupId(((Group) groupList.getSelectedItem()).getGroup_id());
+
         return item;
     }
 
@@ -138,9 +141,9 @@ public class ItemDialog extends JDialog implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         JButton src = (JButton) e.getSource();
-        // Добавляем студента, но не закрываем окно
+        // Добавляем деталь, но не закрываем окно
         // Здесь мы не будем вызывать в отдельном потоке сохранение.
-        // Оно не занимаем много времени и лишние действия здесь не оправданы
+        // Оно не занимает много времени и лишние действия здесь не оправданы
         if (src.getName().equals("New")) {
             result = true;
             try {
