@@ -132,12 +132,11 @@ public class ManagementSystem {
         return item;
     }
 
-    public void moveItemsToGroup(Group oldGroup, Group newGroup, int item_Id) throws SQLException {
+    public void moveItemsToGroup(Group oldGroup, Group newGroup) throws SQLException {
         PreparedStatement stmt = con.prepareStatement("UPDATE items SET group_id = ? "
-                + "WHERE group_id = ? AND item_id = ? ");
+                + "WHERE group_id = ? ");
         stmt.setInt(1, newGroup.getGroup_id());
         stmt.setInt(2, oldGroup.getGroup_id());
-        stmt.setInt(3, item_Id);
         stmt.execute();
     }
 

@@ -52,6 +52,9 @@ public class Item implements Comparable{
     public void setChangeDate(java.sql.Date date) {
         this.changeDate.setTime(date);
     }
+    public void setChangeDate2(java.util.Date date) {
+        this.changeDate.setTime(date);
+    }
 
     public void setGroupId(int groupId) {
         this.groupId = groupId;
