@@ -13,7 +13,7 @@ import java.util.Date;
 public class SearchDilog extends JDialog implements ActionListener {
 
     private static final int D_HEIGHT = 200;   // высота окна
-    private final static int D_WIDTH = 450;   // ширина окна
+    private final static int D_WIDTH = 550;   // ширина окна
     private final static int L_X = 10;      // левая граница метки для поля
     private final static int L_W = 100;     // ширина метки для поля
     private final static int C_W = 150;     // ширина поля
@@ -24,6 +24,7 @@ public class SearchDilog extends JDialog implements ActionListener {
     private JTextField in_stock = new JTextField();
     private JTextField in_stock2 = new JTextField();
     private JSpinner changeDate = new JSpinner(new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_MONTH));
+    private JSpinner changeDate2 = new JSpinner(new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_MONTH));
     private JCheckBox name = new JCheckBox();
     private JCheckBox count = new JCheckBox();
     private JCheckBox date = new JCheckBox();
@@ -51,17 +52,22 @@ public class SearchDilog extends JDialog implements ActionListener {
         l = new JLabel(":", JLabel.RIGHT);
         l.setBounds(L_X + L_W + 10 + C_W, 60, 10, 20);
         getContentPane().add(l);
-        in_stock2.setBounds(L_X + L_W + 20 + C_W, 60, C_W, 20);
+        in_stock2.setBounds(L_X + L_W + 30 + C_W, 60, C_W, 20);
         getContentPane().add(in_stock2);
-        /*count.setBounds(L_X + L_W + 10 + C_W, 60, 20, 20);
-        getContentPane().add(count);*/
+        count.setBounds(L_X + L_W + 30 + C_W + C_W, 60, 20, 20);
+        getContentPane().add(count);
 
         l = new JLabel("По дате:", JLabel.RIGHT);
         l.setBounds(L_X, 90, L_W, 20);
         getContentPane().add(l);
         changeDate.setBounds(L_X + L_W + 10, 90, C_W, 20);
         getContentPane().add(changeDate);
-        date.setBounds(L_X + L_W + 10 + C_W, 90, 20, 20);
+        l = new JLabel(":", JLabel.RIGHT);
+        l.setBounds(L_X + L_W + 10 + C_W, 90, 10, 20);
+        getContentPane().add(l);
+        changeDate2.setBounds(L_X + L_W + 30 + C_W, 90, C_W, 20);
+        getContentPane().add(changeDate2);
+        date.setBounds(L_X + L_W + 30 + C_W + C_W, 90, 20, 20);
         getContentPane().add(date);
 
         JButton btnOk = new JButton("OK");
@@ -90,6 +96,8 @@ public class SearchDilog extends JDialog implements ActionListener {
     }
     public void actionPerformed(ActionEvent e) {
         JButton src = (JButton) e.getSource();
+
+
         if (src.getName().equals("OK")) {
             result = true;
         }
