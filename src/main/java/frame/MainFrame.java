@@ -19,8 +19,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.Vector;
+import java.util.*;
+import java.util.List;
 
 public class MainFrame extends JFrame implements ActionListener, ListSelectionListener, ChangeListener {
 
@@ -42,6 +42,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     private JCheckBox name = new JCheckBox("имя");
     private JCheckBox count = new JCheckBox("количество");
     private JCheckBox date = new JCheckBox("дата");
+    private ArrayList<Item> vector;
 
     public MainFrame() throws Exception{
 
@@ -129,9 +130,8 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         // Сделаем в ней 4 колонки - Номер, Дата последнего изменения, Количество в наличии, Количество проданых
         //itemList = new JTable(1, 4).;
         itemList = new JTable(1, 4);
-        itemList.setColumnSelectionAllowed(true);
-        itemList.setRowSelectionAllowed(true);
-        JScrollPane scrollPane = new JScrollPane(itemList);
+
+        //JScrollPane scrollPane = new JScrollPane(itemList);
 
         right.add(new JScrollPane(itemList), BorderLayout.CENTER);
         // Создаем кнопки для деталей
@@ -160,6 +160,9 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         getContentPane().add(top, BorderLayout.NORTH);
         getContentPane().add(bot, BorderLayout.CENTER);
 
+        TableSearchRenderer tsr = new TableSearchRenderer();
+        itemList.setDefaultRenderer(Object.class, tsr);
+
         // Задаем границы формы
         setBounds(100, 100, 700, 500);
     }
@@ -186,28 +189,6 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                 deleteItem();
             }
             if (c.getName().equals(SEARCH_IT)) {
-               /* int countSelected = 0;
-                if(name.isSelected())countSelected++;
-                if(date.isSelected())countSelected++;
-                if(count.isSelected())countSelected++;
-                if(countSelected == 0){
-                    JOptionPane.showMessageDialog(MainFrame.this,
-                            "Выберите критерий поиска");
-                    countSelected=0;
-                    return;
-                }
-                if (countSelected > 1){
-                    JOptionPane.showMessageDialog(MainFrame.this,
-                            "Выберите только один критерий поиска");
-                    if(name.isSelected())name.setSelected(false);
-                    if(count.isSelected())count.setSelected(false);
-                    if(date.isSelected())date.setSelected(false);
-                    countSelected=0;
-                    return;
-                }
-                if(name.isSelected())searchItem(true,false,false);
-                if(count.isSelected())searchItem(false,true,false);
-                if(date.isSelected())searchItem(false,false,true);*/
                 searchItem();
             }
 
@@ -242,8 +223,8 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                         Collection<Item> s = ms.getItemsFromGroup(g);
                         // И устанавливаем модель для таблицы с новыми данными
                         itemList.setModel(new ItemTableModel(new Vector<Item>(s)));
-                        TableSearchRenderer tsr = new TableSearchRenderer();
-                        itemList.setDefaultRenderer(Object.class, tsr);
+                        vector =(ArrayList<Item>) ms.getItemsFromGroup(g);
+
 
                     } catch (SQLException e) {
                         JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
@@ -338,11 +319,13 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                     // Добавляем новую деталь - поэтому true
                     // Также заметим, что необходимо указать не просто this, а MainFrame.this
                     // Иначе класс не будет воспринят - он же другой - анонимный
+                    Group g = (Group) grpList.getSelectedValue();
                     ItemDialog sd = new ItemDialog(ms.getGroups(), true, MainFrame.this);
                     sd.setModal(true);
                     sd.setVisible(true);
                     if (sd.getResult()) {
                         Item s = sd.getItem();
+                        s.setGroupId(g.getGroup_id());
                         ms.insertItem(s);
                         reloadItems();
                     }
@@ -477,12 +460,19 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             setBackground(null);
             Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            ItemTableModel itm = (ItemTableModel) table.getModel();
+
+            if(vector.get(row).getIn_stock()==0)component.setBackground(Color.RED);
+         /*  if(value instanceof Integer){int i = (Integer)value;
+
+               if ((Integer)value==0 && )component.setBackground(null);if(row>0)component.setBackground(Color.RED);}*/
+
+            /*ItemTableModel itm = (ItemTableModel) table.getModel();
             Item item = itm.getItem(row);
                 if(item.getIn_stock()==0) component.setBackground(Color.RED);
-                else if(item.getIn_stock() > 0 && item.getIn_stock() < 3) component.setBackground(Color.YELLOW);
-                else component.setBackground(table.getBackground());
-            table.repaint();
+                else if(item.getIn_stock() > 0 && item.getIn_stock() < 3) {component.setBackground(Color.YELLOW);setBorder(noFocusBorder);}
+                else component.setBackground(table.getBackground());*/
+
+           // table.repaint();
             return component;
         }}
 
