@@ -14,6 +14,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,6 +36,9 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     private JList grpList;
     private JTable itemList;
     private JTextField search = new JTextField();
+    private JCheckBox name = new JCheckBox();
+   // private JCheckBox number = new JCheckBox();
+    private JCheckBox number = new JCheckBox();
 
     public MainFrame() throws Exception{
 
@@ -183,7 +187,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     // метод для обновления списка деталей для определенной группы
     public void reloadItems() {
         // Создаем анонимный класс для потока
-        Thread t = new Thread() {
+        SwingUtilities.invokeLater(new Runnable() {
             // Переопределяем в нем метод run
 
             public void run() {
@@ -196,17 +200,20 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                         Collection<Item> s = ms.getItemsFromGroup(g);
                         // И устанавливаем модель для таблицы с новыми данными
                         itemList.setModel(new ItemTableModel(new Vector<Item>(s)));
+                        TableSearchRenderer tsr = new TableSearchRenderer();
+                        itemList.setDefaultRenderer(Object.class, tsr);
+
                     } catch (SQLException e) {
                         JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
                     }
                 }
             }
             // Окончание нашего метода run
-        };
+        });
         // Окончание определения анонимного класса
 
         // И теперь мы запускаем наш поток
-        t.start();
+        /*t.start();*/
     }
 
     // метод для переноса группы
@@ -214,6 +221,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         Thread t = new Thread() {
 
             public void run() {
+                if(itemList == null)return;
                 // Если группа не выделена - выходим. Хотя это крайне маловероятно
                 if (itemList.getSelectedRows().length == 0) {
                     JOptionPane.showMessageDialog(MainFrame.this,
@@ -350,20 +358,24 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
             public void run() {
                 if (itemList != null) {
-                    ItemTableModel stm = (ItemTableModel) itemList.getModel();
+                    ItemTableModel itmstm = (ItemTableModel) itemList.getModel();
                     // Проверяем - выделена ли хоть какая-нибудь деталь
-                    if (itemList.getSelectedRow() >= 0) {
+                    if (itemList.getSelectedRows().length > 0) {
                         if (JOptionPane.showConfirmDialog(MainFrame.this,
                                 "Вы хотите удалить деталь?", "Удаление детали",
                                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                             // Вот где нам пригодился метод getItem(int rowIndex)
-                            Item s = stm.getItem(itemList.getSelectedRow());
-                            try {
-                                ms.deleteItem(s);
-                                reloadItems();
-                            } catch (SQLException e) {
-                                JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
+                            Item s;
+                            for (int i = 0; i < itemList.getSelectedRows().length; i++) {
+                                s = itmstm.getItem(itemList.getSelectedRows()[i]);
+                                try {
+                                    ms.deleteItem(s);
+
+                                } catch (SQLException e) {
+                                    JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
+                                }
                             }
+                            reloadItems();
                         }
                     } // Если деталь не выделена - сообщаем пользователю, что это необходимо
                     else {
@@ -385,14 +397,49 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
             public void run(){
                 if(itemList != null){
-                    ItemTableModel itemtm = (ItemTableModel) itemList.getModel();
-                        itemList.setRowSelectionInterval(1,1);
-                        itemList.scrollRectToVisible(itemList.getCellRect(itemList.getSelectedRow(),itemList.getSelectedColumn(),false));
+                    if(!search.getText().equals("")){
+                        ItemTableModel itemtm = (ItemTableModel) itemList.getModel();
+                        Item s = itemtm.getItemByName(search.getText());
+                        try {
+                            // Исправляем данные на деталь - поэтому false
+                            // Также заметим, что необходимо указать не просто this, а MainFrame.this
+                            // Иначе класс не будет воспринят - он же другой - анонимный
+                            ItemDialog sd = new ItemDialog(ms.getGroups(), false, MainFrame.this);
+                            sd.setItem(s);
+                            sd.setModal(true);
+                            sd.setVisible(true);
+                            if (sd.getResult()) {
+                                Item us = sd.getItem();
+                                ms.updateItem(us);
+                                reloadItems();
+                            }
+                        } catch (SQLException e) {
+                            JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
+                            e.printStackTrace();
+                        }
+                    }
+                    else return;
+
                 }
             }
         };
         t.start();
     }
+
+    private class TableSearchRenderer extends DefaultTableCellRenderer {
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            setBackground(null);
+            Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            ItemTableModel itm = (ItemTableModel) table.getModel();
+            Item item = itm.getItem(row);
+                if(item.getIn_stock()==0) component.setBackground(Color.RED);
+                else if(item.getIn_stock() > 0 && item.getIn_stock() < 3) component.setBackground(Color.YELLOW);
+                else component.setBackground(table.getBackground());
+            table.repaint();
+            return component;
+        }}
 
     public static void main(String args[]) {
         SwingUtilities.invokeLater(new Runnable() {

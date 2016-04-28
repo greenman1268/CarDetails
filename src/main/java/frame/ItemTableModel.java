@@ -70,4 +70,15 @@ public class ItemTableModel extends AbstractTableModel {
         }
         return null;
     }
+
+    public Item getItemByName(String nameItem){
+        if (items != null){
+            Item item;
+            for (int i = 0; i < items.size(); i++) {
+               item = (Item)items.get(i);
+                if(item.getItemName().equals(nameItem)) return item;
+            }
+        }
+        return null;
+    }
 }
