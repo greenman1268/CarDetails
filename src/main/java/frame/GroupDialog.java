@@ -17,7 +17,7 @@ public class GroupDialog extends JDialog implements ActionListener {
 
     private static final int D_HEIGHT = 150;   // высота
     private final static int D_WIDTH = 200;   // ширина
-   // private JSpinner spYear;
+
     private JComboBox groupList;
     private JButton btnOk = new JButton("OK");
     private JButton btnCancel = new JButton("Cancel");

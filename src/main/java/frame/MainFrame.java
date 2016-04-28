@@ -32,13 +32,16 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     private static final String DELETE_IT = "deleteItem";
     private static final String ALL_ITEMS = "allItems";
     private static final String SEARCH_IT = "searchItem";
+    private static final String BY_NAME = "byName";
+    private static final String BY_COUNT = "byCount";
+    private static final String BY_DATE = "byDate";
     private ManagementSystem ms = null;
     private JList grpList;
     private JTable itemList;
     private JTextField search = new JTextField();
-    private JCheckBox name = new JCheckBox();
-   // private JCheckBox number = new JCheckBox();
-    private JCheckBox number = new JCheckBox();
+    private JCheckBox name = new JCheckBox("имя");
+    private JCheckBox count = new JCheckBox("количество");
+    private JCheckBox date = new JCheckBox("дата");
 
     public MainFrame() throws Exception{
 
@@ -46,18 +49,34 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         JPanel top = new JPanel();
         // Устанавливаем для нее layout
         top.setLayout(null);
+        top.setPreferredSize(new Dimension(500,50));
         // Устанавливаем поиск
-        search.setBounds(5,10,100,20);
+       // search.setBounds(5,10,100,20);
                 //кнопка поиска
         JButton btnSrch = new JButton("Поиск");
         btnSrch.setName(SEARCH_IT);
         btnSrch.setBounds(105,9,70,20);
         btnSrch.addActionListener(this);
 
-        top.add(search);
-        top.add(btnSrch);
 
-        top.setPreferredSize(new Dimension(300,30));
+      /*  name.setName(BY_NAME);
+        name.setBounds(1,30,50,15);
+        name.addActionListener(this);
+
+        count.setName(BY_COUNT);
+        count.setBounds(50, 30, 75, 15);
+        count.addActionListener(this);
+
+        date.setName(BY_DATE);
+        date.setBounds(125, 30, 75, 15);
+        date.addActionListener(this);
+
+        top.add(name);
+        top.add(search);*/
+        top.add(btnSrch);
+       /* top.add(count);
+        top.add(date);*/
+      //  top.setPreferredSize(new Dimension(300,30));
         // Создаем нижнюю панель и задаем ей layout
         JPanel bot = new JPanel();
         bot.setLayout(new BorderLayout());
@@ -167,8 +186,31 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                 deleteItem();
             }
             if (c.getName().equals(SEARCH_IT)) {
+               /* int countSelected = 0;
+                if(name.isSelected())countSelected++;
+                if(date.isSelected())countSelected++;
+                if(count.isSelected())countSelected++;
+                if(countSelected == 0){
+                    JOptionPane.showMessageDialog(MainFrame.this,
+                            "Выберите критерий поиска");
+                    countSelected=0;
+                    return;
+                }
+                if (countSelected > 1){
+                    JOptionPane.showMessageDialog(MainFrame.this,
+                            "Выберите только один критерий поиска");
+                    if(name.isSelected())name.setSelected(false);
+                    if(count.isSelected())count.setSelected(false);
+                    if(date.isSelected())date.setSelected(false);
+                    countSelected=0;
+                    return;
+                }
+                if(name.isSelected())searchItem(true,false,false);
+                if(count.isSelected())searchItem(false,true,false);
+                if(date.isSelected())searchItem(false,false,true);*/
                 searchItem();
             }
+
         }
     }
 
@@ -397,23 +439,26 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
             public void run(){
                 if(itemList != null){
-                    if(!search.getText().equals("")){
+                   // if(!search.getText().equals("")){
                         ItemTableModel itemtm = (ItemTableModel) itemList.getModel();
                         Item s = itemtm.getItemByName(search.getText());
                         try {
                             // Исправляем данные на деталь - поэтому false
                             // Также заметим, что необходимо указать не просто this, а MainFrame.this
                             // Иначе класс не будет воспринят - он же другой - анонимный
-                            ItemDialog sd = new ItemDialog(ms.getGroups(), false, MainFrame.this);
-                            sd.setItem(s);
+                            //ItemDialog sd = new ItemDialog(ms.getGroups(), false, MainFrame.this);
+                           // sd.setItem(s);
+                            SearchDilog sd = new SearchDilog();
                             sd.setModal(true);
                             sd.setVisible(true);
                             if (sd.getResult()) {
-                                Item us = sd.getItem();
-                                ms.updateItem(us);
+                                //Item us = sd.getItem();
+                                /*if(nameCheck)ms.updateItem(us);
+                                if(countCheck)ms.updateItem(us);
+                                if(dateCheck)ms.updateItem(us);*/
                                 reloadItems();
                             }
-                        } catch (SQLException e) {
+                        } catch (Exception e){//(SQLException e) {
                             JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
                             e.printStackTrace();
                         }
@@ -421,7 +466,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                     else return;
 
                 }
-            }
+           // }
         };
         t.start();
     }
