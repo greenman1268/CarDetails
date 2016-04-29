@@ -20,6 +20,10 @@ public class GroupListModel extends AbstractListModel {
     }
 
     public Object getElementAt(int index) {
+        if(group != null){
+           // Group groupitem = (Group)group.get(index);
+            return group.get(index);
+        }
         return null;
     }
 }

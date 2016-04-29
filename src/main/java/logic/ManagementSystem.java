@@ -81,6 +81,16 @@ public class ManagementSystem {
         stmt.execute();
     }
 
+    public void updateGroup(Group group)throws SQLException{
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        stmt = con.prepareStatement("UPDATE groups SET groupName = ? WHERE group_id = ?");
+        stmt.setString(1, group.getGroupName());
+        stmt.setInt(2, group.getGroup_id());
+        stmt.execute();
+    }
+
     public Collection<Item> getAllItems() throws SQLException {
         Collection<Item> items = new ArrayList<Item>();
 

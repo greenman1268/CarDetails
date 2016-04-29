@@ -82,6 +82,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         grpList.addListSelectionListener(this);
         // Сразу выделяем первую группу
         grpList.setSelectedIndex(0);
+
         left.add(new JScrollPane(grpList), BorderLayout.CENTER);
         // Создаем кнопки для групп
         JButton btnMvGr = new JButton("пер.");
@@ -123,8 +124,8 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         // Сделаем в ней 4 колонки - Номер, Дата последнего изменения, Количество в наличии, Количество проданых
 
         itemList = new JTable(1, 4);
-
         right.add(new JScrollPane(itemList), BorderLayout.CENTER);
+
         // Создаем кнопки для деталей
         JButton btnAddSt = new JButton("Добавить");
         btnAddSt.setName(INSERT_IT);
@@ -151,6 +152,8 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         getContentPane().add(top, BorderLayout.NORTH);
         getContentPane().add(bot, BorderLayout.CENTER);
 
+        Group g = (Group) grpList.getSelectedValue();
+        vector =(ArrayList<Item>) ms.getItemsFromGroup(g);
         TableSearchRenderer tsr = new TableSearchRenderer();
         itemList.setDefaultRenderer(Object.class, tsr);
 
@@ -186,7 +189,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                 insertGroup();
             }
             if (c.getName().equals(CHANGE_GR)) {
-
+                updateGroup();
             }
             if (c.getName().equals(DELETE_GR)) {
                 deleteGroup();
@@ -197,39 +200,42 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     // Метод для обеспечения интерфейса ListSelectionListener
     public void valueChanged(ListSelectionEvent e) {
         if (!e.getValueIsAdjusting()) {
-            reloadGroups();
             reloadItems();
+           //reloadGroups();
         }
     }
 
     // Метод для обеспечения интерфейса ChangeListener
     public void stateChanged(ChangeEvent e) {
-        reloadGroups();
         reloadItems();
+      // reloadGroups();
     }
 
     // метод для обновления списка груп
     public void reloadGroups(){
-        SwingUtilities.invokeLater(new Runnable() {
+        Thread t = new Thread() { //SwingUtilities.invokeLater(new Runnable() {
 
             public void run() {
-                if(grpList != null){
+                if (grpList != null) {
                     try {
-                        ArrayList<Group> gl = (ArrayList<Group>)ms.getGroups();
+                        Collection<Group> gl = ms.getGroups();
                         grpList.setModel(new GroupListModel(new Vector<Group>(gl)));
+                        grpList.setSelectedIndex(0);
+
                     } catch (SQLException e) {
                         JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
                         e.printStackTrace();
                     }
                 }
             }
-        });
+        };//});
+        t.start();
     }
 
     // метод для обновления списка деталей для определенной группы
     public void reloadItems() {
         // Создаем анонимный класс для потока
-        SwingUtilities.invokeLater(new Runnable() {// Thread t = new Thread() {
+         SwingUtilities.invokeLater(new Runnable() {// Thread t = new Thread() {
             // Переопределяем в нем метод run
 
             public void run() {
@@ -243,6 +249,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                         // И устанавливаем модель для таблицы с новыми данными
                         itemList.setModel(new ItemTableModel(new Vector<Item>(s)));
                         vector =(ArrayList<Item>) ms.getItemsFromGroup(g);
+
                     } catch (SQLException e) {
                         JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
                     }
@@ -252,7 +259,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         });  //};
         // Окончание определения анонимного класса
         // И теперь мы запускаем наш поток
-        /*t.start();*/
+       // t.start();
     }
 
     //метод для удаления группы
@@ -267,7 +274,9 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
                             Group g = (Group)grpList.getSelectedValue();
                             ms.deleteGroup(g.getGroup_id());
-                            reloadItems();
+
+                           // reloadItems();
+                            reloadGroups();
                         }
 
                     } catch (SQLException e) {
@@ -291,7 +300,29 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                 // Показываем диалог
                 gid.setVisible(true);
                 if(gid.getResult()){
-                reloadItems();}
+                //reloadItems();
+                reloadGroups();}
+            }
+        };
+        t.start();
+    }
+
+    // метод - внести изменения в группу
+    private void updateGroup(){
+        Thread t = new Thread(){
+
+            public void run(){
+                if(grpList != null){
+                    if(grpList.getSelectedValue() != null){
+                        ChangeGroupDilog cgd = new ChangeGroupDilog((Group)grpList.getSelectedValue());
+                        cgd.setModal(true);
+                        cgd.setVisible(true);
+                        if(cgd.getResult()){
+                            reloadGroups();
+                        }
+                    }
+
+                }
             }
         };
         t.start();
@@ -518,6 +549,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
             if(vector.get(row).getIn_stock() == 0)component.setBackground(Color.RED);
             else if(vector.get(row).getIn_stock() > 0 && vector.get(row).getIn_stock() < 3)component.setBackground(Color.YELLOW);
             else component.setBackground(table.getBackground());
+            if(table.isCellSelected(row,column)){component.setBackground(Color.GRAY);}
 
             return component;
         }}
@@ -532,6 +564,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                     sf.setDefaultCloseOperation(EXIT_ON_CLOSE);
                     sf.setVisible(true);
                     sf.reloadItems();
+                  //  sf.reloadGroups();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
