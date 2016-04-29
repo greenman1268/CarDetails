@@ -94,6 +94,7 @@ public class SearchDilog extends JDialog implements ActionListener {
     public boolean getResult() {
         return result;
     }
+
     public void actionPerformed(ActionEvent e) {
         JButton src = (JButton) e.getSource();
 
@@ -105,7 +106,6 @@ public class SearchDilog extends JDialog implements ActionListener {
                 if(countSelected == 0){
                     JOptionPane.showMessageDialog(SearchDilog.this,
                             "Выберите критерий поиска");
-                    countSelected=0;
                     return;
                 }
                 if (countSelected > 1){
@@ -114,7 +114,6 @@ public class SearchDilog extends JDialog implements ActionListener {
                     if(name.isSelected())name.setSelected(false);
                     if(count.isSelected())count.setSelected(false);
                     if(date.isSelected())date.setSelected(false);
-                    countSelected=0;
                     return;
                 }
                 /*if(name.isSelected())searchItem(true,false,false);

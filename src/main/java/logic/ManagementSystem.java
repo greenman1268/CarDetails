@@ -63,6 +63,24 @@ public class ManagementSystem {
         return groups;
     }
 
+    public void deleteGroup(int groupId)throws SQLException{
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        stmt = con.prepareStatement("DELETE FROM groups WHERE group_id = ?");
+        stmt.setInt(1, groupId);
+        stmt.execute();
+    }
+
+    public void insertGroup(Group group)throws SQLException{
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        stmt = con.prepareStatement("INSERT INTO groups (groupName) VALUES (?)");
+        stmt.setString(1, group.getGroupName());
+        stmt.execute();
+    }
+
     public Collection<Item> getAllItems() throws SQLException {
         Collection<Item> items = new ArrayList<Item>();
 
@@ -146,14 +164,13 @@ public class ManagementSystem {
 
     public void insertItem(Item item) throws SQLException {
         PreparedStatement stmt = con.prepareStatement("INSERT INTO items "
-                + "(item_id, itemName, changeDate, group_id, in_stock, sold)"
-                + "VALUES( ?, ?, ?, ?, ?, ?)");
-        stmt.setInt(1, item.getItemId());
-        stmt.setString(2, item.getItemName());
-        stmt.setDate(3, new Date(item.getChangeDate().getTime()));
-        stmt.setInt(4, item.getGroupId());
-        stmt.setInt(5, item.getIn_stock());
-        stmt.setInt(6, item.getSold());
+                + "(itemName, changeDate, group_id, in_stock, sold)"
+                + "VALUES(?, ?, ?, ?, ?)");
+        stmt.setString(1, item.getItemName());
+        stmt.setDate(2, new Date(item.getChangeDate().getTime()));
+        stmt.setInt(3, item.getGroupId());
+        stmt.setInt(4, item.getIn_stock());
+        stmt.setInt(5, item.getSold());
         stmt.execute();
     }
 
