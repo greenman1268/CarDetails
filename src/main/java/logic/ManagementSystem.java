@@ -8,9 +8,8 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.sql.Date;
+import java.util.*;
 
 public class ManagementSystem {
 
@@ -272,7 +271,36 @@ public class ManagementSystem {
         return items;
     }
 
-  /*  public static void main(String[] args) throws Exception {
+    public Collection<Item> searchItemsByDate (java.util.Date from, java.util.Date to)throws SQLException{
+        Collection<Item> items = new ArrayList<Item>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            stmt = con.prepareStatement("SELECT DISTINCT item_id, itemName, changeDate, group_id, in_stock, sold FROM items " +
+                    "WHERE changeDate BETWEEN ? AND ? ");
+            stmt.setDate(1, new java.sql.Date(from.getTime()));
+            stmt.setDate(2, new java.sql.Date(to.getTime()));
+
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Item item = new Item(rs);
+                items.add(item);
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
+
+        return items;
+    }
+
+
+   /* public static void main(String[] args) throws Exception {
         ManagementSystem ms = ManagementSystem.getInstance();
         ms.searchItemsByCount(0,6);
     }*/

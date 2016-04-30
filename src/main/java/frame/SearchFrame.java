@@ -144,7 +144,9 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
                         else if (boolCount){
                          s = ms.searchItemsByCount(searchDilog.getFrom(),searchDilog.getTO());
                         }
-                      //  else if (boolDate){}
+                        else if (boolDate){
+                         s = ms.searchItemsByDate(searchDilog.getDateFrom(),searchDilog.getDateTO());
+                        }
                         // И устанавливаем модель для таблицы с новыми данными
 
                         itemList.setModel(new ItemTableSearchModel(new Vector<Item>(s)));
