@@ -63,6 +63,20 @@ public class ManagementSystem {
         return groups;
     }
 
+    public Group getGroupById(int groupId)throws SQLException{
+        Group group = null;
+        PreparedStatement stmt = con.prepareStatement("SELECT group_id, groupName FROM groups WHERE group_id = ?");
+        stmt.setInt(1, groupId);
+
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            group = new Group(rs);
+        }
+        rs.close();
+        stmt.close();
+        return group;
+    }
+
     public void deleteGroup(int groupId)throws SQLException{
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -112,7 +126,6 @@ public class ManagementSystem {
                 stmt.close();
             }
         }
-
         return items;
     }
 

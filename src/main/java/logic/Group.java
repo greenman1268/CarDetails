@@ -1,5 +1,8 @@
 package logic;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * Created on 27.04.2016
  */
@@ -7,6 +10,13 @@ public class Group {
 
     private int group_id;
     private String groupName;
+
+    public Group(){}
+
+    public Group(ResultSet rs) throws SQLException{
+        setGroup_id(rs.getInt(1));
+        setGroupName(rs.getString(2));
+    }
 
     public int getGroup_id() {
         return group_id;

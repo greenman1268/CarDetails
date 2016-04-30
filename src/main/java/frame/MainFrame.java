@@ -111,6 +111,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         pnlBtnGr.add(btnChGr);
         pnlBtnGr.add(btnDlGr);
         left.add(pnlBtnGr, BorderLayout.SOUTH);
+
         // Создаем правую панель для вывода списка деталей
         JPanel right = new JPanel();
         // Задаем layout и задаем "бордюр" вокруг панели
@@ -248,7 +249,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                         Collection<Item> s = ms.getItemsFromGroup(g);
                         // И устанавливаем модель для таблицы с новыми данными
                         itemList.setModel(new ItemTableModel(new Vector<Item>(s)));
-                        vector =(ArrayList<Item>) ms.getItemsFromGroup(g);
+                        vector =(ArrayList<Item>) s;
 
                     } catch (SQLException e) {
                         JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
@@ -354,7 +355,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                     if (gd.getResult()) {
 
                     ItemTableModel itm = (ItemTableModel) itemList.getModel();
-                    Item item = null;
+                    Item item;
 
                     for (int i = 0; i < itemList.getSelectedRows().length; i++) {
                         try {
@@ -518,13 +519,12 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                             // Исправляем данные на деталь - поэтому false
                             // Также заметим, что необходимо указать не просто this, а MainFrame.this
                             // Иначе класс не будет воспринят - он же другой - анонимный
-
-                            SearchDilog sd = new SearchDilog();
+                            SearchDilog sd = new SearchDilog(MainFrame.this);
                             SearchFrame sf;
                             sd.setModal(true);
                             sd.setVisible(true);
                             if (sd.getResult()) {
-                                sf = new SearchFrame();
+                                //sf = new SearchFrame();
                                 reloadItems();
                             }
                         } catch (Exception e){//(SQLException e) {

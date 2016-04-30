@@ -76,7 +76,7 @@ public class ItemDialog extends JDialog implements ActionListener {
         changeDate.setBounds(L_X + L_W + 10, 120, C_W, 20);
         getContentPane().add(changeDate);
 
-        JButton btnOk = new JButton("OK");
+        JButton btnOk = new JButton("ОК");
         btnOk.setName("OK");
         btnOk.addActionListener(this);
         btnOk.setBounds(L_X + L_W + C_W + 10 + 50, 10, 100, 25);
@@ -156,6 +156,10 @@ public class ItemDialog extends JDialog implements ActionListener {
             return;
         }
         if (src.getName().equals("OK")) {
+            if(itemName.getText().equals("")){
+                JOptionPane.showMessageDialog(ItemDialog.this,
+                        "Введите имя");return;
+            }
             result = true;
         }
         if (src.getName().equals("Cancel")) {

@@ -19,7 +19,7 @@ public class GroupDialog extends JDialog implements ActionListener {
     private final static int D_WIDTH = 200;   // ширина
 
     private JComboBox groupList;
-    private JButton btnOk = new JButton("OK");
+    private JButton btnOk = new JButton("Изменить");
     private JButton btnCancel = new JButton("Cancel");
     private boolean result = false;
 

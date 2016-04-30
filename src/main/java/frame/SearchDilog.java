@@ -28,10 +28,13 @@ public class SearchDilog extends JDialog implements ActionListener {
     private JCheckBox name = new JCheckBox();
     private JCheckBox count = new JCheckBox();
     private JCheckBox date = new JCheckBox();
-
+    private SearchFrame SF;
+    private MainFrame owner;
     private boolean result = false;
 
-    public SearchDilog(){
+    public SearchDilog(MainFrame mf){
+
+        this.owner = mf;
         // Установить заголовок
         setTitle("Критерии поиска");
         getContentPane().setLayout(null);
@@ -70,7 +73,7 @@ public class SearchDilog extends JDialog implements ActionListener {
         date.setBounds(L_X + L_W + 30 + C_W + C_W, 90, 20, 20);
         getContentPane().add(date);
 
-        JButton btnOk = new JButton("OK");
+        JButton btnOk = new JButton("Поиск");
         btnOk.setName("OK");
         btnOk.addActionListener(this);
         btnOk.setBounds(L_X + L_W + 10, 120, 100, 25);
@@ -116,9 +119,19 @@ public class SearchDilog extends JDialog implements ActionListener {
                     if(date.isSelected())date.setSelected(false);
                     return;
                 }
-                /*if(name.isSelected())searchItem(true,false,false);
-                if(count.isSelected())searchItem(false,true,false);
-                if(date.isSelected())searchItem(false,false,true);*/
+                 try {
+                     if(name.isSelected()) {
+                         SF = new SearchFrame(true,false,false,owner);
+                         SF.setDefaultCloseOperation(HIDE_ON_CLOSE);
+                         SF.setVisible(true);
+                         SF.setAlwaysOnTop(true);
+                         SF.reloadItems();}
+                    if(count.isSelected())SF = new SearchFrame(false,true,false,owner);
+                    if(date.isSelected())SF = new SearchFrame(false,false,true,owner);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+
             result = true;
         }
         if (src.getName().equals("Cancel")) {
