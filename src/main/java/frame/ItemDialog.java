@@ -37,10 +37,10 @@ public class ItemDialog extends JDialog implements ActionListener {
     private JComboBox groupList;
 
     // Второй параметр содержит знак - добавление детали или исправление
-    public ItemDialog(List<Group> groups, boolean newItem, MainFrame owner) {
+    public ItemDialog(List<Group> groups, boolean newItem) {
         // После вставки детали без закрытия окна нам потребуется перегрузка списка
         // А для этого нам надо иметь доступ к этому методу в главной форме
-        this.owner = owner;
+       // this.owner = owner;
         // Установить заголовок
         setTitle("Редактирование данных детали");
         getContentPane().setLayout(new FlowLayout());
@@ -144,7 +144,7 @@ public class ItemDialog extends JDialog implements ActionListener {
         // Добавляем деталь, но не закрываем окно
         // Здесь мы не будем вызывать в отдельном потоке сохранение.
         // Оно не занимает много времени и лишние действия здесь не оправданы
-        if (src.getName().equals("New")) {
+       /* if (src.getName().equals("New")) {
             result = true;
             try {
                 ManagementSystem.getInstance().insertItem(getItem());
@@ -154,7 +154,7 @@ public class ItemDialog extends JDialog implements ActionListener {
                 JOptionPane.showMessageDialog(this, sql_e.getMessage());
             }
             return;
-        }
+        }*/
         if (src.getName().equals("OK")) {
             if(itemName.getText().equals("")){
                 JOptionPane.showMessageDialog(ItemDialog.this,
@@ -166,6 +166,9 @@ public class ItemDialog extends JDialog implements ActionListener {
             result = false;
         }
         setVisible(false);
+    }
+    public String getItemName (){
+        return itemName.getText();
     }
 
 }

@@ -166,6 +166,8 @@ public class SearchDilog extends JDialog implements ActionListener {
 
     public String getName(){ return itemName.getText(); }
 
+    public void setName(String newName){ itemName.setText(newName); }
+
     public int getFrom(){ return Integer.parseInt(in_stock.getText());}
 
     public int getTO(){ return Integer.parseInt(in_stock2.getText());}

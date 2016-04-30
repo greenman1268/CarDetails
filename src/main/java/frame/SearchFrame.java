@@ -77,8 +77,8 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
         btnDelSt.setName(DELETE_IT);
         btnDelSt.addActionListener(this);
         JButton btnMovGr = new JButton("Переместить");
-        btnDelSt.setName(MOVE_GR);
-        btnDelSt.addActionListener(this);
+        btnMovGr.setName(MOVE_GR);
+        btnMovGr.addActionListener(this);
         // Создаем панель, на которую положим наши кнопки и кладем ее вниз
         JPanel pnlBtnSt = new JPanel();
         pnlBtnSt.setLayout(new GridLayout(1, 3));
@@ -97,7 +97,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
         itemList.setDefaultRenderer(Object.class, tsr);
 
         // Задаем границы формы
-        setBounds(100, 100, 1000, 500);
+        setBounds(200, 100, 1000, 500);
     }
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() instanceof Component) {
@@ -165,11 +165,128 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
          t.start();
     }
 
-    private void moveTOGroup(){}
+    private void moveTOGroup(){
+        Thread t = new Thread() {
 
-    private void updateItem(){}
+            public void run() {
+                if(itemList == null)return;
+                // Если группа не выделена - выходим. Хотя это крайне маловероятно
+                if (itemList.getSelectedRows().length == 0) {
+                    JOptionPane.showMessageDialog(SearchFrame.this,
+                            "Необходимо выделить деталь в списке");
+                    return;
+                }
+                if(itemList.getSelectedRows().length > 0){
+                    GroupDialog gd = null;
+                    try {
 
-    private void deleteItem(){}
+                        gd = new GroupDialog(ms.getGroups());
+                        gd.setAlwaysOnTop(true);
+                        // Задаем ему режим модальности - нельзя ничего кроме него выделить
+                        gd.setModal(true);
+                        // Показываем диалог
+                        gd.setVisible(true);
+
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    if (gd.getResult()) {
+
+                        ItemTableSearchModel itm = (ItemTableSearchModel) itemList.getModel();
+                        Item item;
+
+                        for (int i = 0; i < itemList.getSelectedRows().length; i++) {
+                            try {
+                                item = itm.getItem(itemList.getSelectedRows()[i]);
+                                ms.moveItemsToGroup(item, gd.getGroup());
+                            } catch (SQLException e) {
+                                JOptionPane.showMessageDialog(SearchFrame.this, e.getMessage());
+                            }
+                        }}
+                    reloadItems();
+                    mainFrame.reloadItems();
+                }
+            }
+
+        };
+        t.start();
+    }
+
+    private void updateItem(){
+        Thread t = new Thread() {
+
+            public void run() {
+                if (itemList != null) {
+                    ItemTableSearchModel stm = (ItemTableSearchModel) itemList.getModel();
+                    // Проверяем - выделен ли хоть какая-нибудь деталь
+                    if (itemList.getSelectedRow() >= 0) {
+                        // Вот где нам пригодился метод getItem(int rowIndex)
+                        Item s = stm.getItem(itemList.getSelectedRow());
+                        try {
+                            // Исправляем данные на деталь - поэтому false
+                            // Также заметим, что необходимо указать не просто this, а MainFrame.this
+                            // Иначе класс не будет воспринят - он же другой - анонимный
+                            ItemDialog sd = new ItemDialog(ms.getGroups(), false);
+                            sd.setAlwaysOnTop(true);
+                            sd.setItem(s);
+                            sd.setModal(true);
+                            sd.setVisible(true);
+                            if (sd.getResult()) {
+                                searchDilog.setName(sd.getItemName());
+                                Item us = sd.getItem();
+                                ms.updateItem(us);
+                                reloadItems();
+                                mainFrame.reloadItems();
+                            }
+                        } catch (SQLException e) {
+                            JOptionPane.showMessageDialog(SearchFrame.this, e.getMessage());
+                            e.printStackTrace();
+                        }
+                    } // Если деталь не выделена - сообщаем пользователю, что это необходимо
+                    else {
+                        JOptionPane.showMessageDialog(SearchFrame.this,
+                                "Необходимо выделить деталь в списке");
+                    }
+                }
+            }
+        };
+        t.start();
+    }
+
+    private void deleteItem(){
+        Thread t = new Thread() {
+
+            public void run() {
+                if (itemList != null) {
+                    ItemTableSearchModel itmstm = (ItemTableSearchModel) itemList.getModel();
+                    // Проверяем - выделена ли хоть какая-нибудь деталь
+                    if (itemList.getSelectedRows().length > 0) {
+                        if (JOptionPane.showConfirmDialog(SearchFrame.this,
+                                "Вы хотите удалить деталь?", "Удаление детали",
+                                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                            // Вот где нам пригодился метод getItem(int rowIndex)
+                            Item s;
+                            for (int i = 0; i < itemList.getSelectedRows().length; i++) {
+                                s = itmstm.getItem(itemList.getSelectedRows()[i]);
+                                try {
+                                    ms.deleteItem(s);
+
+                                } catch (SQLException e) {
+                                    JOptionPane.showMessageDialog(SearchFrame.this, e.getMessage());
+                                }
+                            }
+                            reloadItems();
+                            mainFrame.reloadItems();
+                        }
+                    } // Если деталь не выделена - сообщаем пользователю, что это необходимо
+                    else {
+                        JOptionPane.showMessageDialog(SearchFrame.this, "Необходимо выделить деталь в списке");
+                    }
+                }
+            }
+        };
+        t.start();
+    }
 
     private class TableSearchRenderer extends DefaultTableCellRenderer {
 

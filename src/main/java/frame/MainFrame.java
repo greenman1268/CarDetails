@@ -412,7 +412,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                     // Иначе класс не будет воспринят - он же другой - анонимный
 
                     Group g = (Group) grpList.getSelectedValue();
-                    ItemDialog sd = new ItemDialog(ms.getGroups(), true, MainFrame.this);
+                    ItemDialog sd = new ItemDialog(ms.getGroups(), true);
                     sd.setModal(true);
                     sd.setVisible(true);
                     if (sd.getResult()) {
@@ -444,7 +444,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                             // Исправляем данные на деталь - поэтому false
                             // Также заметим, что необходимо указать не просто this, а MainFrame.this
                             // Иначе класс не будет воспринят - он же другой - анонимный
-                            ItemDialog sd = new ItemDialog(ms.getGroups(), false, MainFrame.this);
+                            ItemDialog sd = new ItemDialog(ms.getGroups(), false);
                             sd.setItem(s);
                             sd.setModal(true);
                             sd.setVisible(true);
