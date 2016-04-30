@@ -1,5 +1,7 @@
 package frame;
 
+import logic.ManagementSystem;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -31,10 +33,16 @@ public class SearchDilog extends JDialog implements ActionListener {
     private SearchFrame SF;
     private MainFrame owner;
     private boolean result = false;
+    private ManagementSystem ms;
 
     public SearchDilog(MainFrame mf){
 
         this.owner = mf;
+        try {
+            ms = ManagementSystem.getInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         // Установить заголовок
         setTitle("Критерии поиска");
         getContentPane().setLayout(null);
@@ -120,12 +128,15 @@ public class SearchDilog extends JDialog implements ActionListener {
                     return;
                 }
                  try {
+
                      if(name.isSelected()) {
+
                          SF = new SearchFrame(true,false,false,owner);
                          SF.setDefaultCloseOperation(HIDE_ON_CLOSE);
                          SF.setVisible(true);
                          SF.setAlwaysOnTop(true);
                          SF.reloadItems();}
+
                     if(count.isSelected())SF = new SearchFrame(false,true,false,owner);
                     if(date.isSelected())SF = new SearchFrame(false,false,true,owner);
                 } catch (Exception e1) {

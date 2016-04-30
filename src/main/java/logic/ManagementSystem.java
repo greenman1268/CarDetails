@@ -216,4 +216,32 @@ public class ManagementSystem {
         stmt.execute();
     }
 
+    public Collection<Item> searchItemsByName (String itemName)throws SQLException{
+        Collection<Item> items = new ArrayList<Item>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            stmt = con.prepareStatement("SELECT item_id, itemName, changeDate, group_id, in_stock, sold FROM items " +
+                    "WHERE itemName= ? " +
+                    "ORDER BY item_id");
+            stmt.setString(1, itemName);
+
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Item item = new Item(rs);
+                items.add(item);
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
+
+        return items;
+    }
+
 }
