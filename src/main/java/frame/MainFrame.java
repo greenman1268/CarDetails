@@ -202,14 +202,14 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     public void valueChanged(ListSelectionEvent e) {
         if (!e.getValueIsAdjusting()) {
             reloadItems();
-           //reloadGroups();
+
         }
     }
 
     // Метод для обеспечения интерфейса ChangeListener
     public void stateChanged(ChangeEvent e) {
         reloadItems();
-      // reloadGroups();
+
     }
 
     // метод для обновления списка груп
@@ -275,7 +275,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
                             Group g = (Group)grpList.getSelectedValue();
                             ms.deleteGroup(g.getGroup_id());
-
+                            ms.removeItemsFromGroup(g);
                            // reloadItems();
                             reloadGroups();
                         }

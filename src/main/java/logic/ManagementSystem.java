@@ -65,7 +65,7 @@ public class ManagementSystem {
 
     public Group getGroupById(int groupId)throws SQLException{
         Group group = null;
-        PreparedStatement stmt = con.prepareStatement("SELECT group_id, groupName FROM groups WHERE group_id = ?");
+        PreparedStatement stmt = con.prepareStatement("SELECT group_id, groupName FROM groups WHERE group_id = ? ");
         stmt.setInt(1, groupId);
 
         ResultSet rs = stmt.executeQuery();
@@ -244,4 +244,38 @@ public class ManagementSystem {
         return items;
     }
 
+    public Collection<Item> searchItemsByCount (int from, int to)throws SQLException{
+        Collection<Item> items = new ArrayList<Item>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            stmt = con.prepareStatement("SELECT DISTINCT item_id, itemName, changeDate, group_id, in_stock, sold FROM items " +
+                    "WHERE in_stock BETWEEN ? AND ? ");
+            stmt.setInt(1, from);
+            stmt.setInt(2, to);
+
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Item item = new Item(rs);
+                items.add(item);
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
+
+        return items;
+    }
+
+  /*  public static void main(String[] args) throws Exception {
+        ManagementSystem ms = ManagementSystem.getInstance();
+        ms.searchItemsByCount(0,6);
+    }*/
 }
+
+

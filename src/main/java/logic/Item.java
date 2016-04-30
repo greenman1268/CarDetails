@@ -79,7 +79,7 @@ public class Item implements Comparable{
                 "\nitemName: " + itemName +
                 "\nchangeDate: " + btoS() +
                 "\nin_stock: " + in_stock +
-                "\nsold: " + sold;
+                "\nsold: " + sold + "\n";
     }
 
     public int compareTo(Object obj) {

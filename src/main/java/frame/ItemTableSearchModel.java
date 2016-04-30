@@ -1,5 +1,6 @@
 package frame;
 
+import logic.Group;
 import logic.Item;
 import logic.ManagementSystem;
 
@@ -19,7 +20,7 @@ public class ItemTableSearchModel extends AbstractTableModel {
     public ItemTableSearchModel(Vector itemsFromSF){
         this.items = itemsFromSF;
         try {
-            this.ms = ManagementSystem.getInstance();
+            ms = ManagementSystem.getInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,17 +49,16 @@ public class ItemTableSearchModel extends AbstractTableModel {
             // Получаем из вектора детали
             Item item = (Item) items.get(rowIndex);
             // В зависимости от колонки возвращаем имя, дата и т.д.
-            String groupName = "TESTNAME";
-            try {
-                groupName = ms.getGroupById(item.getGroupId()).getGroupName();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+
             switch (columnIndex) {
                 case 0:
                     return item.getItemName();
                 case 1:
-                    return groupName;
+                    try {
+                        return ms.getGroupById(item.getGroupId()).getGroupName();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 case 2:
                     return DateFormat.getDateInstance(DateFormat.SHORT).format(
                             item.getChangeDate());

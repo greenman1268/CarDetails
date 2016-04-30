@@ -92,8 +92,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
 
         // Вставляем  нижнюю панель в форму
         getContentPane().add(bot, BorderLayout.CENTER);
-
-        vector =(ArrayList<Item>) ms.getAllItems();
+      //  vector =(ArrayList<Item>) ms.getAllItems();
         TableSearchRenderer tsr = new TableSearchRenderer();
         itemList.setDefaultRenderer(Object.class, tsr);
 
@@ -134,31 +133,27 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
             public void run() {
                 if (itemList != null) {
                     // Получаем выделенную группу
-                   int countGroups = 0;
-                    try {
-                        countGroups = ms.getGroups().size();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                    if(countGroups > 0){
-                    for (int i = 0; i < countGroups; i++) {
 
                     try {
                         // Получаем список деталей
-                        Group g = ms.getGroups().get(i);
-                        Collection<Item> s = null;
+
+                        Collection<Item> s = ms.getAllItems();//ms.getItemsFromGroup(g);
                         if(boolName){
-                         s = ms.searchItemsByName(searchDilog.getName());} // ms.getAllItems();
-                        else if (boolCount){}
-                        else if (boolDate){}
+                         s = ms.searchItemsByName(searchDilog.getName());
+                        }
+                        else if (boolCount){
+                         s = ms.searchItemsByCount(searchDilog.getFrom(),searchDilog.getTO());
+                        }
+                      //  else if (boolDate){}
                         // И устанавливаем модель для таблицы с новыми данными
+
                         itemList.setModel(new ItemTableSearchModel(new Vector<Item>(s)));
-                        vector =(ArrayList<Item>) s;
+                        vector = (ArrayList<Item>) s;
 
                     } catch (SQLException e) {
                         e.printStackTrace();
                         JOptionPane.showMessageDialog(SearchFrame.this, e.getMessage());
-                    }}}}
+                    }}//}}
             }
 
             // Окончание нашего метода run

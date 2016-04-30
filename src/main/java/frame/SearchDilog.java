@@ -130,14 +130,21 @@ public class SearchDilog extends JDialog implements ActionListener {
                  try {
 
                      if(name.isSelected()) {
-
                          SF = new SearchFrame(true,false,false,owner, SearchDilog.this);
                          SF.setDefaultCloseOperation(HIDE_ON_CLOSE);
                          SF.setVisible(true);
                          SF.setAlwaysOnTop(true);
-                         SF.reloadItems();}
+                         SF.reloadItems();
+                     }
 
-                    if(count.isSelected())SF = new SearchFrame(false,true,false,owner,SearchDilog.this);
+                    if(count.isSelected()) {
+                        SF = new SearchFrame(false, true, false, owner, SearchDilog.this);
+                        SF.setDefaultCloseOperation(HIDE_ON_CLOSE);
+                        SF.setVisible(true);
+                        SF.setAlwaysOnTop(true);
+                        SF.reloadItems();
+                    }
+
                     if(date.isSelected())SF = new SearchFrame(false,false,true,owner,SearchDilog.this);
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -151,7 +158,9 @@ public class SearchDilog extends JDialog implements ActionListener {
         setVisible(false);
     }
 
-    public String getName(){
-        return itemName.getText();
-    }
+    public String getName(){ return itemName.getText(); }
+
+    public int getFrom(){ return Integer.parseInt(in_stock.getText());}
+
+    public int getTO(){ return Integer.parseInt(in_stock2.getText());}
 }
