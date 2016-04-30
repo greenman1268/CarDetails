@@ -45,7 +45,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
     public MainFrame() throws Exception{
 
-        // Создаем верхнюю панель, где будет поле для ввода года
+        // Создаем верхнюю панель
         JPanel top = new JPanel();
         // Устанавливаем для нее layout
         top.setLayout(null);

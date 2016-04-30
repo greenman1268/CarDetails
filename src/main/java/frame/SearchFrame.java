@@ -33,10 +33,14 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
     private ManagementSystem ms = null;
     private JTable itemList;
     private JList grpList;
+    private SearchDilog searchDilog;
+    private boolean boolName;
+    private boolean boolCount;
+    private boolean boolDate;
 
     private ArrayList<Item> vector;
 
-    public SearchFrame(boolean name, boolean count, boolean date, MainFrame mf) throws Exception{
+    public SearchFrame(boolean name, boolean count, boolean date, MainFrame mf, SearchDilog sd) throws Exception{
 
         // Создаем нижнюю панель и задаем ей layout
         JPanel bot = new JPanel();
@@ -46,6 +50,10 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
         // Получаем коннект к базе и создаем объект ManagementSystem
         ms = ManagementSystem.getInstance();
         this.mainFrame = mf;
+        this.searchDilog = sd;
+        this.boolName = name;
+        this.boolCount = count;
+        this.boolDate = date;
         // Создаем правую панель для вывода списка деталей
         JPanel right = new JPanel();
         // Задаем layout и задаем "бордюр" вокруг панели
@@ -89,7 +97,6 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
         TableSearchRenderer tsr = new TableSearchRenderer();
         itemList.setDefaultRenderer(Object.class, tsr);
 
-        // reloadItems();
         // Задаем границы формы
         setBounds(100, 100, 1000, 500);
     }
@@ -139,7 +146,11 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
                     try {
                         // Получаем список деталей
                         Group g = ms.getGroups().get(i);
-                        Collection<Item> s = ms.getItemsFromGroup(g); // ms.getAllItems();
+                        Collection<Item> s = null;
+                        if(boolName){
+                         s = ms.searchItemsByName(searchDilog.getName());} // ms.getAllItems();
+                        else if (boolCount){}
+                        else if (boolDate){}
                         // И устанавливаем модель для таблицы с новыми данными
                         itemList.setModel(new ItemTableSearchModel(new Vector<Item>(s)));
                         vector =(ArrayList<Item>) s;
