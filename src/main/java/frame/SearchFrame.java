@@ -10,7 +10,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -98,6 +98,9 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
         TableSearchRenderer tsr = new TableSearchRenderer();
         itemList.setDefaultRenderer(Object.class, tsr);
 
+        JTableHeader header = itemList.getTableHeader();
+        header.setDefaultRenderer(new MyTableHeaderRenderer(header.getDefaultRenderer()));
+
         // Задаем границы формы
         setBounds(200, 100, 1000, 500);
     }
@@ -129,7 +132,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
     // метод для обновления списка деталей для определенной группы
     public void reloadItems() {
         // Создаем анонимный класс для потока
-        Thread t = new Thread() {// SwingUtilities.invokeLater(new Runnable() {//
+         SwingUtilities.invokeLater(new Runnable() {// Thread t = new Thread() {
             // Переопределяем в нем метод run
 
             public void run() {
@@ -155,6 +158,8 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
                         // И устанавливаем модель для таблицы с новыми данными
 
                         itemList.setModel(new ItemTableSearchModel(new Vector<Item>(s)));
+                        RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(itemList.getModel());
+                        itemList.setRowSorter(sorter);
                         vector = (ArrayList<Item>) s;
 
                     } catch (SQLException e) {
@@ -164,10 +169,10 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
             }
 
             // Окончание нашего метода run
-        };
+        });
         // Окончание определения анонимного класса
         // И теперь мы запускаем наш поток
-         t.start();
+        // t.start();
     }
 
     private void moveTOGroup(){
@@ -307,4 +312,29 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
 
             return component;
         }}
+
+    private static class MyTableHeaderRenderer implements TableCellRenderer {
+        private static final Font labelFont = new Font("Arial", Font.BOLD, 11);
+
+        private TableCellRenderer delegate;
+
+        public MyTableHeaderRenderer(TableCellRenderer delegate) {
+            this.delegate = delegate;
+        }
+
+
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+
+            Component c = delegate.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            if(c instanceof JLabel) {
+                JLabel label = (JLabel) c;
+                label.setFont(labelFont);
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                label.setBorder(BorderFactory.createEtchedBorder());
+
+            }
+            return c;
+        }
+    }
 }

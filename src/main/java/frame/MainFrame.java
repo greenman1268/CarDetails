@@ -14,7 +14,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.*;
+import javax.swing.RowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,7 +41,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     private ManagementSystem ms = null;
     private JList grpList;
     private JTable itemList;
-
+    private TableSearchRenderer tsr;
     private ArrayList<Item> vector;
 
     public MainFrame() throws Exception{
@@ -132,6 +133,8 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         // Сделаем в ней 4 колонки - Номер, Дата последнего изменения, Количество в наличии, Количество проданых
 
         itemList = new JTable(1, 4);
+
+
         right.add(new JScrollPane(itemList), BorderLayout.CENTER);
 
         // Создаем кнопки для деталей
@@ -162,9 +165,10 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
         Group g = (Group) grpList.getSelectedValue();
         vector =(ArrayList<Item>) ms.getItemsFromGroup(g);
-        TableSearchRenderer tsr = new TableSearchRenderer();
+        tsr = new TableSearchRenderer();
         itemList.setDefaultRenderer(Object.class, tsr);
-
+        JTableHeader header = itemList.getTableHeader();
+        header.setDefaultRenderer(new MyTableHeaderRenderer(header.getDefaultRenderer()));
         // Задаем границы формы
         setBounds(100, 100, 1000, 500);
     }
@@ -256,6 +260,8 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                         Collection<Item> s = ms.getItemsFromGroup(g);
                         // И устанавливаем модель для таблицы с новыми данными
                         itemList.setModel(new ItemTableModel(new Vector<Item>(s)));
+                        RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(itemList.getModel());
+                        itemList.setRowSorter(sorter);
                         vector =(ArrayList<Item>) s;
 
                     } catch (SQLException e) {
@@ -579,7 +585,34 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
             if(table.isCellSelected(row,column)){component.setBackground(Color.GRAY);}
 
             return component;
-        }}
+        }
+    }
+
+    private static class MyTableHeaderRenderer implements TableCellRenderer {
+        private static final Font labelFont = new Font("Arial", Font.BOLD, 11);
+
+        private TableCellRenderer delegate;
+
+        public MyTableHeaderRenderer(TableCellRenderer delegate) {
+            this.delegate = delegate;
+        }
+
+
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+
+            Component c = delegate.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            if(c instanceof JLabel) {
+                JLabel label = (JLabel) c;
+                label.setFont(labelFont);
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                label.setBorder(BorderFactory.createEtchedBorder());
+
+            }
+            return c;
+        }
+    }
+
 
     public static void main(String args[]) {
         SwingUtilities.invokeLater(new Runnable() {
