@@ -37,10 +37,11 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
     private boolean boolName;
     private boolean boolCount;
     private boolean boolDate;
+    private boolean boolAll;
 
     private ArrayList<Item> vector;
 
-    public SearchFrame(boolean name, boolean count, boolean date, MainFrame mf, SearchDilog sd) throws Exception{
+    public SearchFrame(boolean name, boolean count, boolean date, boolean all, MainFrame mf, SearchDilog sd) throws Exception{
 
         // Создаем нижнюю панель и задаем ей layout
         JPanel bot = new JPanel();
@@ -54,6 +55,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
         this.boolName = name;
         this.boolCount = count;
         this.boolDate = date;
+        this.boolAll = all;
         // Создаем правую панель для вывода списка деталей
         JPanel right = new JPanel();
         // Задаем layout и задаем "бордюр" вокруг панели
@@ -146,6 +148,9 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
                         }
                         else if (boolDate){
                          s = ms.searchItemsByDate(searchDilog.getDateFrom(),searchDilog.getDateTO());
+                        }
+                        else if (boolAll){
+                         s = ms.getAllItems();
                         }
                         // И устанавливаем модель для таблицы с новыми данными
 

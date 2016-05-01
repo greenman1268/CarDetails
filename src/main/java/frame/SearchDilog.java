@@ -130,7 +130,7 @@ public class SearchDilog extends JDialog implements ActionListener {
                  try {
 
                      if(name.isSelected()) {
-                         SF = new SearchFrame(true,false,false,owner, SearchDilog.this);
+                         SF = new SearchFrame(true,false,false,false,owner, SearchDilog.this);
                          SF.setDefaultCloseOperation(HIDE_ON_CLOSE);
                          SF.setVisible(true);
                          SF.setAlwaysOnTop(true);
@@ -138,7 +138,7 @@ public class SearchDilog extends JDialog implements ActionListener {
                      }
 
                     if(count.isSelected()) {
-                        SF = new SearchFrame(false, true, false, owner, SearchDilog.this);
+                        SF = new SearchFrame(false, true, false,false,owner, SearchDilog.this);
                         SF.setDefaultCloseOperation(HIDE_ON_CLOSE);
                         SF.setVisible(true);
                         SF.setAlwaysOnTop(true);
@@ -146,7 +146,7 @@ public class SearchDilog extends JDialog implements ActionListener {
                     }
 
                     if(date.isSelected()){
-                        SF = new SearchFrame(false,false,true,owner,SearchDilog.this);
+                        SF = new SearchFrame(false,false,true,false,owner,SearchDilog.this);
                         SF.setDefaultCloseOperation(HIDE_ON_CLOSE);
                         SF.setVisible(true);
                         SF.setAlwaysOnTop(true);

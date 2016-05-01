@@ -58,6 +58,13 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         btnSrch.addActionListener(this);
         top.add(btnSrch);
 
+        //кнопка показать все
+        JButton btnAll = new JButton("Все детали");
+        btnAll.setName(ALL_ITEMS);
+        btnAll.setBounds(80, 5, 110, 20);
+        btnAll.addActionListener(this);
+        top.add(btnAll);
+
         // Создаем нижнюю панель и задаем ей layout
         JPanel bot = new JPanel();
         bot.setLayout(new BorderLayout());
@@ -506,7 +513,27 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
     // метод для показа всех деталей
     private void showAllItems() {
-        JOptionPane.showMessageDialog(this, "showAllItems");
+        Thread t = new Thread(){
+
+            public void run(){
+                if(itemList != null){
+
+                        try {
+                            SearchFrame sf = new SearchFrame(false,false,false,true,MainFrame.this,null);
+                            sf.setDefaultCloseOperation(HIDE_ON_CLOSE);
+                            sf.setVisible(true);
+                            sf.setAlwaysOnTop(true);
+                            sf.reloadItems();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                }
+                else return;
+                reloadItems();
+                }
+        };
+        t.start();
+
     }
 
     private void searchItem(){
