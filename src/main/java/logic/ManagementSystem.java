@@ -26,16 +26,38 @@ public class ManagementSystem {
             try {
 
                 mysqlDS = new MysqlDataSource();
-                mysqlDS.setURL("jdbc:mysql://localhost:3306/details");
                 mysqlDS.setUser("root");
                 mysqlDS.setPassword("126874539");
                 instance.dataSource = mysqlDS;
                 con =  dataSource.getConnection();
 
+                if(checkDB().equals("NULL")){
+                    makeDB();
+                }
+                else {
+                    mysqlDS.setURL("jdbc:mysql://localhost:3306/details");
+                    instance.dataSource = mysqlDS;
+                    con =  dataSource.getConnection();
+                }
+
             }catch (SQLException e) {
                 e.printStackTrace();
             }}
         return instance;
+    }
+
+    public static String checkDB() throws SQLException {
+        String result = "NULL";
+
+        PreparedStatement stmt = con.prepareStatement("SHOW DATABASES LIKE ? ");
+        stmt.setString(1, "details");
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+           result = rs.getString(1);
+        }
+        rs.close();
+        stmt.close();
+        return result;
     }
 
     public List<Group> getGroups() throws SQLException {
@@ -299,11 +321,53 @@ public class ManagementSystem {
         return items;
     }
 
+    public static void makeDB() throws SQLException{
+        String query;
 
-   /* public static void main(String[] args) throws Exception {
+        Statement stmt = con.createStatement();
+
+        query = "CREATE database details DEFAULT CHARACTER SET utf8 ";
+        stmt.executeUpdate(query);
+        query = "use details";
+        stmt.executeUpdate(query);
+        query = "CREATE TABLE groups( " +
+                "group_id int UNSIGNED not null AUTO_INCREMENT, " +
+                "groupName varchar(255) not null, " +
+                "primary key (group_id)" +
+                ") engine=InnoDB";
+        stmt.executeUpdate(query);
+        query = "CREATE TABLE items " +
+                "(" +
+                "  item_id int unsigned not null auto_increment," +
+                "  itemName varchar(255) not null," +
+                "  changeDate date not null," +
+                "  group_id int not null," +
+                "  in_stock int not null," +
+                "  sold int not null," +
+                "  primary key (item_id)" +
+                ") engine=InnoDB";
+        stmt.executeUpdate(query);
+        query = "set names utf8";
+        stmt.execute(query);
+        query = "insert into groups (groupName) values ('Первая')";
+        stmt.executeUpdate(query);
+        query = "insert into groups (groupName) values ('Вторая')";
+        stmt.executeUpdate(query);
+        query = "insert into items (itemName, changeDate, group_id, in_stock, sold) " +
+                "values ('Деталь 1', '1990-01-01', 1, 10, 10)";
+        stmt.executeUpdate(query);
+        query = "insert into items (itemName, changeDate, group_id, in_stock, sold) " +
+                "values ('Деталь 2', '1990-01-01', 1, 10, 10)";
+        stmt.executeUpdate(query);
+
+    }
+
+/*    public static void main(String[] args) throws Exception {
         ManagementSystem ms = ManagementSystem.getInstance();
-        ms.searchItemsByCount(0,6);
+        System.out.println(ms.checkDB());
+        System.out.println(ms.getAllItems());
     }*/
+
 }
 
 
