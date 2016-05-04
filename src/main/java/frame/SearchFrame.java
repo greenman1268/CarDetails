@@ -1,6 +1,5 @@
 package frame;
 
-import logic.Group;
 import logic.Item;
 import logic.ManagementSystem;
 
@@ -132,7 +131,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
     // метод для обновления списка деталей для определенной группы
     public void reloadItems() {
         // Создаем анонимный класс для потока
-         SwingUtilities.invokeLater(new Runnable() {// Thread t = new Thread() {
+        Thread t = new Thread(){// SwingUtilities.invokeLater(new Runnable() {// Thread t = new Thread() {
             // Переопределяем в нем метод run
 
             public void run() {
@@ -158,9 +157,10 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
                         // И устанавливаем модель для таблицы с новыми данными
 
                         itemList.setModel(new ItemTableSearchModel(new Vector<Item>(s)));
+                        vector = (ArrayList<Item>) s;
                         RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(itemList.getModel());
                         itemList.setRowSorter(sorter);
-                        vector = (ArrayList<Item>) s;
+
 
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -169,10 +169,10 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
             }
 
             // Окончание нашего метода run
-        });
+        };
         // Окончание определения анонимного класса
         // И теперь мы запускаем наш поток
-        // t.start();
+         t.start();
     }
 
     private void moveTOGroup(){

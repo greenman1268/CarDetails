@@ -33,6 +33,9 @@ public class ManagementSystem {
 
                 if(checkDB().equals("NULL")){
                     makeDB();
+                    mysqlDS.setURL("jdbc:mysql://localhost:3306/details");
+                    instance.dataSource = mysqlDS;
+                    con =  dataSource.getConnection();
                 }
                 else {
                     mysqlDS.setURL("jdbc:mysql://localhost:3306/details");

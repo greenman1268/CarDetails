@@ -93,8 +93,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
         left.add(new JScrollPane(grpList), BorderLayout.CENTER);
         // Создаем кнопки для групп
-        JButton btnMvGr = new JButton("пер.");
-        btnMvGr.setName(MOVE_GR);
+
         JButton btnClGr = new JButton("оч.");
         btnClGr.setName(CLEAR_GR);
         JButton btnAdGr = new JButton("доб.");
@@ -104,7 +103,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         JButton btnDlGr = new JButton("уд.");
         btnDlGr.setName(DELETE_GR);
         // Добавляем листенер
-        btnMvGr.addActionListener(this);
+
         btnClGr.addActionListener(this);
         btnAdGr.addActionListener(this);
         btnChGr.addActionListener(this);
@@ -113,7 +112,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         JPanel pnlBtnGr = new JPanel();
         pnlBtnGr.setLayout(new GridLayout(1, 5));
 
-        pnlBtnGr.add(btnMvGr);
+
         pnlBtnGr.add(btnClGr);
         pnlBtnGr.add(btnAdGr);
         pnlBtnGr.add(btnChGr);
@@ -147,12 +146,16 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         JButton btnDelSt = new JButton("Удалить");
         btnDelSt.setName(DELETE_IT);
         btnDelSt.addActionListener(this);
+        JButton btnMvGr = new JButton("Переместить");
+        btnMvGr.setName(MOVE_GR);
+        btnMvGr.addActionListener(this);
         // Создаем панель, на которую положим наши кнопки и кладем ее вниз
         JPanel pnlBtnSt = new JPanel();
         pnlBtnSt.setLayout(new GridLayout(1, 3));
         pnlBtnSt.add(btnAddSt);
         pnlBtnSt.add(btnUpdSt);
         pnlBtnSt.add(btnDelSt);
+        pnlBtnSt.add(btnMvGr);
         right.add(pnlBtnSt, BorderLayout.SOUTH);
 
         // Вставляем панели со списками групп и деталей в нижнюю панель
