@@ -41,6 +41,8 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     private ManagementSystem ms = null;
     private JList grpList;
     private JTable itemList;
+    private JLabel lb;
+    private JTextField rates;
     private TableSearchRenderer tsr;
     private ArrayList<Item> vector;
 
@@ -66,6 +68,14 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         btnAll.setBounds(80, 5, 110, 20);
         btnAll.addActionListener(this);
         top.add(btnAll);
+
+        //указать курс валют
+        lb = new JLabel("курс:");
+        lb.setBounds(210,5,30,20);
+        top.add(lb);
+        rates = new JTextField();
+        rates.setBounds(245,5,70,20);
+        top.add(rates);
 
         // Создаем нижнюю панель и задаем ей layout
         JPanel bot = new JPanel();
@@ -133,8 +143,6 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         // Сделаем в ней 4 колонки - Номер, Дата последнего изменения, Количество в наличии, Количество проданых
 
         itemList = new JTable(1, 4);
-
-
         right.add(new JScrollPane(itemList), BorderLayout.CENTER);
 
         // Создаем кнопки для деталей

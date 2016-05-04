@@ -31,16 +31,31 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
     private MainFrame mainFrame;
     private ManagementSystem ms = null;
     private JTable itemList;
-    private JList grpList;
+   // private JList grpList;
     private SearchDilog searchDilog;
     private boolean boolName;
     private boolean boolCount;
     private boolean boolDate;
     private boolean boolAll;
-
+    private JLabel lb;
+    private JTextField rates;
     private ArrayList<Item> vector;
 
     public SearchFrame(boolean name, boolean count, boolean date, boolean all, MainFrame mf, SearchDilog sd) throws Exception{
+
+        // Создаем верхнюю панель
+        JPanel top = new JPanel();
+        // Устанавливаем для нее layout
+        top.setLayout(null);
+        top.setPreferredSize(new Dimension(500,30));
+
+        //указать курс валют
+        lb = new JLabel("курс:");
+        lb.setBounds(5,5,30,20);
+        top.add(lb);
+        rates = new JTextField();
+        rates.setBounds(40,5,70,20);
+        top.add(rates);
 
         // Создаем нижнюю панель и задаем ей layout
         JPanel bot = new JPanel();
@@ -90,7 +105,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
 
         // Вставляем панели со списками групп и деталей в нижнюю панель
         bot.add(right, BorderLayout.CENTER);
-
+        bot.add(top, BorderLayout.NORTH);
         // Вставляем  нижнюю панель в форму
         getContentPane().add(bot, BorderLayout.CENTER);
         vector =(ArrayList<Item>) ms.getAllItems();
