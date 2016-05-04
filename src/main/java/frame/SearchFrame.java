@@ -43,6 +43,15 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
 
     public SearchFrame(boolean name, boolean count, boolean date, boolean all, MainFrame mf, SearchDilog sd) throws Exception{
 
+        // Получаем коннект к базе и создаем объект ManagementSystem
+        ms = ManagementSystem.getInstance();
+        this.mainFrame = mf;
+        this.searchDilog = sd;
+        this.boolName = name;
+        this.boolCount = count;
+        this.boolDate = date;
+        this.boolAll = all;
+
         // Создаем верхнюю панель
         JPanel top = new JPanel();
         // Устанавливаем для нее layout
@@ -55,21 +64,13 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
         top.add(lb);
         rates = new JTextField();
         rates.setBounds(40,5,70,20);
+        rates.setText(mainFrame.getRates());
         top.add(rates);
 
         // Создаем нижнюю панель и задаем ей layout
         JPanel bot = new JPanel();
         bot.setLayout(new BorderLayout());
 
-
-        // Получаем коннект к базе и создаем объект ManagementSystem
-        ms = ManagementSystem.getInstance();
-        this.mainFrame = mf;
-        this.searchDilog = sd;
-        this.boolName = name;
-        this.boolCount = count;
-        this.boolDate = date;
-        this.boolAll = all;
         // Создаем правую панель для вывода списка деталей
         JPanel right = new JPanel();
         // Задаем layout и задаем "бордюр" вокруг панели

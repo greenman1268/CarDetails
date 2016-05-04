@@ -590,6 +590,10 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         t.start();
     }
 
+    public String getRates()
+    {
+        return rates.getText();
+    }
     private class TableSearchRenderer extends DefaultTableCellRenderer {
 
         @Override
