@@ -254,7 +254,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
                             // Исправляем данные на деталь - поэтому false
                             // Также заметим, что необходимо указать не просто this, а MainFrame.this
                             // Иначе класс не будет воспринят - он же другой - анонимный
-                            ItemDialog sd = new ItemDialog(ms.getGroups(), false);
+                            ItemDialog sd = new ItemDialog(ms.getGroups());
                             sd.setAlwaysOnTop(true);
                             sd.setItem(s);
                             sd.setModal(true);

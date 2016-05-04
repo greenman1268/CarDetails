@@ -24,7 +24,6 @@ public class ItemDialog extends JDialog implements ActionListener {
     private final static int L_W = 100;     // ширина метки для поля
     private final static int C_W = 150;     // ширина поля
     // Владелец нашего окна - вводим для вызова нужного нам метода
-    private MainFrame owner;
     // Результат нажатия кнопок
     private boolean result = false;
     // Параметры детали
@@ -35,11 +34,9 @@ public class ItemDialog extends JDialog implements ActionListener {
     private JSpinner changeDate = new JSpinner(new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_MONTH));
     private JComboBox groupList;
 
-    // Второй параметр содержит знак - добавление детали или исправление
-    public ItemDialog(List<Group> groups, boolean newItem) {
-        // После вставки детали без закрытия окна нам потребуется перегрузка списка
-        // А для этого нам надо иметь доступ к этому методу в главной форме
-       // this.owner = owner;
+
+    public ItemDialog(List<Group> groups) {
+
         // Установить заголовок
         setTitle("Редактирование данных детали");
         getContentPane().setLayout(new FlowLayout());
@@ -143,17 +140,7 @@ public class ItemDialog extends JDialog implements ActionListener {
         // Добавляем деталь, но не закрываем окно
         // Здесь мы не будем вызывать в отдельном потоке сохранение.
         // Оно не занимает много времени и лишние действия здесь не оправданы
-       /* if (src.getName().equals("New")) {
-            result = true;
-            try {
-                ManagementSystem.getInstance().insertItem(getItem());
-                owner.reloadItems();
-                itemName.setText("");
-            } catch (Exception sql_e) {
-                JOptionPane.showMessageDialog(this, sql_e.getMessage());
-            }
-            return;
-        }*/
+
         if (src.getName().equals("OK")) {
             if(itemName.getText().equals("")){
                 JOptionPane.showMessageDialog(ItemDialog.this,
