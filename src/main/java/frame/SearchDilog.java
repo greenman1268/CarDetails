@@ -127,9 +127,23 @@ public class SearchDilog extends JDialog implements ActionListener {
                     if(date.isSelected())date.setSelected(false);
                     return;
                 }
-                 try {
 
+            try {
+                if(!in_stock.getText().equals("")||!in_stock2.getText().equals(""))
+                {
+                    Integer.parseInt(in_stock.getText());
+                    Integer.parseInt(in_stock2.getText());
+                }
+            }catch (Exception ex){
+                JOptionPane.showMessageDialog(SearchDilog.this, "Введите корректные данные 'В наличии'");
+                in_stock.setText("");
+                return;
+            }
+
+                 try {
                      if(name.isSelected()) {
+                         if(name.getText().equals("")) {
+                             JOptionPane.showMessageDialog(SearchDilog.this, "Введите имя");return;}
                          SF = new SearchFrame(true,false,false,false,owner, SearchDilog.this);
                          SF.setDefaultCloseOperation(HIDE_ON_CLOSE);
                          SF.setVisible(true);
@@ -138,6 +152,8 @@ public class SearchDilog extends JDialog implements ActionListener {
                      }
 
                     if(count.isSelected()) {
+                        if(in_stock.getText().equals("")||in_stock2.getText().equals("")){
+                            JOptionPane.showMessageDialog(SearchDilog.this, "Введите значение");return;}
                         SF = new SearchFrame(false, true, false,false,owner, SearchDilog.this);
                         SF.setDefaultCloseOperation(HIDE_ON_CLOSE);
                         SF.setVisible(true);

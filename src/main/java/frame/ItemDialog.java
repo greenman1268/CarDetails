@@ -2,7 +2,6 @@ package frame;
 
 import logic.Group;
 import logic.Item;
-import logic.ManagementSystem;
 
 import javax.swing.*;
 import java.awt.*;
@@ -159,6 +158,20 @@ public class ItemDialog extends JDialog implements ActionListener {
             if(itemName.getText().equals("")){
                 JOptionPane.showMessageDialog(ItemDialog.this,
                         "Введите имя");return;
+            }
+            try {
+                if(!in_stock.getText().equals("")) Integer.parseInt(in_stock.getText());
+            }catch (Exception ex){
+                JOptionPane.showMessageDialog(ItemDialog.this, "Введите корректные данные 'В наличии'");
+                in_stock.setText("");
+                return;
+            }
+            try {
+                if(!sold.getText().equals("")) Integer.parseInt(sold.getText());
+            }catch (Exception ex){
+                JOptionPane.showMessageDialog(ItemDialog.this, "Введите корректные данные 'Продано'");
+                sold.setText("");
+                return;
             }
             result = true;
         }
