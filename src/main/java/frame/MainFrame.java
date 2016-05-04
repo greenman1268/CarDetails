@@ -625,20 +625,15 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
 
     public static void main(String args[]) {
+
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                try {
                     // Мы сразу отменим продолжение работы, если не сможем получить
                     // коннект к базе данных
-                    MainFrame sf = new MainFrame();
-                    sf.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                    sf.setVisible(true);
-                    sf.reloadItems();
+                    LoginDilog ld = new LoginDilog();
+                    ld.setVisible(true);
 
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
-            }
         });
     }
 

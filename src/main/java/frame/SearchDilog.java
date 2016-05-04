@@ -81,13 +81,13 @@ public class SearchDilog extends JDialog implements ActionListener {
         date.setBounds(L_X + L_W + 30 + C_W + C_W, 90, 20, 20);
         getContentPane().add(date);
 
-        JButton btnOk = new JButton("Поиск");
+        btnOk = new JButton("Поиск");
         btnOk.setName("OK");
         btnOk.addActionListener(this);
         btnOk.setBounds(L_X + L_W + 10, 120, 100, 25);
         getContentPane().add(btnOk);
 
-        JButton btnCancel = new JButton("Cancel");
+        btnCancel = new JButton("Cancel");
         btnCancel.setName("Cancel");
         btnCancel.addActionListener(this);
         btnCancel.setBounds(L_X + L_W + 120, 120, 100, 25);
@@ -137,6 +137,7 @@ public class SearchDilog extends JDialog implements ActionListener {
             }catch (Exception ex){
                 JOptionPane.showMessageDialog(SearchDilog.this, "Введите корректные данные 'В наличии'");
                 in_stock.setText("");
+                in_stock2.setText("");
                 return;
             }
 

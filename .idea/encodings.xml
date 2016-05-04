@@ -7,6 +7,7 @@
     <file url="file://$PROJECT_DIR$/src/main/java/frame/ItemDialog.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/frame/ItemTableModel.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/frame/ItemTableSearchModel.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/frame/LoginDilog.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/frame/MainFrame.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/frame/SearchDilog.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/frame/SearchFrame.java" charset="UTF-8" />
