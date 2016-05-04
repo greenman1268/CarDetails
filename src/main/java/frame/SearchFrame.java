@@ -93,7 +93,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
 
         // Вставляем  нижнюю панель в форму
         getContentPane().add(bot, BorderLayout.CENTER);
-      //  vector =(ArrayList<Item>) ms.getAllItems();
+        vector =(ArrayList<Item>) ms.getAllItems();
         TableSearchRenderer tsr = new TableSearchRenderer();
         itemList.setDefaultRenderer(Object.class, tsr);
 
@@ -198,6 +198,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
                         gd.setVisible(true);
 
                     } catch (SQLException e) {
+                        JOptionPane.showMessageDialog(SearchFrame.this, e.getMessage());
                         e.printStackTrace();
                     }
                     if (gd.getResult()) {
@@ -211,6 +212,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
                                 ms.moveItemsToGroup(item, gd.getGroup());
                             } catch (SQLException e) {
                                 JOptionPane.showMessageDialog(SearchFrame.this, e.getMessage());
+                                e.printStackTrace();
                             }
                         }}
                     reloadItems();
@@ -283,6 +285,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
 
                                 } catch (SQLException e) {
                                     JOptionPane.showMessageDialog(SearchFrame.this, e.getMessage());
+                                    e.printStackTrace();
                                 }
                             }
                             reloadItems();

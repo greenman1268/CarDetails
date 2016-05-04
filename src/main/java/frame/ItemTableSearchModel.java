@@ -1,6 +1,5 @@
 package frame;
 
-import logic.Group;
 import logic.Item;
 import logic.ManagementSystem;
 

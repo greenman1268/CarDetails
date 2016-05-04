@@ -44,6 +44,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     private TableSearchRenderer tsr;
     private ArrayList<Item> vector;
 
+
     public MainFrame() throws Exception{
 
         // Создаем верхнюю панель
@@ -366,6 +367,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                         // Показываем диалог
                         gd.setVisible(true);
                     } catch (SQLException e) {
+                        JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
                         e.printStackTrace();
                     }
                     if (gd.getResult()) {
@@ -379,6 +381,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                              ms.moveItemsToGroup(item, gd.getGroup());
                         } catch (SQLException e) {
                             JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
+                            e.printStackTrace();
                         }
                     }}
                     reloadItems();
@@ -408,6 +411,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                             reloadItems();
                         } catch (SQLException e) {
                             JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -439,6 +443,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                     }
                 } catch (SQLException e) {
                     JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
+                    e.printStackTrace();
                 } }
             }
         };
@@ -506,6 +511,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
                                 } catch (SQLException e) {
                                     JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
+                                    e.printStackTrace();
                                 }
                             }
                             reloadItems();
@@ -534,6 +540,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                             sf.setAlwaysOnTop(true);
                             sf.reloadItems();
                         } catch (Exception e) {
+                            JOptionPane.showMessageDialog(MainFrame.this, e.getMessage());
                             e.printStackTrace();
                         }
                 }
@@ -627,7 +634,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                     sf.setDefaultCloseOperation(EXIT_ON_CLOSE);
                     sf.setVisible(true);
                     sf.reloadItems();
-                  //  sf.reloadGroups();
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
