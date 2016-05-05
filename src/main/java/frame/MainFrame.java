@@ -37,6 +37,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     private static final String INSERT_GR = "insertGroup";
     private static final String CHANGE_GR = "changeGroup";
     private static final String DELETE_GR = "deleteGroup";
+    private static final String PRINT = "print";
 
     private ManagementSystem ms = null;
     private JList grpList;
@@ -69,12 +70,19 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         btnAll.addActionListener(this);
         top.add(btnAll);
 
+        //кнопка печать
+        JButton btnPrint = new JButton("Печать");
+        btnPrint.setName(PRINT);
+        btnPrint.setBounds(195,5,90,20);
+        btnPrint.addActionListener(this);
+        top.add(btnPrint);
+
         //указать курс валют
         lb = new JLabel("курс:");
-        lb.setBounds(210,5,30,20);
+        lb.setBounds(300, 5, 30, 20);
         top.add(lb);
         rates = new JTextField();
-        rates.setBounds(245,5,70,20);
+        rates.setBounds(335,5,70,20);
         top.add(rates);
 
         // Создаем нижнюю панель и задаем ей layout

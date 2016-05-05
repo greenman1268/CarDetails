@@ -27,6 +27,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
     private static final String MOVE_GR = "moveGroup";
     private static final String UPDATE_IT = "updateItem";
     private static final String DELETE_IT = "deleteItem";
+    private static final String PRINT = "print";
 
     private MainFrame mainFrame;
     private ManagementSystem ms = null;
@@ -58,12 +59,19 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
         top.setLayout(null);
         top.setPreferredSize(new Dimension(500,30));
 
+        //кнопка печать
+        JButton btnPrint = new JButton("Печать");
+        btnPrint.setName(PRINT);
+        btnPrint.setBounds(5,5,90,20);
+        btnPrint.addActionListener(this);
+        top.add(btnPrint);
+
         //указать курс валют
         lb = new JLabel("курс:");
-        lb.setBounds(5,5,30,20);
+        lb.setBounds(105,5,30,20);
         top.add(lb);
         rates = new JTextField();
-        rates.setBounds(40,5,70,20);
+        rates.setBounds(140,5,70,20);
         rates.setText(mainFrame.getRates());
         top.add(rates);
 
