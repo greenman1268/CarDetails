@@ -30,12 +30,12 @@ public class ItemTableModel extends AbstractTableModel {
 
     // Количество столбцов - 4. Номер, Дата последнего изменения, Количество в наличии, Количество проданых
     public int getColumnCount() {
-        return 4;
+        return 5;
     }
 
     // Вернем наименование колонки
     public String getColumnName(int column) {
-        String[] colNames = {"Номер", "Дата последнего изменения", "В наличии", "Продано"};
+        String[] colNames = {"Номер", "Дата последнего изменения", "Цена", "В наличии", "Продано"};
         return colNames[column];
     }
 
@@ -50,10 +50,13 @@ public class ItemTableModel extends AbstractTableModel {
                     return item.getItemName();
                 case 1:
                     return DateFormat.getDateInstance(DateFormat.SHORT).format(
-                            item.getChangeDate());
+                           item.getChangeDate());
                 case 2:
-                    return item.getIn_stock();
+                    return item.getPrice();
+
                 case 3:
+                    return item.getIn_stock();
+                case 4:
                     return item.getSold();
             }
         }

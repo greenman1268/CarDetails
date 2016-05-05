@@ -142,7 +142,6 @@ public class ManagementSystem {
             while (rs.next()) {
                 Item item = new Item(rs);
                 items.add(item);
-                System.out.println(item);
             }
         } finally {
             if (rs != null) {
@@ -170,7 +169,6 @@ public class ManagementSystem {
             while (rs.next()) {
                 Item item = new Item(rs);
                 items.add(item);
-                System.out.println(item);
             }
         } finally {
             if (rs != null) {
@@ -191,7 +189,6 @@ public class ManagementSystem {
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
             item = new Item(rs);
-            System.out.println(item);
         }
         rs.close();
         stmt.close();
@@ -260,7 +257,6 @@ public class ManagementSystem {
             while (rs.next()) {
                 Item item = new Item(rs);
                 items.add(item);
-                System.out.println(item);
             }
         } finally {
             if (rs != null) {
@@ -289,7 +285,6 @@ public class ManagementSystem {
             while (rs.next()) {
                 Item item = new Item(rs);
                 items.add(item);
-                System.out.println(item);
             }
         } finally {
             if (rs != null) {
@@ -318,7 +313,6 @@ public class ManagementSystem {
             while (rs.next()) {
                 Item item = new Item(rs);
                 items.add(item);
-                System.out.println(item);
             }
         } finally {
             if (rs != null) {

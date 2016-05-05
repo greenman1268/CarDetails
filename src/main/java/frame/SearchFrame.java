@@ -83,7 +83,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
         // Наша таблица пока ничего не умеет - просто положим ее как заготовку
         // Сделаем в ней 4 колонки - Номер, Дата последнего изменения, Количество в наличии, Количество проданых
 
-        itemList = new JTable(1, 5);
+        itemList = new JTable(1, 6);
         right.add(new JScrollPane(itemList), BorderLayout.CENTER);
 
         // Создаем кнопки для деталей
@@ -170,13 +170,12 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
                         else if (boolAll){
                          s = ms.getAllItems();
                         }
-                        // И устанавливаем модель для таблицы с новыми данными
 
+                        // И устанавливаем модель для таблицы с новыми данными
                         itemList.setModel(new ItemTableSearchModel(new Vector<Item>(s)));
                         vector = (ArrayList<Item>) s;
                         RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(itemList.getModel());
                         itemList.setRowSorter(sorter);
-
 
                     } catch (SQLException e) {
                         e.printStackTrace();

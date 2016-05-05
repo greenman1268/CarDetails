@@ -34,12 +34,12 @@ public class ItemTableSearchModel extends AbstractTableModel {
     }
 
     public int getColumnCount() {
-        return 5;
+        return 6;
     }
 
     // Вернем наименование колонки
     public String getColumnName(int column) {
-        String[] colNames = {"Номер", "Группа", "Дата последнего изменения", "В наличии", "Продано"};
+        String[] colNames = {"Номер", "Группа", "Дата последнего изменения", "Цена", "В наличии", "Продано"};
         return colNames[column];
     }
 
@@ -62,8 +62,10 @@ public class ItemTableSearchModel extends AbstractTableModel {
                     return DateFormat.getDateInstance(DateFormat.SHORT).format(
                             item.getChangeDate());
                 case 3:
-                    return item.getIn_stock();
+                    return item.getPrice();
                 case 4:
+                    return item.getIn_stock();
+                case 5:
                     return item.getSold();
             }
         }

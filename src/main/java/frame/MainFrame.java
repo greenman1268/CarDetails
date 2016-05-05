@@ -142,7 +142,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         // Наша таблица пока ничего не умеет - просто положим ее как заготовку
         // Сделаем в ней 4 колонки - Номер, Дата последнего изменения, Количество в наличии, Количество проданых
 
-        itemList = new JTable(1, 4);
+        itemList = new JTable(1, 5);
         right.add(new JScrollPane(itemList), BorderLayout.CENTER);
 
         // Создаем кнопки для деталей
