@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.Vector;
 
 public class ItemDialog extends JDialog implements ActionListener {
 
-    private static final int D_HEIGHT = 200;   // высота окна
+    private static final int D_HEIGHT = 240;   // высота окна
     private final static int D_WIDTH = 450;   // ширина окна
     private final static int L_X = 10;      // левая граница метки для поля
     private final static int L_W = 100;     // ширина метки для поля
@@ -31,6 +32,7 @@ public class ItemDialog extends JDialog implements ActionListener {
     private JTextField itemName = new JTextField();
     private JTextField in_stock = new JTextField();
     private JTextField sold = new JTextField();
+    private JTextField price = new JTextField();
     private JSpinner changeDate = new JSpinner(new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_MONTH));
     private JComboBox groupList;
 
@@ -54,34 +56,40 @@ public class ItemDialog extends JDialog implements ActionListener {
         itemName.setBounds(L_X + L_W + 10, 30, C_W, 20);
         getContentPane().add(itemName);
 
-        l = new JLabel("В наличии:", JLabel.RIGHT);
+        l = new JLabel("Цена:", JLabel.RIGHT);
         l.setBounds(L_X, 60, L_W, 20);
         getContentPane().add(l);
-        in_stock.setBounds(L_X + L_W + 10, 60, C_W, 20);
+        price.setBounds(L_X + L_W + 10, 60, C_W, 20);
+        getContentPane().add(price);
+
+        l = new JLabel("В наличии:", JLabel.RIGHT);
+        l.setBounds(L_X, 90, L_W, 20);
+        getContentPane().add(l);
+        in_stock.setBounds(L_X + L_W + 10, 90, C_W, 20);
         getContentPane().add(in_stock);
 
         l = new JLabel("Продано:", JLabel.RIGHT);
-        l.setBounds(L_X, 90, L_W, 20);
+        l.setBounds(L_X, 120, L_W, 20);
         getContentPane().add(l);
-        sold.setBounds(L_X + L_W + 10, 90, C_W, 20);
+        sold.setBounds(L_X + L_W + 10, 120, C_W, 20);
         getContentPane().add(sold);
 
         l = new JLabel("Дата изменения:", JLabel.RIGHT);
-        l.setBounds(L_X, 120, L_W, 20);
+        l.setBounds(L_X, 150, L_W, 20);
         getContentPane().add(l);
-        changeDate.setBounds(L_X + L_W + 10, 120, C_W, 20);
+        changeDate.setBounds(L_X + L_W + 10, 150, C_W, 20);
         getContentPane().add(changeDate);
 
         JButton btnOk = new JButton("ОК");
         btnOk.setName("OK");
         btnOk.addActionListener(this);
-        btnOk.setBounds(L_X + L_W + C_W + 10 + 50, 10, 100, 25);
+        btnOk.setBounds(L_X + L_W + C_W + 10 + 50, 30, 100, 25);
         getContentPane().add(btnOk);
 
         JButton btnCancel = new JButton("Cancel");
         btnCancel.setName("Cancel");
         btnCancel.addActionListener(this);
-        btnCancel.setBounds(L_X + L_W + C_W + 10 + 50, 40, 100, 25);
+        btnCancel.setBounds(L_X + L_W + C_W + 10 + 50, 60, 100, 25);
         getContentPane().add(btnCancel);
 
         // Устанавливаем поведение формы при закрытии - не закрывать совсем.
@@ -101,6 +109,7 @@ public class ItemDialog extends JDialog implements ActionListener {
         changeDate.getModel().setValue(item.getChangeDate());
         in_stock.setText(Integer.toString(item.getIn_stock()));
         sold.setText(Integer.toString(item.getSold()));
+        price.setText(item.getPrice().toString());
 
         for (int i = 0; i < groupList.getModel().getSize(); i++) {
             Group g = (Group) groupList.getModel().getElementAt(i);
@@ -118,6 +127,7 @@ public class ItemDialog extends JDialog implements ActionListener {
         item.setItemName(itemName.getText());
         Date d = ((SpinnerDateModel) changeDate.getModel()).getDate();
         item.setChangeDate(d);
+        item.setPrice(new BigDecimal(price.getText()));
 
         if(in_stock.getText().equals("")){ item.setIn_stock(0); }
         else {item.setIn_stock(Integer.parseInt(in_stock.getText())); }
@@ -145,6 +155,13 @@ public class ItemDialog extends JDialog implements ActionListener {
             if(itemName.getText().equals("")){
                 JOptionPane.showMessageDialog(ItemDialog.this,
                         "Введите имя");return;
+            }
+            try {
+                if(!price.getText().equals("")) new BigDecimal(price.getText());
+            }catch (Exception ex){
+                JOptionPane.showMessageDialog(ItemDialog.this, "Введите корректные данные 'Цена'");
+                price.setText("");
+                return;
             }
             try {
                 if(!in_stock.getText().equals("")) Integer.parseInt(in_stock.getText());
