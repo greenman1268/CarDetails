@@ -1,5 +1,6 @@
 package logic.report;
 
+import logic.Item;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -7,14 +8,20 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class ExcelGenerateReport {
+
+    private static ArrayList<Item> itemList;
 
     private static CellStyle stTop = null;//font 15 bold right
     private static CellStyle stTop1 = null;//font 15 bold middle
     private static CellStyle stTop3 = null;//font 14
     private static CellStyle stMid = null;//font 14 bold middle
 
+    public ExcelGenerateReport(ArrayList<Item> list){
+        this.itemList = list;
+    }
 
     public static void write_xlsx() {
         try {
@@ -169,7 +176,7 @@ public class ExcelGenerateReport {
        }
 
     public static void main(String[] args) {
-        ExcelGenerateReport exg = new ExcelGenerateReport();
+        ExcelGenerateReport exg = new ExcelGenerateReport(new ArrayList<Item>());
         exg.write_xlsx();
     }
 }

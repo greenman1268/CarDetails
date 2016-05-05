@@ -226,6 +226,9 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
             if (c.getName().equals(DELETE_GR)) {
                 deleteGroup();
             }
+            if (c.getName().equals(PRINT)) {
+                printReport();
+            }
         }
     }
 
@@ -601,6 +604,30 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     {
         return rates.getText();
     }
+
+    private void printReport() {
+        Thread t = new Thread(){
+
+            public void run() {
+                if (itemList != null){
+                    if (itemList.getSelectedRows().length == 0) {
+                        JOptionPane.showMessageDialog(MainFrame.this,
+                                "Необходимо выделить деталь в списке");
+                        return;
+                    }
+                if (itemList.getSelectedRows().length > 0) {
+                    ItemTableModel itmstm = (ItemTableModel) itemList.getModel();
+                    ArrayList<Item> s = new ArrayList<>();
+                    for (int i = 0; i < itemList.getSelectedRows().length; i++) {
+                        s.add(itmstm.getItem(itemList.getSelectedRows()[i]));
+                    }
+                }
+            }
+            }
+        };
+        t.start();
+
+    }
     private class TableSearchRenderer extends DefaultTableCellRenderer {
 
         @Override
@@ -651,7 +678,6 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                     // коннект к базе данных
                     LoginDilog ld = new LoginDilog();
                     ld.setVisible(true);
-
                 }
         });
     }

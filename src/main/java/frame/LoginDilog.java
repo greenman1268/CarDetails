@@ -67,7 +67,7 @@ public class LoginDilog extends JDialog implements ActionListener {
         JButton src = (JButton) e.getSource();
 
         if(src.getName().equals("OK")){
-            if(login.getText().equals("admin") && password.getText().equals("1")){
+            if(login.getText().equals("") && password.getText().equals("")){
                 try{
                 MainFrame sf = new MainFrame();
                 sf.setDefaultCloseOperation(EXIT_ON_CLOSE);
