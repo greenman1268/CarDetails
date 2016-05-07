@@ -18,7 +18,7 @@ public class Item implements Comparable{
     private int in_stock;
     private int sold;
     private BigDecimal price;
-
+    private Boolean print = false;
     public Item() {
     }
 
@@ -54,6 +54,8 @@ public class Item implements Comparable{
 
     public BigDecimal getPrice() {return price;}
 
+    public Boolean getPrint(){return print;}
+
     public void setItemId(int itemId) {
         this.itemId = itemId;
     }
@@ -75,6 +77,8 @@ public class Item implements Comparable{
     }
 
     public void setPrice(BigDecimal price) { this.price = price;}
+
+    public void setPrint(Boolean print) { this.print = print;}
 
     public String btoS(){
         SimpleDateFormat smt = new SimpleDateFormat("dd.MM.YYYY");

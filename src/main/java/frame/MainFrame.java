@@ -46,6 +46,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     private JTextField rates;
     private TableSearchRenderer tsr;
     private ArrayList<Item> vector;
+    private ArrayList<Item> selected;
 
 
     public MainFrame() throws Exception{
@@ -84,6 +85,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         rates = new JTextField();
         rates.setBounds(335,5,70,20);
         top.add(rates);
+        selected = new ArrayList<>();
 
         // Создаем нижнюю панель и задаем ей layout
         JPanel bot = new JPanel();
@@ -150,7 +152,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         // Наша таблица пока ничего не умеет - просто положим ее как заготовку
         // Сделаем в ней 4 колонки - Номер, Дата последнего изменения, Количество в наличии, Количество проданых
 
-        itemList = new JTable(1, 5);
+        itemList = new JTable(1, 6);
         right.add(new JScrollPane(itemList), BorderLayout.CENTER);
 
         // Создаем кнопки для деталей
@@ -189,6 +191,9 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         itemList.setDefaultRenderer(Object.class, tsr);
         JTableHeader header = itemList.getTableHeader();
         header.setDefaultRenderer(new MyTableHeaderRenderer(header.getDefaultRenderer()));
+
+
+
         // Задаем границы формы
         setBounds(100, 100, 1000, 500);
     }
@@ -228,6 +233,17 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
             }
             if (c.getName().equals(PRINT)) {
                 printReport();
+            }
+            for (int i = 0; i < itemList.getRowCount(); i++) {
+                Boolean checked = Boolean.valueOf(itemList.getValueAt(i,5).toString());
+
+                if(checked){
+                    selected.add((Item)vector.get(i));
+
+                }
+
+            }for (int i = 0; i < selected.size(); i++) {
+                System.out.println(selected.get(i).getItemName());
             }
         }
     }
@@ -285,6 +301,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                         itemList.setModel(new ItemTableModel(new Vector<Item>(s)));
                         RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(itemList.getModel());
                         itemList.setRowSorter(sorter);
+
                         vector =(ArrayList<Item>) s;
 
                     } catch (SQLException e) {
@@ -610,18 +627,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
             public void run() {
                 if (itemList != null){
-                    if (itemList.getSelectedRows().length == 0) {
-                        JOptionPane.showMessageDialog(MainFrame.this,
-                                "Необходимо выделить деталь в списке");
-                        return;
-                    }
-                if (itemList.getSelectedRows().length > 0) {
-                    ItemTableModel itmstm = (ItemTableModel) itemList.getModel();
-                    ArrayList<Item> s = new ArrayList<>();
-                    for (int i = 0; i < itemList.getSelectedRows().length; i++) {
-                        s.add(itmstm.getItem(itemList.getSelectedRows()[i]));
-                    }
-                }
+
             }
             }
         };

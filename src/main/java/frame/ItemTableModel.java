@@ -7,6 +7,8 @@ package frame;
 import logic.Item;
 
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.Vector;
 
@@ -30,14 +32,60 @@ public class ItemTableModel extends AbstractTableModel {
 
     // Количество столбцов - 4. Номер, Дата последнего изменения, Количество в наличии, Количество проданых
     public int getColumnCount() {
-        return 5;
+        return 6;
     }
 
     // Вернем наименование колонки
     public String getColumnName(int column) {
-        String[] colNames = {"Номер", "Дата последнего изменения", "Цена", "В наличии", "Продано"};
+        String[] colNames = {"Номер", "Дата последнего изменения", "Цена", "В наличии", "Продано", "Печать"};
         return colNames[column];
     }
+
+    @Override
+    public boolean isCellEditable(int row, int col){
+        if(col == 5){
+            return true;
+        }
+        return false;
+    }
+
+    public void setValueAt(Object value, int row, int col) {
+        if(items != null){
+            Item item = (Item) items.get(row);
+
+            switch (col){
+                case 0:item.setItemName((String)value);break;
+                case 1:item.setChangeDate((java.util.Date)value);break;
+                case 2:item.setPrice((BigDecimal)value);break;
+                case 3:item.setIn_stock((Integer)value);break;
+                case 4:item.setSold((Integer)value);break;
+                case 5:item.setPrint((Boolean)value);break;
+                default:
+                    System.out.println("SOMETHING WRONG");
+            }
+        }
+        fireTableCellUpdated(row, col);
+    }
+    @Override
+    public Class getColumnClass(int column){
+        switch (column){
+            case 0:
+                return String.class;
+            case 1:
+                return DateFormat.class;
+            case 2:
+                return BigDecimal.class;
+            case 3:
+                return Integer.class;
+            case 4:
+                return Integer.class;
+            case 5:
+                return Boolean.class;
+            default:
+                return null;
+        }
+    }
+
 
     // Возвращаем данные для определенной строки и столбца
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -58,6 +106,8 @@ public class ItemTableModel extends AbstractTableModel {
                     return item.getIn_stock();
                 case 4:
                     return item.getSold();
+                case 5:
+                    return item.getPrint();
             }
         }
         return null;

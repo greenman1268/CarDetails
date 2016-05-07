@@ -127,10 +127,11 @@ public class ItemDialog extends JDialog implements ActionListener {
         item.setItemName(itemName.getText());
         Date d = ((SpinnerDateModel) changeDate.getModel()).getDate();
         item.setChangeDate(d);
-        item.setPrice(new BigDecimal(price.getText()));
+        if(price.getText().equals("")){item.setPrice(new BigDecimal(0));}
+        else { item.setPrice(new BigDecimal(price.getText())); }
 
         if(in_stock.getText().equals("")){ item.setIn_stock(0); }
-        else {item.setIn_stock(Integer.parseInt(in_stock.getText())); }
+        else { item.setIn_stock(Integer.parseInt(in_stock.getText())); }
 
         if(sold.getText().equals("")){ item.setSold(0); }
         else { item.setSold(Integer.parseInt(sold.getText())); }

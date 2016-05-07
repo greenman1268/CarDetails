@@ -326,6 +326,8 @@ public class ManagementSystem {
         return items;
     }
 
+
+
     public static void makeDB() throws SQLException{
         String query;
 
@@ -367,10 +369,9 @@ public class ManagementSystem {
         stmt.executeUpdate(query);
 
     }
-
-  /*  public static void main(String[] args) throws Exception {
-        ManagementSystem ms = ManagementSystem.getInstance();
-    }*/
+/*
+   public static void main(String[] args) throws Exception {
+        ManagementSystem ms = ManagementSystem.getInstance();}*/
 
 }
 
