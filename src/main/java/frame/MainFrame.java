@@ -7,6 +7,7 @@ package frame;
 import logic.Group;
 import logic.Item;
 import logic.ManagementSystem;
+import logic.report.ExcelGenerateReport;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -640,7 +641,19 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
             public void run() {
                 if (itemList != null){
-
+                    if(selected.size()>0){
+                        ArrayList<Item> list = new ArrayList<>();
+                        for (int i = 0; i < selected.size(); i++) {
+                            if(selected.get(i).getPrint())list.add(selected.get(i));
+                        }
+                        ExcelGenerateReport ExGR = new ExcelGenerateReport(new ArrayList<>(selected));
+                       // ExGR.main();
+                        selected.clear();
+                        reloadItems();
+                    }
+                    else JOptionPane.showMessageDialog(MainFrame.this,
+                            "Необходимо отметить деталь в списке");
+                    return;
             }
             }
         };
