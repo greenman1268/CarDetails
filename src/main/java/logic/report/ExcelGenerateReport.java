@@ -26,6 +26,7 @@ public class ExcelGenerateReport {
     private static CellStyle stTop2 = null;//font 12
     private static CellStyle stTop2R = null;//font 12
     private static CellStyle stTop3 = null;//font 11
+    private static CellStyle stTop4 = null;//font 10
     private static CellStyle stHead = null;//font 12 bold with bold top, left and thin right,bottom
     private static CellStyle stHead1 = null;//font 12 bold with bold top and thin left,right,bottom
     private static CellStyle stHead2 = null;//font 12 bold with bold top,right and thin left,bottom
@@ -88,8 +89,13 @@ public class ExcelGenerateReport {
 
         //font 11
         Font fmid2 = wb.createFont();
-        fmid.setFontName("Arial");
-        fmid.setFontHeightInPoints((short)11);
+        fmid2.setFontName("Arial");
+        fmid2.setFontHeightInPoints((short)11);
+        
+        //font 10
+        Font fmid3 = wb.createFont();
+        fmid3.setFontName("Arial");
+        fmid3.setFontHeightInPoints((short)8);
 
         //font 15 bold without borders right
         stTop = wb.createCellStyle();
@@ -117,6 +123,11 @@ public class ExcelGenerateReport {
         stTop3 = wb.createCellStyle();
         stTop3.setFont(fmid2);
         stTop3.setAlignment(CellStyle.ALIGN_LEFT);
+        
+        //font 10 without borders
+        stTop4 = wb.createCellStyle();
+        stTop4.setFont(fmid3);
+        stTop4.setAlignment(CellStyle.ALIGN_LEFT);
         
         //font 12 bold center top-left
         stHead = wb.createCellStyle();
@@ -266,8 +277,8 @@ public class ExcelGenerateReport {
         sheet.setColumnWidth(3, 1200);
         sheet.setColumnWidth(4, 2000);
         sheet.setColumnWidth(5, 1300);
-        sheet.setColumnWidth(6, 9000);
-        sheet.setColumnWidth(7, 4000);
+        sheet.setColumnWidth(6, 8500);
+        sheet.setColumnWidth(7, 4500);
         sheet.setColumnWidth(8, 1650);
         sheet.setColumnWidth(9, 1500);
         sheet.setColumnWidth(10, 1000);
@@ -604,6 +615,7 @@ public class ExcelGenerateReport {
         sheet.addMergedRegion(region);
         c14_1.setCellValue("Всього найменувань 1, на суму 444,00");//-------->Доработать
         
+        //ROW 3
         rows++;
         Row row15 = sheet.createRow(rows);
         Cell c15_1 = row15.createCell(1);
@@ -621,7 +633,8 @@ public class ExcelGenerateReport {
         region = new CellRangeAddress(rows, rows, 1, 6);
         sheet.addMergedRegion(region);
         c15_1.setCellValue("Чотириста сорок чотири гривнi 00 копiйок");//-------->Доработать
-
+        
+        //ROW 4
         rows++;
         Row row16 = sheet.createRow(rows);
         Cell cell;
@@ -629,8 +642,154 @@ public class ExcelGenerateReport {
             cell = row16.createCell(i);
             cell.setCellStyle(stTop);
         }
-
+        
+        //ROW 5
         rows+=2;
+        Row row17 = sheet.createRow(rows);
+        Cell c17_1 = row17.createCell(1);
+        c17_1.setCellStyle(stTop2);
+        Cell c17_2 = row17.createCell(2);
+        c17_2.setCellStyle(stTop2);
+        Cell c17_3 = row17.createCell(3);
+        c17_3.setCellStyle(stTop2);
+        region = new CellRangeAddress(rows, rows, 1, 3);
+        sheet.addMergedRegion(region);
+        c17_1.setCellValue("Виконавець");//-------->Доработать
+        
+        Cell c17_6 = row17.createCell(6);
+        c17_6.setCellStyle(stTop);
+        
+        Cell c17_7 = row17.createCell(7);
+        c17_7.setCellStyle(stTop4);
+        Cell c17_8 = row17.createCell(8);
+        c17_8.setCellStyle(stTop4);
+        Cell c17_9 = row17.createCell(9);
+        c17_9.setCellStyle(stTop4);
+        Cell c17_10 = row17.createCell(10);
+        c17_10.setCellStyle(stTop4);
+        Cell c17_11 = row17.createCell(11);
+        c17_11.setCellStyle(stTop4);
+        Cell c17_12 = row17.createCell(12);
+        c17_12.setCellStyle(stTop4);
+        region = new CellRangeAddress(rows, rows, 7, 12);
+        sheet.addMergedRegion(region);
+        c17_7.setCellValue("  УВАГА! Шановний покупець, умови обмiну чи повернення товару");
+        
+        //ROW 6
+        rows++;
+        Row row18 = sheet.createRow(rows);
+        Cell c18_7 = row18.createCell(7);
+        c18_7.setCellStyle(stTop4);
+        Cell c18_8 = row18.createCell(8);
+        c18_8.setCellStyle(stTop4);
+        Cell c18_9 = row18.createCell(9);
+        c18_9.setCellStyle(stTop4);
+        Cell c18_10 = row18.createCell(10);
+        c18_10.setCellStyle(stTop4);
+        Cell c18_11 = row18.createCell(11);
+        c18_11.setCellStyle(stTop4);
+        Cell c18_12 = row18.createCell(12);
+        c18_12.setCellStyle(stTop4);
+        region = new CellRangeAddress(rows, rows, 7, 12);
+        sheet.addMergedRegion(region);
+        c18_7.setCellValue("- вiн не використовувався та зберiгся у тому виглядi, в якому був отриманий"); 
+        
+        //ROW 7
+        rows++;
+        Row row19 = sheet.createRow(rows);
+        Cell c19_7 = row19.createCell(7);
+        c19_7.setCellStyle(stTop4);
+        Cell c19_8 = row19.createCell(8);
+        c19_8.setCellStyle(stTop4);
+        Cell c19_9 = row19.createCell(9);
+        c19_9.setCellStyle(stTop4);
+        Cell c19_10 = row19.createCell(10);
+        c19_10.setCellStyle(stTop4);
+        Cell c19_11 = row19.createCell(11);
+        c19_11.setCellStyle(stTop4);
+        Cell c19_12 = row19.createCell(12);
+        c19_12.setCellStyle(stTop4);
+        region = new CellRangeAddress(rows, rows, 7, 12);
+        sheet.addMergedRegion(region);
+        c19_7.setCellValue("- минуло лише 14 днiв з дати замовлення.");
+        
+        //ROW 8
+        rows++;
+        Row row20 = sheet.createRow(rows);
+        Cell c20_7 = row20.createCell(7);
+        c20_7.setCellStyle(stTop4);
+        Cell c20_8 = row20.createCell(8);
+        c20_8.setCellStyle(stTop4);
+        Cell c20_9 = row20.createCell(9);
+        c20_9.setCellStyle(stTop4);
+        Cell c20_10 = row20.createCell(10);
+        c20_10.setCellStyle(stTop4);
+        Cell c20_11 = row20.createCell(11);
+        c20_11.setCellStyle(stTop4);
+        Cell c20_12 = row20.createCell(12);
+        c20_12.setCellStyle(stTop4);
+        region = new CellRangeAddress(rows, rows, 7, 12);
+        sheet.addMergedRegion(region);
+        c20_7.setCellValue("- про рiшення повернути товар необхiдно повiдомити 0577602100, 0955159725");
+        
+        //ROW 9
+        rows++;
+        Row row21 = sheet.createRow(rows);
+        Cell c21_7 = row21.createCell(7);
+        c21_7.setCellStyle(stTop4);
+        Cell c21_8 = row21.createCell(8);
+        c21_8.setCellStyle(stTop4);
+        Cell c21_9 = row21.createCell(9);
+        c21_9.setCellStyle(stTop4);
+        Cell c21_10 = row21.createCell(10);
+        c21_10.setCellStyle(stTop4);
+        Cell c21_11 = row21.createCell(11);
+        c21_11.setCellStyle(stTop4);
+        Cell c21_12 = row21.createCell(12);
+        c21_12.setCellStyle(stTop4);
+        region = new CellRangeAddress(rows, rows, 7, 12);
+        sheet.addMergedRegion(region);
+        c21_7.setCellValue("- 0673551585, 0632332110 або на пошту zakaz@cartuz.com");
+        
+        //ROW 10
+        rows++;
+        Row row22 = sheet.createRow(rows);
+        Cell c22_7 = row22.createCell(7);
+        c22_7.setCellStyle(stTop4);
+        Cell c22_8 = row22.createCell(8);
+        c22_8.setCellStyle(stTop4);
+        Cell c22_9 = row22.createCell(9);
+        c22_9.setCellStyle(stTop4);
+        Cell c22_10 = row22.createCell(10);
+        c22_10.setCellStyle(stTop4);
+        Cell c22_11 = row22.createCell(11);
+        c22_11.setCellStyle(stTop4);
+        Cell c22_12 = row22.createCell(12);
+        c22_12.setCellStyle(stTop4);
+        region = new CellRangeAddress(rows, rows, 7, 12);
+        sheet.addMergedRegion(region);
+        c22_7.setCellValue("- повернення вiдправляти необхiдно \"Новою Поштою\" чи \"Iнтаймом\" без звор. дост.");
+        
+        //ROW 11
+        rows++;
+        Row row23 = sheet.createRow(rows);
+        Cell c23_7 = row23.createCell(7);
+        c23_7.setCellStyle(stTop4);
+        Cell c23_8 = row23.createCell(8);
+        c23_8.setCellStyle(stTop4);
+        Cell c23_9 = row23.createCell(9);
+        c23_9.setCellStyle(stTop4);
+        Cell c23_10 = row23.createCell(10);
+        c23_10.setCellStyle(stTop4);
+        Cell c23_11 = row23.createCell(11);
+        c23_11.setCellStyle(stTop4);
+        Cell c23_12 = row23.createCell(12);
+        c23_12.setCellStyle(stTop4);
+        region = new CellRangeAddress(rows, rows, 7, 12);
+        sheet.addMergedRegion(region);
+        c23_7.setCellValue("- товар на замовлення поверненню не пiдлягає ");
+        
+        
 
 
     }
@@ -659,9 +818,9 @@ public class ExcelGenerateReport {
         }
     }
 
-    public static void main(String[] args) {
-        ExcelGenerateReport exg = new ExcelGenerateReport(new ArrayList<Item>());
-        exg.write_xlsx();
+    public static void main() {
+
+        write_xlsx();
         Desktop desktop = null;
         if (Desktop.isDesktopSupported()) {
             desktop = Desktop.getDesktop();
