@@ -6,6 +6,7 @@ package frame;
 
 import logic.Item;
 
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import java.math.BigDecimal;
@@ -43,10 +44,7 @@ public class ItemTableModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int row, int col){
-        if(col == 5){
-            return true;
-        }
-        return false;
+        return true;
     }
 
     public void setValueAt(Object value, int row, int col) {
@@ -134,4 +132,6 @@ public class ItemTableModel extends AbstractTableModel {
         }
         return null;
     }
+
+
 }

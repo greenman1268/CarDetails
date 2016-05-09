@@ -10,12 +10,10 @@ import logic.ManagementSystem;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
 import javax.swing.table.*;
 import javax.swing.RowSorter;
+import javax.swing.text.StyledEditorKit;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -46,8 +44,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     private JTextField rates;
     private TableSearchRenderer tsr;
     private ArrayList<Item> vector;
-    private ArrayList<Item> selected;
-
+    private Vector<Item> selected = new Vector<>();
 
     public MainFrame() throws Exception{
 
@@ -85,7 +82,6 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         rates = new JTextField();
         rates.setBounds(335,5,70,20);
         top.add(rates);
-        selected = new ArrayList<>();
 
         // Создаем нижнюю панель и задаем ей layout
         JPanel bot = new JPanel();
@@ -234,19 +230,9 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
             if (c.getName().equals(PRINT)) {
                 printReport();
             }
-            for (int i = 0; i < itemList.getRowCount(); i++) {
-                Boolean checked = Boolean.valueOf(itemList.getValueAt(i,5).toString());
 
-                if(checked){
-                    selected.add((Item)vector.get(i));
 
-                }
-
-            }for (int i = 0; i < selected.size(); i++) {
-                System.out.println(selected.get(i).getItemName());
-            }
-        }
-    }
+}}
 
     // Метод для обеспечения интерфейса ListSelectionListener
     public void valueChanged(ListSelectionEvent e) {
@@ -298,7 +284,34 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                         // Получаем список деталей
                         Collection<Item> s = ms.getItemsFromGroup(g);
                         // И устанавливаем модель для таблицы с новыми данными
-                        itemList.setModel(new ItemTableModel(new Vector<Item>(s)));
+                       final Vector<Item> v = new Vector(s);
+                        if(selected!=null){
+                            for (int i = 0; i < v.size(); i++) {
+                                for (int j = 0; j < selected.size(); j++) {
+                                    if(v.get(i).getItemName().equals(selected.get(j).getItemName())&& v.get(i).getGroupId()==selected.get(j).getGroupId())
+                                        v.get(i).setPrint(selected.get(j).getPrint());
+                                }
+                            }
+                        }
+
+
+
+                        itemList.setModel(new ItemTableModel(v));
+                        itemList.getModel().addTableModelListener(new TableModelListener() {
+                            @Override
+                            public void tableChanged(TableModelEvent tableModelEvent) {
+                                int row = tableModelEvent.getFirstRow();
+                                int column = tableModelEvent.getColumn();
+                                if(column == 5){
+                                    TableModel model = (TableModel)tableModelEvent.getSource();
+                                    Boolean checked = (Boolean)model.getValueAt(row,column);
+                                    Item item = v.get(row);
+                                    item.setPrint(checked);
+                                    selected.add(item);
+                                }
+                            }
+                        });
+
                         RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(itemList.getModel());
                         itemList.setRowSorter(sorter);
 

@@ -327,7 +327,6 @@ public class ManagementSystem {
     }
 
 
-
     public static void makeDB() throws SQLException{
         String query;
 

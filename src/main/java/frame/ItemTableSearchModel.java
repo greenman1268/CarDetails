@@ -4,6 +4,7 @@ import logic.Item;
 import logic.ManagementSystem;
 
 import javax.swing.table.AbstractTableModel;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.Vector;
@@ -33,13 +34,59 @@ public class ItemTableSearchModel extends AbstractTableModel {
         return 0;
     }
 
+    @Override
+    public boolean isCellEditable(int row, int col){
+        return true;
+    }
+
     public int getColumnCount() {
-        return 6;
+        return 7;
+    }
+
+    public void setValueAt(Object value, int row, int col) {
+        if(items != null){
+            Item item = (Item) items.get(row);
+
+            switch (col){
+                case 0:item.setItemName((String)value);break;
+                case 1:item.setGroupId((Integer)value);break;
+                case 2:item.setChangeDate((java.util.Date)value);break;
+                case 3:item.setPrice((BigDecimal)value);break;
+                case 4:item.setIn_stock((Integer)value);break;
+                case 5:item.setSold((Integer)value);break;
+                case 6:item.setPrint((Boolean)value);break;
+                default:
+                    System.out.println("SOMETHING WRONG");
+            }
+        }
+        fireTableCellUpdated(row, col);
+    }
+
+    @Override
+    public Class getColumnClass(int column){
+        switch (column){
+            case 0:
+                return String.class;
+            case 1:
+                return String.class;
+            case 2:
+                return DateFormat.class;
+            case 3:
+                return BigDecimal.class;
+            case 4:
+                return Integer.class;
+            case 5:
+                return Integer.class;
+            case 6:
+                return Boolean.class;
+            default:
+                return null;
+        }
     }
 
     // Вернем наименование колонки
     public String getColumnName(int column) {
-        String[] colNames = {"Номер", "Группа", "Дата последнего изменения", "Цена", "В наличии", "Продано"};
+        String[] colNames = {"Номер", "Группа", "Дата последнего изменения", "Цена", "В наличии", "Продано", "Печать"};
         return colNames[column];
     }
 
@@ -67,6 +114,8 @@ public class ItemTableSearchModel extends AbstractTableModel {
                     return item.getIn_stock();
                 case 5:
                     return item.getSold();
+                case 6:
+                    return item.getPrint();
             }
         }
         return null;

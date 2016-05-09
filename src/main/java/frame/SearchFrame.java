@@ -5,10 +5,7 @@ import logic.ManagementSystem;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -41,6 +38,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
     private JLabel lb;
     private JTextField rates;
     private ArrayList<Item> vector;
+    private Vector<Item> selected = new Vector<>();
 
     public SearchFrame(boolean name, boolean count, boolean date, boolean all, MainFrame mf, SearchDilog sd) throws Exception{
 
@@ -166,6 +164,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
                         // Получаем список деталей
 
                         Collection<Item> s = ms.getAllItems();//ms.getItemsFromGroup(g);
+
                         if(boolName){
                          s = ms.searchItemsByName(searchDilog.getName());
                         }
@@ -179,8 +178,31 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
                          s = ms.getAllItems();
                         }
 
+                        final Vector<Item> v = new Vector(s);
+                        if(selected!=null){
+                            for (int i = 0; i < v.size(); i++) {
+                                for (int j = 0; j < selected.size(); j++) {
+                                    if(v.get(i).getItemName().equals(selected.get(j).getItemName())&& v.get(i).getGroupId()==selected.get(j).getGroupId())
+                                        v.get(i).setPrint(selected.get(j).getPrint());
+                                }
+                            }
+                        }
                         // И устанавливаем модель для таблицы с новыми данными
                         itemList.setModel(new ItemTableSearchModel(new Vector<Item>(s)));
+                        itemList.getModel().addTableModelListener(new TableModelListener() {
+                            @Override
+                            public void tableChanged(TableModelEvent tableModelEvent) {
+                                int row = tableModelEvent.getFirstRow();
+                                int column = tableModelEvent.getColumn();
+                                if(column == 6){
+                                    TableModel model = (TableModel)tableModelEvent.getSource();
+                                    Boolean checked = (Boolean)model.getValueAt(row,column);
+                                    Item item = v.get(row);
+                                    item.setPrint(checked);
+                                    selected.add(item);
+                                }
+                            }
+                        });
                         vector = (ArrayList<Item>) s;
                         RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(itemList.getModel());
                         itemList.setRowSorter(sorter);
