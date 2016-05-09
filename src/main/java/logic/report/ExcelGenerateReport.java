@@ -26,6 +26,8 @@ public class ExcelGenerateReport {
     private static CellStyle stTop2 = null;//font 12
     private static CellStyle stTop3 = null;//font 11
     private static CellStyle stHead = null;//font 12 bold with bold top, left and thin right,bottom
+    private static CellStyle stHead1 = null;//font 12 bold with bold top and thin left,right,bottom
+    private static CellStyle stHead2 = null;//font 12 bold with bold top,right and thin left,bottom
 
     private static XSSFWorkbook  wb = null;
     private static XSSFSheet sheet = null;
@@ -84,7 +86,7 @@ public class ExcelGenerateReport {
         stTop = wb.createCellStyle();
         stTop.setFont(ftop);
         stTop.setAlignment(CellStyle.ALIGN_LEFT);
-        stTop.setBorderBottom(CellStyle.BORDER_THICK);
+        stTop.setBorderBottom(CellStyle.BORDER_MEDIUM);
         stTop.setBottomBorderColor(IndexedColors.BLACK.getIndex());
 
         //font 12
@@ -101,11 +103,56 @@ public class ExcelGenerateReport {
         stTop3 = wb.createCellStyle();
         stTop3.setFont(fmid2);
         stTop3.setAlignment(CellStyle.ALIGN_LEFT);
-
-
-        /*stMid.setFillBackgroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
-        stMid.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());*/
-
+        
+        //font 12 bold center top-left
+        stHead = wb.createCellStyle();
+        stHead.setFont(fmid1);
+        stHead.setAlignment(CellStyle.ALIGN_CENTER);
+        stHead.setBorderTop(CellStyle.BORDER_MEDIUM);
+        stHead.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        stHead.setBorderLeft(CellStyle.BORDER_MEDIUM);
+        stHead.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        stHead.setBorderRight(CellStyle.BORDER_THIN);
+        stHead.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        stHead.setBorderBottom(CellStyle.BORDER_THIN);
+        stHead.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        stHead.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        stHead.setFillBackgroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        stHead.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());  
+        
+        //font 12 bold center top-center
+        stHead1 = wb.createCellStyle();
+        stHead1.setFont(fmid1);
+        stHead1.setAlignment(CellStyle.ALIGN_CENTER);
+        stHead1.setBorderTop(CellStyle.BORDER_MEDIUM);
+        stHead1.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        stHead1.setBorderLeft(CellStyle.BORDER_THIN);
+        stHead1.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        stHead1.setBorderRight(CellStyle.BORDER_THIN);
+        stHead1.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        stHead1.setBorderBottom(CellStyle.BORDER_THIN);
+        stHead1.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        stHead1.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        stHead1.setFillBackgroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        stHead1.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());  
+        
+        //font 12 bold center top-right
+        stHead2 = wb.createCellStyle();
+        stHead2.setFont(fmid1);
+        stHead2.setAlignment(CellStyle.ALIGN_CENTER);
+        stHead2.setBorderTop(CellStyle.BORDER_MEDIUM);
+        stHead2.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        stHead2.setBorderLeft(CellStyle.BORDER_THIN);
+        stHead2.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        stHead2.setBorderRight(CellStyle.BORDER_MEDIUM);
+        stHead2.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        stHead2.setBorderBottom(CellStyle.BORDER_THIN);
+        stHead2.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        stHead2.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        stHead2.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        stHead2.setFillBackgroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        
+        
     }
 
     protected static void insertDetailInfo(Sheet sheet) {
@@ -117,13 +164,13 @@ public class ExcelGenerateReport {
         sheet.setColumnWidth(3, 1200);
         sheet.setColumnWidth(4, 2000);
         sheet.setColumnWidth(5, 1300);
-        sheet.setColumnWidth(6, 10000);
+        sheet.setColumnWidth(6, 9000);
         sheet.setColumnWidth(7, 4000);
         sheet.setColumnWidth(8, 1650);
         sheet.setColumnWidth(9, 1500);
         sheet.setColumnWidth(10, 1000);
         sheet.setColumnWidth(11, 3000);
-        sheet.setColumnWidth(12, 4000);
+        sheet.setColumnWidth(12, 3000);
 
         //ROW 1 Замовлення покупця
         Row row1 = sheet.createRow(1);
@@ -294,6 +341,47 @@ public class ExcelGenerateReport {
 
         //ROW 12 TABLE
         Row row12 = sheet.createRow(12);
+        Cell c12_1 = row12.createCell(1);
+        c12_1.setCellStyle(stHead);
+        c12_1.setCellValue("№");
+
+        Cell c12_2 = row12.createCell(2);
+        c12_2.setCellStyle(stHead1);
+        Cell c12_3 = row12.createCell(3);
+        c12_3.setCellStyle(stHead1);
+        Cell c12_4 = row12.createCell(4);
+        c12_4.setCellStyle(stHead1);
+        region = new CellRangeAddress(12, 12, 2, 4);
+        sheet.addMergedRegion(region);
+        c12_2.setCellValue("Код");
+
+        Cell c12_5 = row12.createCell(5);
+        c12_5.setCellStyle(stHead1);
+        Cell c12_6 = row12.createCell(6);
+        c12_6.setCellStyle(stHead1);
+        Cell c12_7 = row12.createCell(7);
+        c12_7.setCellStyle(stHead1);
+        region = new CellRangeAddress(12, 12, 5, 7);
+        sheet.addMergedRegion(region);
+        c12_5.setCellValue("Товар");
+
+        Cell c12_8 = row12.createCell(8);
+        c12_8.setCellStyle(stHead1);
+        Cell c12_9 = row12.createCell(9);
+        c12_9.setCellStyle(stHead1);
+        Cell c12_10 = row12.createCell(10);
+        c12_10.setCellStyle(stHead1);
+        region = new CellRangeAddress(12, 12, 8, 10);
+        sheet.addMergedRegion(region);
+        c12_8.setCellValue("Кiлькiсть");
+
+        Cell c12_11 = row12.createCell(11);
+        c12_11.setCellStyle(stHead1);
+        c12_11.setCellValue("Цiна");
+
+        Cell c12_12 = row12.createCell(12);
+        c12_12.setCellStyle(stHead2);
+        c12_12.setCellValue("Сума");
 
 
     }
