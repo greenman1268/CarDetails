@@ -7,6 +7,7 @@ package logic;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -326,6 +327,30 @@ public class ManagementSystem {
         return items;
     }
 
+    public BigDecimal getRateValByName(String name)throws SQLException{
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        BigDecimal value = new BigDecimal(0);
+        value.setScale(2,BigDecimal.ROUND_HALF_UP);
+
+        stmt = con.prepareStatement("SELECT currency_val FROM rates WHERE currency_name=? ");
+        stmt.setString(1, name);
+        rs = stmt.executeQuery();
+        while (rs.next()){
+            value = new BigDecimal(rs.getBigDecimal(1).toString());
+        }
+        return value;
+    }
+
+    public void setRateVal(String name,BigDecimal value)throws SQLException{
+        PreparedStatement stmt = null;
+
+        stmt = con.prepareStatement("UPDATE rates SET currency_val=? WHERE currency_name=?");
+        stmt.setBigDecimal(1,value);
+        stmt.setString(2,name);
+        stmt.execute();
+    }
+
 
     public static void makeDB() throws SQLException{
         String query;
@@ -354,6 +379,14 @@ public class ManagementSystem {
                 "primary key (item_id)" +
                 ") engine=InnoDB";
         stmt.executeUpdate(query);
+        query = "CREATE TABLE rates " +
+                "(" +
+                "currency_id int unsigned not null auto_increment, " +
+                "currency_name varchar(255) not null, " +
+                "currency_val decimal(7,2), " +
+                "PRIMARY KEY (currency_id)" +
+                ") engine=InnoDB";
+        stmt.execute(query);
         query = "set names utf8";
         stmt.execute(query);
         query = "insert into groups (groupName) values ('Первая')";
@@ -366,11 +399,19 @@ public class ManagementSystem {
         query = "insert into items (itemName, changeDate, group_id, in_stock, sold) " +
                 "values ('Деталь 2', '1990-01-01', 1, 10, 10)";
         stmt.executeUpdate(query);
+        query = "insert into rates (currency_name, currency_val) " +
+                "values ('dollar', 25.38)";
+        stmt.executeUpdate(query);
+        query = "insert into rates (currency_name, currency_val) " +
+                "values ('euro', 28.98)";
+        stmt.executeUpdate(query);
 
     }
-/*
-   public static void main(String[] args) throws Exception {
-        ManagementSystem ms = ManagementSystem.getInstance();}*/
+
+/*   public static void main(String[] args) throws Exception {
+        ManagementSystem ms = ManagementSystem.getInstance();
+        ms.getRateValByName("dollar");
+    }*/
 
 }
 

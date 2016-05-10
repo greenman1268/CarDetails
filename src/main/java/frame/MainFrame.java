@@ -35,12 +35,11 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     private static final String CHANGE_GR = "changeGroup";
     private static final String DELETE_GR = "deleteGroup";
     private static final String PRINT = "print";
+    private static final String RATES = "rates";
 
     private ManagementSystem ms = null;
     private JList grpList;
     private JTable itemList;
-    private JLabel lb;
-    private JTextField rates;
     private TableSearchRenderer tsr;
     private ArrayList<Item> vector;
     private Vector<Item> selected = new Vector<>();
@@ -75,12 +74,11 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         top.add(btnPrint);
 
         //указать курс валют
-        lb = new JLabel("курс:");
-        lb.setBounds(300, 5, 30, 20);
-        top.add(lb);
-        rates = new JTextField();
-        rates.setBounds(335,5,70,20);
-        top.add(rates);
+        JButton btnRates = new JButton("Курс");
+        btnRates.setName(RATES);
+        btnRates.setBounds(290, 5, 70, 20);
+        btnRates.addActionListener(this);
+        top.add(btnRates);
 
         // Создаем нижнюю панель и задаем ей layout
         JPanel bot = new JPanel();
@@ -228,6 +226,9 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
             }
             if (c.getName().equals(PRINT)) {
                 printReport();
+            }
+            if (c.getName().equals(RATES)){
+                updateRates();
             }
 
 
@@ -627,11 +628,6 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         t.start();
     }
 
-    public String getRates()
-    {
-        return rates.getText();
-    }
-
     private void printReport() {
         Thread t = new Thread(){
 
@@ -654,7 +650,22 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
             }
         };
         t.start();
+    }
 
+    private void updateRates(){
+        Thread t = new Thread(){
+
+            public void run(){
+                RatesDilog rd = new RatesDilog();
+                rd.setModal(true);
+                rd.setVisible(true);
+                if (rd.getResult()) {
+                    reloadItems();
+                }
+
+            }
+        };
+        t.start();
     }
     private class TableSearchRenderer extends DefaultTableCellRenderer {
 

@@ -35,8 +35,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
     private boolean boolCount;
     private boolean boolDate;
     private boolean boolAll;
-    private JLabel lb;
-    private JTextField rates;
+
     private ArrayList<Item> vector;
     private Vector<Item> selected = new Vector<>();
 
@@ -65,13 +64,9 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
         top.add(btnPrint);
 
         //указать курс валют
-        lb = new JLabel("курс:");
-        lb.setBounds(105,5,30,20);
+        JButton lb = new JButton("Курс");
+        lb.setBounds(100,5,70,20);
         top.add(lb);
-        rates = new JTextField();
-        rates.setBounds(140,5,70,20);
-        rates.setText(mainFrame.getRates());
-        top.add(rates);
 
         // Создаем нижнюю панель и задаем ей layout
         JPanel bot = new JPanel();
