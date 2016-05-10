@@ -13,8 +13,6 @@ import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.*;
 import javax.swing.table.*;
-import javax.swing.RowSorter;
-import javax.swing.text.StyledEditorKit;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -149,7 +147,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         // Наша таблица пока ничего не умеет - просто положим ее как заготовку
         // Сделаем в ней 4 колонки - Номер, Дата последнего изменения, Количество в наличии, Количество проданых
 
-        itemList = new JTable(1, 6);
+        itemList = new JTable(1, 5);
         right.add(new JScrollPane(itemList), BorderLayout.CENTER);
 
         // Создаем кнопки для деталей
@@ -295,15 +293,13 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                             }
                         }
 
-
-
                         itemList.setModel(new ItemTableModel(v));
                         itemList.getModel().addTableModelListener(new TableModelListener() {
                             @Override
                             public void tableChanged(TableModelEvent tableModelEvent) {
                                 int row = tableModelEvent.getFirstRow();
                                 int column = tableModelEvent.getColumn();
-                                if(column == 5){
+                                if(column == 4){
                                     TableModel model = (TableModel)tableModelEvent.getSource();
                                     Boolean checked = (Boolean)model.getValueAt(row,column);
                                     Item item = v.get(row);

@@ -4,7 +4,6 @@ import logic.Item;
 import logic.ManagementSystem;
 
 import javax.swing.table.AbstractTableModel;
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.Vector;
@@ -40,7 +39,7 @@ public class ItemTableSearchModel extends AbstractTableModel {
     }
 
     public int getColumnCount() {
-        return 7;
+        return 6;
     }
 
     public void setValueAt(Object value, int row, int col) {
@@ -51,10 +50,10 @@ public class ItemTableSearchModel extends AbstractTableModel {
                 case 0:item.setItemName((String)value);break;
                 case 1:item.setGroupId((Integer)value);break;
                 case 2:item.setChangeDate((java.util.Date)value);break;
-                case 3:item.setPrice((BigDecimal)value);break;
-                case 4:item.setIn_stock((Integer)value);break;
-                case 5:item.setSold((Integer)value);break;
-                case 6:item.setPrint((Boolean)value);break;
+                //case 3:item.setPrice((BigDecimal)value);break;
+                case 3:item.setIn_stock((Integer)value);break;
+                case 4:item.setSold((Integer)value);break;
+                case 5:item.setPrint((Boolean)value);break;
                 default:
                     System.out.println("SOMETHING WRONG");
             }
@@ -71,13 +70,13 @@ public class ItemTableSearchModel extends AbstractTableModel {
                 return String.class;
             case 2:
                 return DateFormat.class;
+            /*case 3:
+                return BigDecimal.class;*/
             case 3:
-                return BigDecimal.class;
+                return Integer.class;
             case 4:
                 return Integer.class;
             case 5:
-                return Integer.class;
-            case 6:
                 return Boolean.class;
             default:
                 return null;
@@ -86,7 +85,7 @@ public class ItemTableSearchModel extends AbstractTableModel {
 
     // Вернем наименование колонки
     public String getColumnName(int column) {
-        String[] colNames = {"Номер", "Группа", "Дата последнего изменения", "Цена", "В наличии", "Продано", "Печать"};
+        String[] colNames = {"Номер", "Группа", "Дата последнего изменения", "В наличии", "Продано", "Печать"};
         return colNames[column];
     }
 
@@ -108,13 +107,13 @@ public class ItemTableSearchModel extends AbstractTableModel {
                 case 2:
                     return DateFormat.getDateInstance(DateFormat.SHORT).format(
                             item.getChangeDate());
+                /*case 3:
+                    return item.getPrice();*/
                 case 3:
-                    return item.getPrice();
-                case 4:
                     return item.getIn_stock();
-                case 5:
+                case 4:
                     return item.getSold();
-                case 6:
+                case 5:
                     return item.getPrint();
             }
         }

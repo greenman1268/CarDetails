@@ -3,7 +3,6 @@ package logic;
 /**
  * Created on 27.04.2016
  */
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -17,7 +16,7 @@ public class Item implements Comparable{
     private int groupId;
     private int in_stock;
     private int sold;
-    private BigDecimal price;
+    //private BigDecimal price;
     private Boolean print = false;
     public Item() {
     }
@@ -29,7 +28,7 @@ public class Item implements Comparable{
         setGroupId(rs.getInt(4));
         setIn_stock(rs.getInt(5));
         setSold(rs.getInt(6));
-        setPrice(rs.getBigDecimal(7));
+        //setPrice(rs.getBigDecimal(7));
     }
 
     public int getIn_stock() { return in_stock; }
@@ -52,7 +51,7 @@ public class Item implements Comparable{
         return groupId;
     }
 
-    public BigDecimal getPrice() {return price;}
+    //public BigDecimal getPrice() {return price;}
 
     public Boolean getPrint(){return print;}
 
@@ -76,7 +75,7 @@ public class Item implements Comparable{
         this.groupId = groupId;
     }
 
-    public void setPrice(BigDecimal price) { this.price = price;}
+   // public void setPrice(BigDecimal price) { this.price = price;}
 
     public void setPrint(Boolean print) { this.print = print;}
 
@@ -90,8 +89,8 @@ public class Item implements Comparable{
                 "\nitemName: " + itemName +
                 "\nchangeDate: " + btoS() +
                 "\nin_stock: " + in_stock +
-                "\nsold: " + sold +
-                "\nprice: " + price + "\n";
+                "\nsold: " + sold + "\n";
+               // "\nprice: " + price + "\n";
     }
 
     public int compareTo(Object obj) {

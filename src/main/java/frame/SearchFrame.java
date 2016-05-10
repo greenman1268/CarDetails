@@ -194,7 +194,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
                             public void tableChanged(TableModelEvent tableModelEvent) {
                                 int row = tableModelEvent.getFirstRow();
                                 int column = tableModelEvent.getColumn();
-                                if(column == 6){
+                                if(column == 5){
                                     TableModel model = (TableModel)tableModelEvent.getSource();
                                     Boolean checked = (Boolean)model.getValueAt(row,column);
                                     Item item = v.get(row);
@@ -280,16 +280,13 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
                         // Вот где нам пригодился метод getItem(int rowIndex)
                         Item s = stm.getItem(itemList.getSelectedRow());
                         try {
-                            // Исправляем данные на деталь - поэтому false
-                            // Также заметим, что необходимо указать не просто this, а MainFrame.this
-                            // Иначе класс не будет воспринят - он же другой - анонимный
                             ItemDialog sd = new ItemDialog(ms.getGroups());
                             sd.setAlwaysOnTop(true);
                             sd.setItem(s);
                             sd.setModal(true);
                             sd.setVisible(true);
                             if (sd.getResult()) {
-                                searchDilog.setName(sd.getItemName());
+                                //searchDilog.setName(sd.getItemName());
                                 Item us = sd.getItem();
                                 ms.updateItem(us);
                                 reloadItems();

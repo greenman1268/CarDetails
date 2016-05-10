@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +31,7 @@ public class ItemDialog extends JDialog implements ActionListener {
     private JTextField itemName = new JTextField();
     private JTextField in_stock = new JTextField();
     private JTextField sold = new JTextField();
-    private JTextField price = new JTextField();
+   // private JTextField price = new JTextField();
     private JSpinner changeDate = new JSpinner(new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_MONTH));
     private JComboBox groupList;
 
@@ -56,28 +55,28 @@ public class ItemDialog extends JDialog implements ActionListener {
         itemName.setBounds(L_X + L_W + 10, 30, C_W, 20);
         getContentPane().add(itemName);
 
-        l = new JLabel("Цена:", JLabel.RIGHT);
+       /* l = new JLabel("Цена:", JLabel.RIGHT);
         l.setBounds(L_X, 60, L_W, 20);
         getContentPane().add(l);
         price.setBounds(L_X + L_W + 10, 60, C_W, 20);
-        getContentPane().add(price);
+        getContentPane().add(price);*/
 
         l = new JLabel("В наличии:", JLabel.RIGHT);
-        l.setBounds(L_X, 90, L_W, 20);
+        l.setBounds(L_X, 60, L_W, 20);
         getContentPane().add(l);
-        in_stock.setBounds(L_X + L_W + 10, 90, C_W, 20);
+        in_stock.setBounds(L_X + L_W + 10, 60, C_W, 20);
         getContentPane().add(in_stock);
 
         l = new JLabel("Продано:", JLabel.RIGHT);
-        l.setBounds(L_X, 120, L_W, 20);
+        l.setBounds(L_X, 90, L_W, 20);
         getContentPane().add(l);
-        sold.setBounds(L_X + L_W + 10, 120, C_W, 20);
+        sold.setBounds(L_X + L_W + 10, 90, C_W, 20);
         getContentPane().add(sold);
 
         l = new JLabel("Дата изменения:", JLabel.RIGHT);
-        l.setBounds(L_X, 150, L_W, 20);
+        l.setBounds(L_X, 120, L_W, 20);
         getContentPane().add(l);
-        changeDate.setBounds(L_X + L_W + 10, 150, C_W, 20);
+        changeDate.setBounds(L_X + L_W + 10, 120, C_W, 20);
         getContentPane().add(changeDate);
 
         JButton btnOk = new JButton("ОК");
@@ -109,7 +108,7 @@ public class ItemDialog extends JDialog implements ActionListener {
         changeDate.getModel().setValue(item.getChangeDate());
         in_stock.setText(Integer.toString(item.getIn_stock()));
         sold.setText(Integer.toString(item.getSold()));
-        price.setText(item.getPrice().toString());
+        //price.setText(item.getPrice().toString());
 
         for (int i = 0; i < groupList.getModel().getSize(); i++) {
             Group g = (Group) groupList.getModel().getElementAt(i);
@@ -127,8 +126,12 @@ public class ItemDialog extends JDialog implements ActionListener {
         item.setItemName(itemName.getText());
         Date d = ((SpinnerDateModel) changeDate.getModel()).getDate();
         item.setChangeDate(d);
-        if(price.getText().equals("")){item.setPrice(new BigDecimal(0));}
-        else { item.setPrice(new BigDecimal(price.getText())); }
+       /* if(price.getText().equals("")){item.setPrice(new BigDecimal(0));}
+        else {
+            BigDecimal bg = new BigDecimal(0);
+            bg.setScale(2, RoundingMode.HALF_UP);
+            bg = new BigDecimal(price.getText());
+            item.setPrice(bg); }*/
 
         if(in_stock.getText().equals("")){ item.setIn_stock(0); }
         else { item.setIn_stock(Integer.parseInt(in_stock.getText())); }
@@ -157,13 +160,13 @@ public class ItemDialog extends JDialog implements ActionListener {
                 JOptionPane.showMessageDialog(ItemDialog.this,
                         "Введите имя");return;
             }
-            try {
+           /* try {
                 if(!price.getText().equals("")) new BigDecimal(price.getText());
             }catch (Exception ex){
                 JOptionPane.showMessageDialog(ItemDialog.this, "Введите корректные данные 'Цена'");
                 price.setText("");
                 return;
-            }
+            }*/
             try {
                 if(!in_stock.getText().equals("")) Integer.parseInt(in_stock.getText());
             }catch (Exception ex){

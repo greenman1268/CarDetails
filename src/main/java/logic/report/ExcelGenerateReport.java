@@ -567,7 +567,7 @@ public class ExcelGenerateReport {
             Cell cn_11 = row.createCell(11);
             if(size - i == 1)cn_11.setCellStyle(stBot1R);
             else cn_11.setCellStyle(stMid1R);
-            cn_11.setCellValue(itemList.get(i).getPrice().toString());
+            cn_11.setCellValue(0);//------------------------------------->Доработать цена
 
             Cell cn_12 = row.createCell(12);
             if(size - i == 1)cn_12.setCellStyle(stBot2);
