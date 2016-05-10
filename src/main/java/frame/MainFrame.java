@@ -7,7 +7,6 @@ package frame;
 import logic.Group;
 import logic.Item;
 import logic.ManagementSystem;
-import logic.report.ExcelGenerateReport;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -230,8 +229,6 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
             if (c.getName().equals(RATES)){
                 updateRates();
             }
-
-
 }}
 
     // Метод для обеспечения интерфейса ListSelectionListener
@@ -638,10 +635,21 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                         for (int i = 0; i < selected.size(); i++) {
                             if(selected.get(i).getPrint())list.add(selected.get(i));
                         }
-                        ExcelGenerateReport ExGR = new ExcelGenerateReport(new ArrayList<>(selected));
+                        /*ExcelGenerateReport ExGR = new ExcelGenerateReport(new ArrayList<>(selected));
                         ExGR.main();
+                        */
+                        PrintDilog pd = new PrintDilog(selected);
+                        pd.setModal(true);
+                        pd.setVisible(true);
+
+                        if(pd.getResult())
+                        {
                         selected.clear();
                         reloadItems();
+                        }
+                        else if(!pd.getResult()){
+                            reloadItems();
+                        }
                     }
                     else JOptionPane.showMessageDialog(MainFrame.this,
                             "Необходимо отметить деталь в списке");

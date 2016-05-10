@@ -3,6 +3,8 @@ package logic;
 /**
  * Created on 27.04.2016
  */
+
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -16,7 +18,7 @@ public class Item implements Comparable{
     private int groupId;
     private int in_stock;
     private int sold;
-    //private BigDecimal price;
+    private BigDecimal price;
     private Boolean print = false;
     public Item() {
     }
@@ -51,7 +53,7 @@ public class Item implements Comparable{
         return groupId;
     }
 
-    //public BigDecimal getPrice() {return price;}
+    public BigDecimal getPrice() {return price;}
 
     public Boolean getPrint(){return print;}
 
@@ -75,7 +77,7 @@ public class Item implements Comparable{
         this.groupId = groupId;
     }
 
-   // public void setPrice(BigDecimal price) { this.price = price;}
+    public void setPrice(BigDecimal price) { this.price = price;}
 
     public void setPrint(Boolean print) { this.print = print;}
 
