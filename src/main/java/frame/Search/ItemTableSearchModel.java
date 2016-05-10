@@ -1,4 +1,4 @@
-package frame;
+package frame.Search;
 
 import logic.Item;
 import logic.ManagementSystem;

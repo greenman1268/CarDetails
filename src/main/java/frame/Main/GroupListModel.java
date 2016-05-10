@@ -1,4 +1,4 @@
-package frame;
+package frame.Main;
 
 import javax.swing.*;
 import java.util.Vector;

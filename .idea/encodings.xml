@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/src/main/java/frame/ChangeGroupDilog.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/frame/GroupDialog.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/frame/GroupInsertDilog.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/frame/ItemDialog.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/frame/ItemTableModel.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/frame/ItemTableSearchModel.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/frame/LoginDilog.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/frame/MainFrame.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/frame/PrintDilog.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/frame/RatesDilog.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/frame/SearchDilog.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/frame/SearchFrame.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/frame/Main/ChangeGroupDilog.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/frame/Main/GroupDialog.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/frame/Main/GroupInsertDilog.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/frame/Main/ItemDialog.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/frame/Main/ItemTableModel.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/frame/Main/LoginDilog.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/frame/Main/MainFrame.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/frame/Main/RatesDilog.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/frame/Print/PrintDilog.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/frame/Search/ItemTableSearchModel.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/frame/Search/SearchDilog.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/frame/Search/SearchFrame.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/logic/Group.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/logic/Item.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/logic/ManagementSystem.java" charset="UTF-8" />

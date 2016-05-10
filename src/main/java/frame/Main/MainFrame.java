@@ -1,9 +1,12 @@
-package frame;
+package frame.Main;
 
 /**
  * Created on 27.04.2016
  */
 
+import frame.Print.PrintDilog;
+import frame.Search.SearchDilog;
+import frame.Search.SearchFrame;
 import logic.Group;
 import logic.Item;
 import logic.ManagementSystem;

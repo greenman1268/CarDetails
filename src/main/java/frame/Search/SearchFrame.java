@@ -1,5 +1,8 @@
-package frame;
+package frame.Search;
 
+import frame.Main.GroupDialog;
+import frame.Main.ItemDialog;
+import frame.Main.MainFrame;
 import logic.Item;
 import logic.ManagementSystem;
 

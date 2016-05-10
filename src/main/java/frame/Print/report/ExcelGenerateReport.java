@@ -1,4 +1,4 @@
-package logic.report;
+package frame.Print.report;
 
 import logic.Item;
 import org.apache.poi.xssf.usermodel.*;

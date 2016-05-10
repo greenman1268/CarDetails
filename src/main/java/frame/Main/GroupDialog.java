@@ -1,4 +1,4 @@
-package frame;
+package frame.Main;
 
 /**
  * Created on 27.04.2016

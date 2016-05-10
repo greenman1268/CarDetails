@@ -1,5 +1,6 @@
-package frame;
+package frame.Search;
 
+import frame.Main.MainFrame;
 import logic.ManagementSystem;
 
 import javax.swing.*;

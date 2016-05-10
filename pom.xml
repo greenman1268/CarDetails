@@ -69,7 +69,7 @@
                             </descriptorRefs>
                             <archive>
                                 <manifest>
-                                    <mainClass>frame.MainFrame</mainClass>
+                                    <mainClass>frame.Main.MainFrame</mainClass>
                                 </manifest>
                             </archive>
                         </configuration>
