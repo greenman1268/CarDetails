@@ -116,13 +116,13 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
             bg = new BigDecimal(price.getText());
             item.setPrice(bg); }*/
 
-        if(in_stock.getText().equals("")){ item.setIn_stock(0); }
+     /*   if(in_stock.getText().equals("")){ item.setIn_stock(0); }
         else { item.setIn_stock(Integer.parseInt(in_stock.getText())); }
 
         if(sold.getText().equals("")){ item.setSold(0); }
         else { item.setSold(Integer.parseInt(sold.getText())); }
 
-        item.setGroupId(((Group) groupList.getSelectedItem()).getGroup_id());
+        item.setGroupId(((Group) groupList.getSelectedItem()).getGroup_id());*/
 
         return item;
     }
