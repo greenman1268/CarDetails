@@ -1,5 +1,10 @@
 package frame.Print.report;
 
+import logic.Currency;
+import logic.Item;
+import logic.ManagementSystem;
+import java.util.ArrayList;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,10 +15,8 @@ import java.awt.event.ActionListener;
  */
 public class PrintParametresDilog extends JDialog implements ActionListener {
     private static final int D_HEIGHT = 240;   // высота окна
-    private final static int D_WIDTH = 450;   // ширина окна
-    private final static int L_X = 10;      // левая граница метки для поля
-    private final static int L_W = 100;     // ширина метки для поля
-    private final static int C_W = 150;     // ширина поля
+    private final static int D_WIDTH = 800;   // ширина окна
+
     // Владелец нашего окна - вводим для вызова нужного нам метода
     // Результат нажатия кнопок
     private boolean result = false;
@@ -23,12 +26,45 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
     private JTextField in_stock = new JTextField();
     private JTextField count = new JTextField();
     private JTextField price = new JTextField();
-    private JComboBox groupList;
+    private JComboBox currency;
 
-    public PrintParametresDilog(){
+    private ManagementSystem ms;
+    private Item item;
+    private ArrayList<Currency> list;
+
+    public PrintParametresDilog(Item item){
+        this.item = item;
+        try {
+            this.ms = ManagementSystem.getInstance();
+            this.list =(ArrayList) ms.getRateList();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         // Установить заголовок
-        setTitle("Редактирование данных детали");
+        setTitle("Ввод данных на печать");
         getContentPane().setLayout(null);
+
+        JLabel l = new JLabel(item.getItemName(), JLabel.RIGHT);
+        l.setBounds(10, 30, 200, 20);
+        getContentPane().add(l);
+
+        l = new JLabel("Количество: ", JLabel.RIGHT);
+        l.setBounds(220,30,150,20);
+        getContentPane().add(l);
+
+        count.setBounds(380,30,100,20);
+        getContentPane().add(count);
+
+        l = new JLabel("Цена:", JLabel.RIGHT);
+        l.setBounds(490,30,100,20);
+        getContentPane().add(l);
+
+        price.setBounds(600,30,150,20);
+        getContentPane().add(price);
+
+
+        currency = new JComboBox()
 
         // Устанавливаем поведение формы при закрытии - не закрывать совсем.
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

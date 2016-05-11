@@ -351,6 +351,26 @@ public class ManagementSystem {
         stmt.execute();
     }
 
+    public Collection<Currency> getRateList()throws SQLException{
+        Collection<Currency> list = new ArrayList<>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+            stmt = con.prepareStatement("SELECT currency_name, currency_val FROM rates " +
+                    "WHERE currency_name=? ");
+            stmt.setString(1,"USD");
+            rs = stmt.executeQuery();
+            list.add(new Currency(rs));
+            stmt = con.prepareStatement("SELECT currency_name, currency_val FROM rates " +
+                    "WHERE currency_name=? ");
+            stmt.setString(1,"EURO");
+            rs = stmt.executeQuery();
+            list.add(new Currency(rs));
+
+        return list;
+
+    }
+
 
     public static void makeDB() throws SQLException{
         String query;

@@ -818,8 +818,9 @@ public class ExcelGenerateReport {
         }
     }
 
-    public static void main() {
-
+    public static void main(){//String[] args) {
+/*ExcelGenerateReport exgr = new ExcelGenerateReport(new ArrayList<Item>());
+        exgr.write_xlsx();*/
         write_xlsx();
         Desktop desktop = null;
         if (Desktop.isDesktopSupported()) {
