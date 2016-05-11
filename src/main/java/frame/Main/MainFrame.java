@@ -4,7 +4,7 @@ package frame.Main;
  * Created on 27.04.2016
  */
 
-import frame.Print.PrintDilog;
+import frame.Print.report.PrintFrame;
 import frame.Search.SearchDilog;
 import frame.Search.SearchFrame;
 import logic.Group;
@@ -634,25 +634,22 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
             public void run() {
                 if (itemList != null){
                     if(selected.size()>0){
-                        ArrayList<Item> list = new ArrayList<>();
+                        Vector<Item> list = new Vector<>();
                         for (int i = 0; i < selected.size(); i++) {
                             if(selected.get(i).getPrint())list.add(selected.get(i));
                         }
                         /*ExcelGenerateReport ExGR = new ExcelGenerateReport(new ArrayList<>(selected));
                         ExGR.main();
                         */
-                        PrintDilog pd = new PrintDilog(selected);
-                        pd.setModal(true);
-                        pd.setVisible(true);
-
-                        if(pd.getResult())
-                        {
+                        PrintFrame pf = new PrintFrame(list);
+                        pf.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                        pf.setVisible(true);
+                        pf.reloadItems();
+/*
+                        if(pf.getResult()){
                         selected.clear();
-                        reloadItems();
-                        }
-                        else if(!pd.getResult()){
-                            reloadItems();
-                        }
+                        reloadItems();}
+                        else reloadItems();*/
                     }
                     else JOptionPane.showMessageDialog(MainFrame.this,
                             "Необходимо отметить деталь в списке");

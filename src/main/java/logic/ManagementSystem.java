@@ -400,10 +400,13 @@ public class ManagementSystem {
                 "values ('Деталь 2', '1990-01-01', 1, 10, 10)";
         stmt.executeUpdate(query);
         query = "insert into rates (currency_name, currency_val) " +
-                "values ('dollar', 25.38)";
+                "values ('USD', 25.38)";
         stmt.executeUpdate(query);
         query = "insert into rates (currency_name, currency_val) " +
-                "values ('euro', 28.98)";
+                "values ('EUR', 28.98)";
+        stmt.executeUpdate(query);
+        query = "insert into rates (currency_name, currency_val) " +
+                "values ('UAH', 1)";
         stmt.executeUpdate(query);
 
     }

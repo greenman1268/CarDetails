@@ -796,7 +796,7 @@ public class ExcelGenerateReport {
 
     public static void putPicture(){
         try {
-            InputStream my_banner_image = new FileInputStream("src/main/java/logic/report/resources/1.jpg");
+            InputStream my_banner_image = new FileInputStream("src/main/java/frame/Print/report/resources/1.jpg");
             byte[] bytes = IOUtils.toByteArray(my_banner_image);
             int my_picture_id = wb.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
             XSSFDrawing drawing = (XSSFDrawing) sheet.createDrawingPatriarch();

@@ -32,7 +32,6 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
     private MainFrame mainFrame;
     private ManagementSystem ms = null;
     private JTable itemList;
-   // private JList grpList;
     private SearchDilog searchDilog;
     private boolean boolName;
     private boolean boolCount;
@@ -186,7 +185,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
                             }
                         }
                         // И устанавливаем модель для таблицы с новыми данными
-                        itemList.setModel(new ItemTableSearchModel(new Vector<Item>(s)));
+                        itemList.setModel(new ItemTableSearchModel(v));
                         itemList.getModel().addTableModelListener(new TableModelListener() {
                             @Override
                             public void tableChanged(TableModelEvent tableModelEvent) {

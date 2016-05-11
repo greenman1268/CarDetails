@@ -83,8 +83,8 @@ public class RatesDilog extends JDialog implements ActionListener {
 
     // Установить поля соответственно переданным данным о детале
     public void setCurrency() throws SQLException {
-        dollar.setText(String.valueOf(ms.getRateValByName("dollar")));
-        euro.setText(String.valueOf(ms.getRateValByName("euro")));
+        dollar.setText(String.valueOf(ms.getRateValByName("USD")));
+        euro.setText(String.valueOf(ms.getRateValByName("EUR")));
     }
 
     public boolean getResult() {
@@ -126,8 +126,8 @@ public class RatesDilog extends JDialog implements ActionListener {
                 return;
             }
             try {
-                ms.setRateVal("dollar",bgD);
-                ms.setRateVal("euro",bgE);
+                ms.setRateVal("USD",bgD);
+                ms.setRateVal("EUR",bgE);
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
