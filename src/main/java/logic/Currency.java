@@ -9,13 +9,16 @@ import java.sql.SQLException;
  */
 public class Currency {
 
+    private int currency_id;
     private String name;
     private BigDecimal value;
 
     public Currency(ResultSet rs) throws SQLException {
-        setName(rs.getString(1));
-        setValue(rs.getBigDecimal(2));
+        setCurrency_id(rs.getInt(1));
+        setName(rs.getString(2));
+        setValue(rs.getBigDecimal(3));
     }
+    public void setCurrency_id(int id){ this.currency_id = id;}
 
     public void setName(String name) {
         this.name = name;
@@ -25,6 +28,7 @@ public class Currency {
         this.value = value;
     }
 
+    public int getCurrency_id(){ return currency_id;}
 
     public String getName() {
         return name;
@@ -33,4 +37,6 @@ public class Currency {
     public BigDecimal getValue() {
         return value;
     }
+
+    public String toString(){return name;}
 }

@@ -170,10 +170,12 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
                     PrintTableModel prtm = (PrintTableModel)itemList.getModel();
                     if(itemList.getSelectedRow() >= 0){
                         Item item = prtm.getItem(itemList.getSelectedRow());
-                PrintParametresDilog ppd = new PrintParametresDilog(item);
+                PrintParametresDilog ppd = new PrintParametresDilog(item, PrintFrame.this);
+                        ppd.setItem(item);
                 ppd.setModal(true);
                 ppd.setVisible(true);
                 if (ppd.getResult()) {
+                    ppd.updateItem(selected);
                     reloadItems();
                 }}
                 else JOptionPane.showMessageDialog(PrintFrame.this,

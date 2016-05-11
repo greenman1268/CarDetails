@@ -341,6 +341,20 @@ public class ManagementSystem {
         }
         return value;
     }
+    public BigDecimal getRateValById(String name)throws SQLException{
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        BigDecimal value = new BigDecimal(0);
+        value.setScale(2,BigDecimal.ROUND_HALF_UP);
+
+        stmt = con.prepareStatement("SELECT currency_val FROM rates WHERE currency_name=? ");
+        stmt.setString(1, name);
+        rs = stmt.executeQuery();
+        while (rs.next()){
+            value = new BigDecimal(rs.getBigDecimal(1).toString());
+        }
+        return value;
+    }
 
     public void setRateVal(String name,BigDecimal value)throws SQLException{
         PreparedStatement stmt = null;
@@ -356,21 +370,21 @@ public class ManagementSystem {
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
-            stmt = con.prepareStatement("SELECT currency_name, currency_val FROM rates " +
+            stmt = con.prepareStatement("SELECT currency_id, currency_name, currency_val FROM rates " +
                     "WHERE currency_name=? ");
             stmt.setString(1,"USD");
             rs = stmt.executeQuery();
-            list.add(new Currency(rs));
-            stmt = con.prepareStatement("SELECT currency_name, currency_val FROM rates " +
+            while (rs.next())list.add(new Currency(rs));
+            stmt = con.prepareStatement("SELECT currency_id, currency_name, currency_val FROM rates " +
                     "WHERE currency_name=? ");
-            stmt.setString(1,"EURO");
+            stmt.setString(1,"EUR");
             rs = stmt.executeQuery();
-            list.add(new Currency(rs));
-            stmt = con.prepareStatement("SELECT currency_name, currency_val FROM rates " +
+            while (rs.next())list.add(new Currency(rs));
+            stmt = con.prepareStatement("SELECT currency_id, currency_name, currency_val FROM rates " +
                     "WHERE currency_name=? ");
             stmt.setString(1,"UAH");
             rs = stmt.executeQuery();
-            list.add(new Currency(rs));
+            while (rs.next()) list.add(new Currency(rs));
 
         return list;
 
