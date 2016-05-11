@@ -366,6 +366,11 @@ public class ManagementSystem {
             stmt.setString(1,"EURO");
             rs = stmt.executeQuery();
             list.add(new Currency(rs));
+            stmt = con.prepareStatement("SELECT currency_name, currency_val FROM rates " +
+                    "WHERE currency_name=? ");
+            stmt.setString(1,"UAH");
+            rs = stmt.executeQuery();
+            list.add(new Currency(rs));
 
         return list;
 
