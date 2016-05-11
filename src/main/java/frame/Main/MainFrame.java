@@ -673,6 +673,9 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         };
         t.start();
     }
+
+    public Vector<Item> getSelected(){return selected;}
+
     private class TableSearchRenderer extends DefaultTableCellRenderer {
 
         @Override

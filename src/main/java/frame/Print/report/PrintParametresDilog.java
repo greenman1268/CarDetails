@@ -47,6 +47,7 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
         this.in_stock = item.getIn_stock();
         this.sold = item.getSold();
         this.pf = pf;
+
         // Установить заголовок
         setTitle("Ввод данных на печать");
         getContentPane().setLayout(null);
@@ -120,7 +121,6 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
         BigDecimal pricen = new BigDecimal(0);
         pricen.setScale(2,BigDecimal.ROUND_HALF_UP);
         pricen = new BigDecimal(price.getText());
-        //BigDecimal currency = new BigDecimal(0);
 
         item.setPrice(pricen.multiply(((Currency)currency.getModel().getSelectedItem()).getValue()));
         for (int i = 0; i < selected.size(); i++) {
@@ -128,22 +128,10 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
                 selected.get(i).setIn_stock(in_stock-Integer.parseInt(count.getText()));
                 selected.get(i).setSold(sold + Integer.parseInt(count.getText()));
                 selected.get(i).setPrice(pricen.multiply(((Currency)currency.getModel().getSelectedItem()).getValue()));
+                selected.get(i).setCount(Integer.parseInt(count.getText()));
+                selected.get(i).setCurrency(((Currency) currency.getModel().getSelectedItem()).getName());
             }
         }
-       /* if(price.getText().equals("")){item.setPrice(new BigDecimal(0));}
-        else {
-            BigDecimal bg = new BigDecimal(0);
-            bg.setScale(2, RoundingMode.HALF_UP);
-            bg = new BigDecimal(price.getText());
-            item.setPrice(bg); }*/
-
-     /*   if(in_stock.getText().equals("")){ item.setIn_stock(0); }
-        else { item.setIn_stock(Integer.parseInt(in_stock.getText())); }
-
-        if(sold.getText().equals("")){ item.setSold(0); }
-        else { item.setSold(Integer.parseInt(sold.getText())); }
-
-        item.setGroupId(((Group) groupList.getSelectedItem()).getGroup_id());*/
 
         return item;
     }

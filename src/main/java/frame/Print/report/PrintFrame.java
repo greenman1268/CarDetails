@@ -1,5 +1,6 @@
 package frame.Print.report;
 
+import frame.Main.MainFrame;
 import frame.Main.RatesDilog;
 import logic.Item;
 import logic.ManagementSystem;
@@ -11,6 +12,7 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.Vector;
 
 /**
@@ -21,12 +23,15 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
     private ManagementSystem ms = null;
     private JTable itemList;
     private Vector<Item> selected;
+    private Vector<Item> resetList;
     private Vector<Item> listToPrint = new Vector<>();
     private boolean result;
 
-
     public PrintFrame(Vector<Item> selected){
-        this.selected = selected;
+
+        this.selected = new Vector<>(selected);
+        this.resetList = new Vector<>(selected);
+
         try {
             ms = ManagementSystem.getInstance();
         } catch (Exception e) {
@@ -41,8 +46,9 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
 
         //указать курс валют
         JButton lb = new JButton("Курс");
-        lb.setName("rates");
+        lb.setName("Rates");
         lb.setBounds(100,5,70,20);
+        lb.addActionListener(this);
         top.add(lb);
 
         // Создаем нижнюю панель и задаем ей layout
@@ -93,6 +99,7 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
 
     }
     public boolean getResult(){return result;}
+    public Vector<Item> getResetList(){return resetList;}
 
     public void reloadItems(){
         Thread t = new Thread(){
@@ -115,6 +122,7 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
                                     Item item = selected.get(row);
                                     listToPrint.add(item);
                                 }
+                                if(!checked)listToPrint.remove(row);
                             }
                         }
                     });
@@ -136,7 +144,7 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
             if (c.getName().equals("Params")){
                 createParams();
             }
-            if (c.getName().equals("rates")){
+            if (c.getName().equals("Rates")){
                 updateRates();
             }
         }
@@ -198,7 +206,6 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
                 if (rd.getResult()) {
                     reloadItems();
                 }
-
             }
         };
         t.start();
