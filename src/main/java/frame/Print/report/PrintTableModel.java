@@ -55,7 +55,7 @@ public class PrintTableModel extends AbstractTableModel {
                 case 3:item.setPrice((BigDecimal)value);break;
                 case 4:item.setIn_stock((Integer)value);break;
                 case 5:item.setSold((Integer)value);break;
-                case 6:item.setCurrency((BigDecimal)value);break;
+                case 6:item.setCurrency((String)value);break;
                 case 7:item.setPrint((Boolean)value);break;
                 default:
                     System.out.println("SOMETHING WRONG");
@@ -80,7 +80,7 @@ public class PrintTableModel extends AbstractTableModel {
             case 5:
                 return Integer.class;
             case 6:
-                return BigDecimal.class;
+                return String.class;
             case 7:
                 return Boolean.class;
             default:
@@ -120,7 +120,7 @@ public class PrintTableModel extends AbstractTableModel {
                 case 5:
                     return item.getCount();
                 case 6:
-                    return 0;
+                    return item.getCurrency();
                 case 7:
                     return item.getPrint();
             }

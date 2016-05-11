@@ -1,7 +1,6 @@
 package frame.Print.report;
 
 import logic.Currency;
-import logic.Group;
 import logic.Item;
 import logic.ManagementSystem;
 
@@ -10,7 +9,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Vector;
 
 /**
@@ -32,6 +30,8 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
     private ManagementSystem ms;
     private Item item;
     private ArrayList<Currency> list;
+    private int in_stock;
+    private int sold;
 
     public PrintParametresDilog(Item item){
         this.item = item;
@@ -42,13 +42,15 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        this.in_stock = item.getIn_stock();
+        this.sold = item.getSold();
         // Установить заголовок
         setTitle("Ввод данных на печать");
         getContentPane().setLayout(null);
 
         name = new JLabel(item.getItemName(), JLabel.RIGHT);
         name.setBounds(10, 30, 200, 20);
-        getContentPane().add(l);
+        getContentPane().add(name);
 
         JLabel l = new JLabel("Количество: ", JLabel.RIGHT);
         l.setBounds(220,30,150,20);
@@ -108,7 +110,8 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
     public Item getItem() {
         Item item = new Item();
         item.setItemName(name.getText());
-
+        item.setIn_stock(in_stock-Integer.parseInt(count.getText()));
+        item.setSold(sold+Integer.parseInt(count.getText()));
        /* if(price.getText().equals("")){item.setPrice(new BigDecimal(0));}
         else {
             BigDecimal bg = new BigDecimal(0);

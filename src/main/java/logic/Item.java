@@ -21,7 +21,7 @@ public class Item implements Comparable{
     private BigDecimal price;
     private Boolean print = false;
     private int count = 0;
-    private BigDecimal currency = new BigDecimal(0);
+    private String currency = "UAH";
     public Item() {
     }
 
@@ -60,7 +60,7 @@ public class Item implements Comparable{
 
     public Boolean getPrint(){return print;}
 
-    public BigDecimal getCurrency(){return currency;}
+    public String getCurrency(){return currency;}
 
     public void setItemId(int itemId) {
         this.itemId = itemId;
@@ -88,7 +88,7 @@ public class Item implements Comparable{
 
     public void setCount(int count){ this.count = count; }
 
-    public void setCurrency(BigDecimal currency) {this.currency = currency;}
+    public void setCurrency(String currency) {this.currency = currency;}
 
     public String btoS(){
         SimpleDateFormat smt = new SimpleDateFormat("dd.MM.YYYY");
