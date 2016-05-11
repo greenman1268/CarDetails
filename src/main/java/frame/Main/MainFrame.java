@@ -638,9 +638,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                         for (int i = 0; i < selected.size(); i++) {
                             if(selected.get(i).getPrint())list.add(selected.get(i));
                         }
-                        /*ExcelGenerateReport ExGR = new ExcelGenerateReport(new ArrayList<>(selected));
-                        ExGR.main();
-                        */
+
                         PrintFrame pf = new PrintFrame(list);
                         pf.setDefaultCloseOperation(EXIT_ON_CLOSE);
                         pf.setVisible(true);

@@ -1,5 +1,6 @@
 package frame.Print.report;
 
+import frame.Main.RatesDilog;
 import logic.Item;
 import logic.ManagementSystem;
 
@@ -40,6 +41,7 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
 
         //указать курс валют
         JButton lb = new JButton("Курс");
+        lb.setName("rates");
         lb.setBounds(100,5,70,20);
         top.add(lb);
 
@@ -54,31 +56,25 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
         right.setBorder(new BevelBorder(BevelBorder.LOWERED));
         // Создаем надпись
         right.add(new JLabel("Детали:"), BorderLayout.NORTH);
-        // Создаем таблицу и вставляем ее в скроллируемую
-        // панель, которую в свою очередь уже кладем на панель right
-        // Наша таблица пока ничего не умеет - просто положим ее как заготовку
-        // Сделаем в ней 4 колонки - Номер, Дата последнего изменения, Количество в наличии, Количество проданых
 
-        itemList = new JTable(1, 6);
+        itemList = new JTable(1, 8);
         right.add(new JScrollPane(itemList), BorderLayout.CENTER);
 
         JButton btnOk = new JButton("Печать");
         btnOk.setBounds(5,5,100,20);
         btnOk.setName("OK");
         btnOk.addActionListener(this);
-
-        JButton btnCn = new JButton("Отмена");
-        btnOk.setBounds(110,5,100,20);
-        btnCn.setName("Cancel");
-        btnCn.addActionListener(this);
-
+        JButton btnParam = new JButton("Параметры");
+        btnParam.setBounds(110,5,120,20);
+        btnParam.setName("Params");
+        btnParam.addActionListener(this);
 
         // Создаем панель, на которую положим наши кнопки и кладем ее вниз
         JPanel pnlBtnSt = new JPanel();
         pnlBtnSt.setLayout(null);
         pnlBtnSt.setPreferredSize(new Dimension(2000,30));
         pnlBtnSt.add(btnOk);
-        pnlBtnSt.add(btnCn);
+        pnlBtnSt.add(btnParam);
         right.add(pnlBtnSt, BorderLayout.SOUTH);
 
         // Вставляем панели со списками групп и деталей в нижнюю панель
@@ -112,7 +108,7 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
                         public void tableChanged(TableModelEvent tableModelEvent) {
                             int row = tableModelEvent.getFirstRow();
                             int column = tableModelEvent.getColumn();
-                            if(column == 5){
+                            if(column == 7){
                                 TableModel model = (TableModel)tableModelEvent.getSource();
                                 Boolean checked = (Boolean)model.getValueAt(row,column);
                                 if(checked){
@@ -137,8 +133,11 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
                 toPrint();
                 result = true;
             }
-            if (c.getName().equals("Cancel")){
-                result = false;
+            if (c.getName().equals("Params")){
+                createParams();
+            }
+            if (c.getName().equals("rates")){
+                updateRates();
             }
         }
 
@@ -157,7 +156,48 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
     }
 
     public void toPrint(){
+        /*ExcelGenerateReport ExGR = new ExcelGenerateReport(new ArrayList<>(selected));
+                        ExGR.main();
+                        */
+        //ms.updateItem();
+    }
 
+    public void createParams(){
+        Thread t = new Thread(){
+
+            public void run() {
+                if(itemList!=null){
+                    if(itemList.getSelectedRows().length > 0){
+                PrintParametresDilog ppd = new PrintParametresDilog();
+                ppd.setModal(true);
+                ppd.setVisible(true);
+                if (ppd.getResult()) {
+                    reloadItems();
+                }}
+                else JOptionPane.showMessageDialog(PrintFrame.this,
+                            "Необходимо отметить деталь в списке");
+                    return;}
+
+            }
+        };
+        t.start();
+
+    }
+
+    public void updateRates(){
+        Thread t = new Thread(){
+
+            public void run(){
+                RatesDilog rd = new RatesDilog();
+                rd.setModal(true);
+                rd.setVisible(true);
+                if (rd.getResult()) {
+                    reloadItems();
+                }
+
+            }
+        };
+        t.start();
     }
 
     private class TableSearchRenderer extends DefaultTableCellRenderer {
