@@ -24,13 +24,12 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
     private JTable itemList;
     private Vector<Item> selected;
     private Vector<Item> resetList;
-    private Vector<Item> listToPrint = new Vector<>();
     private boolean result;
 
     public PrintFrame(Vector<Item> selected){
 
         this.selected = new Vector<>(selected);
-        this.resetList = new Vector<>(selected);
+        this.resetList = new Vector<>();
 
         try {
             ms = ManagementSystem.getInstance();
@@ -118,11 +117,7 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
                             if(column == 7){
                                 TableModel model = (TableModel)tableModelEvent.getSource();
                                 Boolean checked = (Boolean)model.getValueAt(row,column);
-                                if(checked){
-                                    Item item = selected.get(row);
-                                    listToPrint.add(item);
-                                }
-                                if(!checked)listToPrint.remove(row);
+                                selected.get(row).setPrint(checked);
                             }
                         }
                     });
@@ -167,7 +162,8 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
         /*ExcelGenerateReport ExGR = new ExcelGenerateReport(new ArrayList<>(selected));
                         ExGR.main();
                         */
-        //ms.updateItem();
+        //ms.updateItem(selected.get(0);
+
     }
 
     public void createParams(){

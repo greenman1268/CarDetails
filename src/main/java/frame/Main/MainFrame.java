@@ -640,7 +640,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                         }
 
                         PrintFrame pf = new PrintFrame(list);
-                        pf.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                        pf.setDefaultCloseOperation(HIDE_ON_CLOSE);
                         pf.setVisible(true);
                         pf.reloadItems();
 /*

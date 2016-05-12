@@ -31,28 +31,26 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
     private ManagementSystem ms;
     private Item item;
     private ArrayList<Currency> list;
-    private int in_stock;
-    private int sold;
+
     private PrintFrame pf;
 
     public PrintParametresDilog(Item item, PrintFrame pf){
-        this.item = item;
         try {
             this.ms = ManagementSystem.getInstance();
             this.list =(ArrayList) ms.getRateList();
+            this.item = ms.getItemByName(item.getItemName());
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        this.in_stock = item.getIn_stock();
-        this.sold = item.getSold();
+
         this.pf = pf;
 
         // Установить заголовок
         setTitle("Ввод данных на печать");
         getContentPane().setLayout(null);
 
-        name = new JLabel(item.getItemName(), JLabel.RIGHT);
+        name = new JLabel(this.item.getItemName(), JLabel.RIGHT);
         name.setBounds(40, 30, 200, 20);
         getContentPane().add(name);
 
@@ -104,18 +102,18 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
     // Установить поля соответственно переданным данным о детале
     public void setItem(Item item) {
 
-        count.setText(Integer.toString(item.getIn_stock()));
-        price.setText(item.getPrice().toString());
+        count.setText(Integer.toString(this.item.getIn_stock()));
+        price.setText(this.item.getPrice().toString());
 
     }
 
 
     // Вернуть данные в виде новой детали с соотвтествующими полями
     public Item updateItem(Vector<Item> selected) {
-        item.setItemId(this.item.getItemId());
+        item.setItemId(item.getItemId());
         item.setItemName(name.getText());
-        item.setIn_stock(in_stock-Integer.parseInt(count.getText()));
-        item.setSold(sold+Integer.parseInt(count.getText()));
+        item.setIn_stock(this.item.getIn_stock()-Integer.parseInt(count.getText()));
+        item.setSold(this.item.getSold()+Integer.parseInt(count.getText()));
         item.setGroupId(this.item.getGroupId());
 
         BigDecimal pricen = new BigDecimal(0);
@@ -124,12 +122,14 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
 
         item.setPrice(pricen.multiply(((Currency)currency.getModel().getSelectedItem()).getValue()));
         for (int i = 0; i < selected.size(); i++) {
-            if(selected.get(i).getItemId()==item.getItemId()){
-                selected.get(i).setIn_stock(in_stock-Integer.parseInt(count.getText()));
-                selected.get(i).setSold(sold + Integer.parseInt(count.getText()));
+            if(selected.get(i).getItemId()==item.getItemId() && selected.get(i).getItemName().equals(item.getItemName())){
+                selected.get(i).setIn_stock(item.getIn_stock());
+                selected.get(i).setSold(item.getSold());
                 selected.get(i).setPrice(pricen.multiply(((Currency)currency.getModel().getSelectedItem()).getValue()));
                 selected.get(i).setCount(Integer.parseInt(count.getText()));
                 selected.get(i).setCurrency(((Currency) currency.getModel().getSelectedItem()).getName());
+                selected.get(i).setGroupId(item.getGroupId());
+
             }
         }
 
@@ -152,7 +152,7 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
                         "Неверное значение \"Количество\"");
                 ex.printStackTrace();return;
             }
-            if(Integer.parseInt(count.getText())>in_stock){
+            if(Integer.parseInt(count.getText())>this.item.getIn_stock()){
                 JOptionPane.showMessageDialog(PrintParametresDilog.this,
                     "Значение \"Количество\" слишком большое");return;}
             try{
