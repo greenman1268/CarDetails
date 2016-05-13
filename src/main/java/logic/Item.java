@@ -100,7 +100,8 @@ public class Item implements Comparable{
                 "\nitemName: " + itemName +
                 "\nchangeDate: " + btoS() +
                 "\nin_stock: " + in_stock +
-                "\nsold: " + sold + "\n";
+                "\nsold: " + sold +
+                "\nprint: " + print;
                // "\nprice: " + price + "\n";
     }
 

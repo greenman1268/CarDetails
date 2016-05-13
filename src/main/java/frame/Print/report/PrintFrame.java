@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  * Created on 11.05.2016
@@ -27,7 +28,7 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
     private MainFrame mf;
     private boolean result = false;
 
-    public PrintFrame(Vector<Item> selected, MainFrame mf){
+    public PrintFrame(Vector<Item> selected, MainFrame mf) {
 
         this.mf = mf;
         this.selected = new Vector<>(selected);
@@ -46,12 +47,12 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
         JPanel top = new JPanel();
         // Устанавливаем для нее layout
         top.setLayout(null);
-        top.setPreferredSize(new Dimension(500,30));
+        top.setPreferredSize(new Dimension(500, 30));
 
         //указать курс валют
         JButton lb = new JButton("Курс");
         lb.setName("Rates");
-        lb.setBounds(100,5,70,20);
+        lb.setBounds(100, 5, 70, 20);
         lb.addActionListener(this);
         top.add(lb);
 
@@ -71,22 +72,22 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
         right.add(new JScrollPane(itemList), BorderLayout.CENTER);
 
         JButton btnOk = new JButton("Печать");
-        btnOk.setBounds(5,5,100,20);
+        btnOk.setBounds(5, 5, 100, 20);
         btnOk.setName("OK");
         btnOk.addActionListener(this);
         JButton btnParam = new JButton("Параметры");
-        btnParam.setBounds(110,5,120,20);
+        btnParam.setBounds(110, 5, 120, 20);
         btnParam.setName("Params");
         btnParam.addActionListener(this);
         JButton btnReset = new JButton("Сброс");
-        btnReset.setBounds(235,5,120,20);
+        btnReset.setBounds(235, 5, 120, 20);
         btnReset.setName("Reset");
         btnReset.addActionListener(this);
 
         // Создаем панель, на которую положим наши кнопки и кладем ее вниз
         JPanel pnlBtnSt = new JPanel();
         pnlBtnSt.setLayout(null);
-        pnlBtnSt.setPreferredSize(new Dimension(2000,30));
+        pnlBtnSt.setPreferredSize(new Dimension(2000, 30));
         pnlBtnSt.add(btnOk);
         pnlBtnSt.add(btnParam);
         pnlBtnSt.add(btnReset);
@@ -107,13 +108,19 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
         setBounds(200, 100, 1000, 500);
 
     }
-    public boolean getResult(){return result;}
-    public Vector<Item> getSelected(){return selected;}
 
-    public void reloadItems(){
-        Thread t = new Thread(){
+    public boolean getResult() {
+        return result;
+    }
 
-            public void run(){
+    public Vector<Item> getSelected() {
+        return selected;
+    }
+
+    public void reloadItems() {
+        Thread t = new Thread() {
+
+            public void run() {
                 if (itemList != null) {
 
                     itemList.setModel(new PrintTableModel(selected));
@@ -124,9 +131,9 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
                         public void tableChanged(TableModelEvent tableModelEvent) {
                             int row = tableModelEvent.getFirstRow();
                             int column = tableModelEvent.getColumn();
-                            if(column == 7){
-                                TableModel model = (TableModel)tableModelEvent.getSource();
-                                Boolean checked = (Boolean)model.getValueAt(row,column);
+                            if (column == 7) {
+                                TableModel model = (TableModel) tableModelEvent.getSource();
+                                Boolean checked = (Boolean) model.getValueAt(row, column);
                                 selected.get(row).setPrint(checked);
                             }
                         }
@@ -142,17 +149,18 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() instanceof Component) {
             Component c = (Component) e.getSource();
+
             if (c.getName().equals("OK")) {
                 toPrint();
                 result = true;
             }
-            if (c.getName().equals("Params")){
+            if (c.getName().equals("Params")) {
                 createParams();
             }
-            if (c.getName().equals("Rates")){
+            if (c.getName().equals("Rates")) {
                 updateRates();
             }
-            if (c.getName().equals("Reset")){
+            if (c.getName().equals("Reset")) {
                 resetTable();
             }
         }
@@ -171,33 +179,38 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
         }
     }
 
-    public void toPrint(){
-        Thread t = new Thread(){
+    public void toPrint() {
+        Thread t = new Thread() {
 
-            public void run(){
+            public void run() {
                 for (int i = 0; i < selected.size(); i++) {
-                    if(!selected.get(i).getPrint()){
-                        selected.remove(i);i=0;
+                    if (!selected.get(i).getPrint()) {
+                        selected.remove(i);
+                        i = 0;
                     }
+                }
+
+                if (selected.size() != 0) {
+                    ExcelGenerateReport ExGR = new ExcelGenerateReport(new ArrayList<>(selected));
+                    ExGR.toPrint();
                     for (int j = 0; j < selected.size(); j++) {
                         try {
-                            ms.updateItem(selected.get(i));
+                            ms.updateItem(selected.get(j));
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
                     }
                     mf.getSelected().clear();
                     mf.reloadItems();
+                } else {
+                    JOptionPane.showMessageDialog(PrintFrame.this,
+                            "Необходимо отметить деталь в списке");
+                    return;
                 }
                 reloadItems();
-            }
-        };
-        t.start();
-        /*ExcelGenerateReport ExGR = new ExcelGenerateReport(new ArrayList<>(selected));
-                        ExGR.main();
-                        */
-
-    }
+            }};
+    t.start();
+}
 
     public void createParams(){
         Thread t = new Thread(){
@@ -218,7 +231,6 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
                 else JOptionPane.showMessageDialog(PrintFrame.this,
                             "Необходимо отметить деталь в списке");
                     return;}
-
             }
         };
         t.start();

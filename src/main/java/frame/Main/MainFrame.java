@@ -227,6 +227,11 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                 deleteGroup();
             }
             if (c.getName().equals(PRINT)) {
+                if(selected.size()==0){
+                    JOptionPane.showMessageDialog(MainFrame.this,
+                            "Необходимо отметить деталь в списке");
+                    return;
+                }
                 printReport();
             }
             if (c.getName().equals(RATES)){
@@ -642,6 +647,8 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                         pf.setDefaultCloseOperation(HIDE_ON_CLOSE);
                         pf.setVisible(true);
                         pf.reloadItems();
+                        selected.clear();
+                        reloadItems();
                         }
                     }
                     else JOptionPane.showMessageDialog(MainFrame.this,

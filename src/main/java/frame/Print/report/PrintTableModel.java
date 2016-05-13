@@ -127,9 +127,7 @@ public class PrintTableModel extends AbstractTableModel {
         }
         return null;
     }
-
-
-    // Добавим метод, который возвращает деталь по номеру строки
+        // Добавим метод, который возвращает деталь по номеру строки
     // Это нам пригодится чуть позже
     public Item getItem(int rowIndex) {
         if (items != null) {

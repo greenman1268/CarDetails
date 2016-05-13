@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class ExcelGenerateReport {
 
     private static ArrayList<Item> itemList;
+    private static ArrayList<Item> newItem;
 
     private static CellStyle stTop = null;//font 15 bold left border bottom
     private static CellStyle stTop1 = null;//font 12
@@ -43,10 +44,11 @@ public class ExcelGenerateReport {
     private static XSSFSheet sheet = null;
 
     public ExcelGenerateReport(ArrayList<Item> list){
-        this.itemList = list;
+        this.itemList = new ArrayList<>();
+        this.newItem = list;
     }
 
-    public static void write_xlsx() {
+    public static void write_xlsx(String fname) {
         try {
             wb = new XSSFWorkbook();
             sheet = wb.createSheet("Накладна");
@@ -58,7 +60,7 @@ public class ExcelGenerateReport {
             insertDetailInfo(sheet);
             //Write the Excel file
 
-            FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.home") + "/Desktop/new.xlsx");
+            FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.home") + "/Desktop/"+fname+".xlsx");
             wb.write(fileOut);
             fileOut.close();
             System.out.println("finished succesfully");
@@ -818,18 +820,41 @@ public class ExcelGenerateReport {
         }
     }
 
-    public static void main(){//String[] args) {
-/*ExcelGenerateReport exgr = new ExcelGenerateReport(new ArrayList<Item>());
-        exgr.write_xlsx();*/
-        write_xlsx();
+    public void toPrint() {
+        /*String name = "";
+        if(newItem.size()<8){
+            name = "new1";
+        write_xlsx(name);
         Desktop desktop = null;
         if (Desktop.isDesktopSupported()) {
             desktop = Desktop.getDesktop();
 
         try {
-            desktop.open(new File(System.getProperty("user.home") + "/Desktop/new.xlsx"));
+            desktop.open(new File(System.getProperty("user.home") + "/Desktop/"+name+".xlsx"));
         } catch (IOException ioe) {
             ioe.printStackTrace();
-        }}
+        }}}
+        else if(newItem.size()>7){*/
+           String name = null;
+            int count = (int)Math.ceil((double)newItem.size() / 7);
+
+            for (int i = 0; i < count; i++) {
+            name = "new" + (i+1);
+                int end = 7 * (i+1);
+                for (int j = 0 * (i+1); j < end; j++) {
+                    if(j<=newItem.size()-1)itemList.add(newItem.get(j));
+                }
+                write_xlsx(name);
+                Desktop desktop = null;
+                if (Desktop.isDesktopSupported()) {
+                    desktop = Desktop.getDesktop();
+
+                    try {
+                        desktop.open(new File(System.getProperty("user.home") + "/Desktop/"+name+".xlsx"));
+                    } catch (IOException ioe) {
+                        ioe.printStackTrace();
+                    }}
+            }
+        }
     }
-}
+//}
