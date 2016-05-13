@@ -164,7 +164,6 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
                 resetTable();
             }
         }
-
     }
 
     @Override
@@ -183,19 +182,17 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
         Thread t = new Thread() {
 
             public void run() {
+                Vector<Item> selec = new Vector<>();
                 for (int i = 0; i < selected.size(); i++) {
-                    if (!selected.get(i).getPrint()) {
-                        selected.remove(i);
-                        i = 0;
-                    }
+                    if(selected.get(i).getPrint())selec.add(selected.get(i));
                 }
 
-                if (selected.size() != 0) {
-                    ExcelGenerateReport ExGR = new ExcelGenerateReport(new ArrayList<>(selected));
+                if (selec.size() != 0) {
+                    ExcelGenerateReport ExGR = new ExcelGenerateReport(new ArrayList<>(selec));
                     ExGR.toPrint();
-                    for (int j = 0; j < selected.size(); j++) {
+                    for (int j = 0; j < selec.size(); j++) {
                         try {
-                            ms.updateItem(selected.get(j));
+                            ms.updateItem(selec.get(j));
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
@@ -290,7 +287,6 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
             this.delegate = delegate;
         }
 
-
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
             Component c = delegate.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -300,7 +296,6 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
                 label.setFont(labelFont);
                 label.setHorizontalAlignment(SwingConstants.CENTER);
                 label.setBorder(BorderFactory.createEtchedBorder());
-
             }
             return c;
         }

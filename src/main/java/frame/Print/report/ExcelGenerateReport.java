@@ -821,34 +821,23 @@ public class ExcelGenerateReport {
     }
 
     public void toPrint() {
-        /*String name = "";
-        if(newItem.size()<8){
-            name = "new1";
-        write_xlsx(name);
-        Desktop desktop = null;
-        if (Desktop.isDesktopSupported()) {
-            desktop = Desktop.getDesktop();
 
-        try {
-            desktop.open(new File(System.getProperty("user.home") + "/Desktop/"+name+".xlsx"));
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }}}
-        else if(newItem.size()>7){*/
            String name = null;
             int count = (int)Math.ceil((double)newItem.size() / 7);
-
+            int k = 0;
+            int end;
             for (int i = 0; i < count; i++) {
             name = "new" + (i+1);
-                int end = 7 * (i+1);
-                for (int j = 0 * (i+1); j < end; j++) {
+                end = 7 * (i+1);
+                itemList.clear();
+                for (int j = k ; j < end; j++) {
                     if(j<=newItem.size()-1)itemList.add(newItem.get(j));
                 }
+                k = end;
                 write_xlsx(name);
-                Desktop desktop = null;
+                Desktop desktop;
                 if (Desktop.isDesktopSupported()) {
                     desktop = Desktop.getDesktop();
-
                     try {
                         desktop.open(new File(System.getProperty("user.home") + "/Desktop/"+name+".xlsx"));
                     } catch (IOException ioe) {
