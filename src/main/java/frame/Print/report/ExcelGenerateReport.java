@@ -14,6 +14,7 @@ import org.apache.poi.util.IOUtils;
 
 import java.awt.*;
 import java.io.*;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -57,7 +58,7 @@ public class ExcelGenerateReport {
             //Setup some styles that we need for the Cells
             setCellStyles(wb);
             //insert info in the table
-            insertDetailInfo(sheet);
+            insertDetailInfo(sheet, fname);
             //Write the Excel file
 
             FileOutputStream fileOut = new FileOutputStream(System.getProperty("user.home") + "/Desktop/"+fname+".xlsx");
@@ -270,7 +271,7 @@ public class ExcelGenerateReport {
         
     }
 
-    protected static void insertDetailInfo(Sheet sheet) {
+    protected static void insertDetailInfo(Sheet sheet, String fname) {
 
         //Set Column Widths
         sheet.setColumnWidth(0, 500);
@@ -357,7 +358,7 @@ public class ExcelGenerateReport {
 
 
         //ROW 4
-        putPicture();
+        putPicture(fname);
         Row row4 = sheet.createRow(4);
         Cell c4_6 = row4.createCell(6);
         c4_6.setCellStyle(stTop3);
@@ -498,12 +499,13 @@ public class ExcelGenerateReport {
         c12_12.setCellStyle(stHead2);
         c12_12.setCellValue("Сума");
 
-        //ROWS CONTENT
+        //ROWS CONTENT----------------------------------------MAIN ROWS-------------------------------------------------
         Row row;
         int rows = 12;
         int size = itemList.size();
         int count = 0;
-
+        BigDecimal sum = new BigDecimal(0);
+        sum.setScale(2, BigDecimal.ROUND_HALF_UP);
         for (int i = 0; i < size; i++) {
             count++;
             rows++;
@@ -550,7 +552,7 @@ public class ExcelGenerateReport {
             Cell cn_8 = row.createCell(8);
             if(size - i == 1)cn_8.setCellStyle(stBot1R);
             else cn_8.setCellStyle(stMid1R);
-            cn_8.setCellValue(0);//------------------------------------->Доработать - Количество
+            cn_8.setCellValue(itemList.get(i).getCount());//------------------------------------->Доработать - Количество
 
             Cell cn_9 = row.createCell(9);
             Cell cn_10 = row.createCell(10);
@@ -569,12 +571,13 @@ public class ExcelGenerateReport {
             Cell cn_11 = row.createCell(11);
             if(size - i == 1)cn_11.setCellStyle(stBot1R);
             else cn_11.setCellStyle(stMid1R);
-            cn_11.setCellValue(0);//------------------------------------->Доработать цена
+            cn_11.setCellValue(itemList.get(i).getPrice().toString());//------------------------------------->Доработать цена
 
             Cell cn_12 = row.createCell(12);
             if(size - i == 1)cn_12.setCellStyle(stBot2);
             else cn_12.setCellStyle(stMid2);
-            cn_12.setCellValue(0);//------------------------------------->Доработать - Сума
+            sum = sum.add(itemList.get(i).getPrice().multiply(new BigDecimal(itemList.get(i).getCount())));
+            cn_12.setCellValue(itemList.get(i).getPrice().multiply(new BigDecimal(itemList.get(i).getCount())).toString());//------------------------------------->Доработать - Сума
         }
         //ROWS After table
         //ROW 1
@@ -596,7 +599,7 @@ public class ExcelGenerateReport {
         c13_12.setCellStyle(stTop2R);
         region = new CellRangeAddress(rows, rows, 10, 12);
         sheet.addMergedRegion(region);
-        c13_10.setCellValue("444,0");
+        c13_10.setCellValue(sum.toString());
 
         //ROW 2
         rows+=2;
@@ -615,7 +618,7 @@ public class ExcelGenerateReport {
         c14_6.setCellStyle(stTop3);
         region = new CellRangeAddress(rows, rows, 1, 6);
         sheet.addMergedRegion(region);
-        c14_1.setCellValue("Всього найменувань 1, на суму 444,00");//-------->Доработать
+        c14_1.setCellValue("Всього найменувань 1, на суму "+sum.toString());//-------->Доработать
         
         //ROW 3
         rows++;
@@ -796,7 +799,7 @@ public class ExcelGenerateReport {
 
     }
 
-    public static void putPicture(){
+    public static void putPicture(String name){
         try {
             InputStream my_banner_image = new FileInputStream("src/main/java/frame/Print/report/resources/1.jpg");
             byte[] bytes = IOUtils.toByteArray(my_banner_image);
@@ -810,7 +813,7 @@ public class ExcelGenerateReport {
             my_anchor.setRow2(5);
             XSSFPicture my_picture = drawing.createPicture(my_anchor, my_picture_id);
             my_picture.resize();
-            FileOutputStream out = new FileOutputStream(new File(System.getProperty("user.home") + "/Desktop/new.xlsx"));
+            FileOutputStream out = new FileOutputStream(new File(System.getProperty("user.home") + "/Desktop/"+name+".xlsx"));
             wb.write(out);
             out.close();
         } catch (FileNotFoundException e) {
@@ -846,4 +849,3 @@ public class ExcelGenerateReport {
             }
         }
     }
-//}
