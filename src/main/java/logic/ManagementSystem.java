@@ -196,6 +196,21 @@ public class ManagementSystem {
         return item;
     }
 
+    public Item getItemByNameGidIid(Item m) throws SQLException {
+        Item item = null;
+        PreparedStatement stmt = con.prepareStatement("SELECT item_id, itemName, changeDate, group_id, in_stock, sold FROM items WHERE itemName=? AND item_id=? AND group_id=?");
+        stmt.setString(1, m.getItemName());
+        stmt.setInt(2, m.getItemId());
+        stmt.setInt(3, m.getGroupId());
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            item = new Item(rs);
+        }
+        rs.close();
+        stmt.close();
+        return item;
+    }
+
     public void moveItemsToGroup(Item item, Group newGroup) throws SQLException {
         PreparedStatement stmt = con.prepareStatement("UPDATE items SET group_id = ? "
                 + "WHERE item_id = ? ");

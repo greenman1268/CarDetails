@@ -23,7 +23,6 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
     // Результат нажатия кнопок
     private boolean result = false;
     // Параметры детали
-    private JTextField itemName = new JTextField();
     private JTextField count = new JTextField();
     private JTextField price = new JTextField();
     private JComboBox currency;
@@ -117,10 +116,10 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
         item.setGroupId(this.item.getGroupId());
 
         BigDecimal pricen = new BigDecimal(0);
-        pricen.setScale(2,BigDecimal.ROUND_HALF_UP);
+        pricen.setScale(2, BigDecimal.ROUND_HALF_UP);
         pricen = new BigDecimal(price.getText());
 
-        item.setPrice(pricen.multiply(((Currency)currency.getModel().getSelectedItem()).getValue()));
+        item.setPrice(pricen.multiply(((Currency) currency.getModel().getSelectedItem()).getValue()));
         for (int i = 0; i < selected.size(); i++) {
             if(selected.get(i).getItemId()==item.getItemId() && selected.get(i).getItemName().equals(item.getItemName())){
                 selected.get(i).setIn_stock(item.getIn_stock());
@@ -154,7 +153,7 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
             }
             if(Integer.parseInt(count.getText())>this.item.getIn_stock()){
                 JOptionPane.showMessageDialog(PrintParametresDilog.this,
-                    "Значение \"Количество\" слишком большое");return;}
+                        "Значение \"Количество\" слишком большое");return;}
             try{
                 new BigDecimal(price.getText());
             }catch (Exception ex){

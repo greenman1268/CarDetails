@@ -288,7 +288,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                         if(selected!=null){
                             for (int i = 0; i < v.size(); i++) {
                                 for (int j = 0; j < selected.size(); j++) {
-                                    if(v.get(i).getItemName().equals(selected.get(j).getItemName())&& v.get(i).getGroupId()==selected.get(j).getGroupId())
+                                    if(v.get(i).getItemName().equals(selected.get(j).getItemName())&& v.get(i).getGroupId()==selected.get(j).getGroupId() && v.get(i).getItemId()==selected.get(j).getItemId())
                                         v.get(i).setPrint(selected.get(j).getPrint());
                                 }
                             }
@@ -628,7 +628,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         t.start();
     }
 
-    private void printReport() {
+    private void printReport(){
         Thread t = new Thread(){
 
             public void run() {
@@ -638,22 +638,17 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                         for (int i = 0; i < selected.size(); i++) {
                             if(selected.get(i).getPrint())list.add(selected.get(i));
                         }
-
-                        PrintFrame pf = new PrintFrame(list);
+                        PrintFrame pf = new PrintFrame(list, MainFrame.this);
                         pf.setDefaultCloseOperation(HIDE_ON_CLOSE);
                         pf.setVisible(true);
                         pf.reloadItems();
-/*
-                        if(pf.getResult()){
-                        selected.clear();
-                        reloadItems();}
-                        else reloadItems();*/
+                        }
                     }
                     else JOptionPane.showMessageDialog(MainFrame.this,
                             "Необходимо отметить деталь в списке");
                     return;
             }
-            }
+
         };
         t.start();
     }
@@ -675,6 +670,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     }
 
     public Vector<Item> getSelected(){return selected;}
+
 
     private class TableSearchRenderer extends DefaultTableCellRenderer {
 

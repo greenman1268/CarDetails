@@ -24,15 +24,20 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
     private JTable itemList;
     private Vector<Item> selected;
     private Vector<Item> resetList;
-    private boolean result;
+    private MainFrame mf;
+    private boolean result = false;
 
-    public PrintFrame(Vector<Item> selected){
+    public PrintFrame(Vector<Item> selected, MainFrame mf){
 
+        this.mf = mf;
         this.selected = new Vector<>(selected);
         this.resetList = new Vector<>();
 
         try {
             ms = ManagementSystem.getInstance();
+            for (int i = 0; i < selected.size(); i++) {
+                resetList.add(ms.getItemByNameGidIid(selected.get(i)));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,6 +78,10 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
         btnParam.setBounds(110,5,120,20);
         btnParam.setName("Params");
         btnParam.addActionListener(this);
+        JButton btnReset = new JButton("Сброс");
+        btnReset.setBounds(235,5,120,20);
+        btnReset.setName("Reset");
+        btnReset.addActionListener(this);
 
         // Создаем панель, на которую положим наши кнопки и кладем ее вниз
         JPanel pnlBtnSt = new JPanel();
@@ -80,6 +89,7 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
         pnlBtnSt.setPreferredSize(new Dimension(2000,30));
         pnlBtnSt.add(btnOk);
         pnlBtnSt.add(btnParam);
+        pnlBtnSt.add(btnReset);
         right.add(pnlBtnSt, BorderLayout.SOUTH);
 
         // Вставляем панели со списками групп и деталей в нижнюю панель
@@ -98,7 +108,7 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
 
     }
     public boolean getResult(){return result;}
-    public Vector<Item> getResetList(){return resetList;}
+    public Vector<Item> getSelected(){return selected;}
 
     public void reloadItems(){
         Thread t = new Thread(){
@@ -142,6 +152,9 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
             if (c.getName().equals("Rates")){
                 updateRates();
             }
+            if (c.getName().equals("Reset")){
+                resetTable();
+            }
         }
 
     }
@@ -159,10 +172,30 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
     }
 
     public void toPrint(){
+        Thread t = new Thread(){
+
+            public void run(){
+                for (int i = 0; i < selected.size(); i++) {
+                    if(!selected.get(i).getPrint()){
+                        selected.remove(i);i=0;
+                    }
+                    for (int j = 0; j < selected.size(); j++) {
+                        try {
+                            ms.updateItem(selected.get(i));
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    mf.getSelected().clear();
+                    mf.reloadItems();
+                }
+                reloadItems();
+            }
+        };
+        t.start();
         /*ExcelGenerateReport ExGR = new ExcelGenerateReport(new ArrayList<>(selected));
                         ExGR.main();
                         */
-        //ms.updateItem(selected.get(0);
 
     }
 
@@ -202,6 +235,20 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
                 if (rd.getResult()) {
                     reloadItems();
                 }
+            }
+        };
+        t.start();
+    }
+
+    public void resetTable(){
+        Thread t = new Thread(){
+
+            public void run(){
+                if (JOptionPane.showConfirmDialog(PrintFrame.this,
+                        "Сбросить значения?", "Сброс",
+                        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                selected = resetList;
+                reloadItems();}
             }
         };
         t.start();
