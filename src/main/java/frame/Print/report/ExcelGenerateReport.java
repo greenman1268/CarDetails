@@ -804,13 +804,30 @@ public class ExcelGenerateReport {
         String[] hundreds = {"сто","двiстi","триста","чотириста","п'ятсот","шiстсот","сiмсот","вiсiмсот","дев'ятсот"};
         String[] thousends = {"тисяча","тисяч","тисячi"};
         String[] millions = {"мiльйон","мiльйони","мiльйонiв"};
-        String[] Hryvna = {"гривня","гривнi","гривень"};
-        String[] Dollar = {"долар","долари","доларiв"};
-        String[] Evro = {"євро"};
+        String[] Hryvna = {"гривня","гривнi","гривень"}; String[] Kopeck = {"копiйка","копiйки","копiйок"};
+        String[] Dollar = {"долар","долари","доларiв"}; String[] Cents = {"цент","центи","центiв"};
+        String[] Evro = {"євро"}; String[] EvroCents = {"євроцент","євроценти","євроцентiв"};
+
+        int integer = sum.intValue();
+        int fraction = sum.remainder(BigDecimal.ONE).movePointRight(sum.scale()).abs().toBigInteger().intValue();
+
+        //FOR INTEGER-------------------------
+        if(integer==0)
+        if(integer/10>0) {
+            if(integer/100>0){
+
+            }else {
+
+            }
+        }
+        else {
+            summa.append(units[(integer%10)-1]).append(" ");
+        }
+
+        //FOR DECIMAL-------------------------
 
 
-
-
+        return summa.toString();
     }
 
     public static void putPicture(String name){
