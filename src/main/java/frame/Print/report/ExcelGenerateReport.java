@@ -793,8 +793,22 @@ public class ExcelGenerateReport {
         region = new CellRangeAddress(rows, rows, 7, 12);
         sheet.addMergedRegion(region);
         c23_7.setCellValue("- товар на замовлення поверненню не пiдлягає ");
-        
-        
+    }
+
+    public String sumToWords(BigDecimal sum){
+        StringBuilder summa = new StringBuilder("");
+
+        String[] units = {"одна","двi","три","чотири","п'ять","шiсть","сiм","вiсiм","дев'ять"};
+        String[] tens = {"десять","двадцять","тридцять","сорок","п'ятдесят","шiстдесят","сiмдесят","вiсiмдесят","дев'яносто"};
+        String[] tens2 = {"одинадцять","дванадцять","тринадцять","чотирнадцять","п'ятнадцять","шiстнадцять","сiмнадцять","вiсiмнадцять","дев'ятнадцять"};
+        String[] hundreds = {"сто","двiстi","триста","чотириста","п'ятсот","шiстсот","сiмсот","вiсiмсот","дев'ятсот"};
+        String[] thousends = {"тисяча","тисяч","тисячi"};
+        String[] millions = {"мiльйон","мiльйони","мiльйонiв"};
+        String[] Hryvna = {"гривня","гривнi","гривень"};
+        String[] Dollar = {"долар","долари","доларiв"};
+        String[] Evro = {"євро"};
+
+
 
 
     }
