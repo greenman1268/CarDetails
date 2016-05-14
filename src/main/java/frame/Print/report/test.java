@@ -13,7 +13,9 @@ public class test {
         bd = new BigDecimal("1037.6980");
         BigInteger decimal = bd.remainder(BigDecimal.ONE).movePointRight(bd.scale()).abs().toBigInteger();
         String s = "долар долари доларiв цент центи центiв";
-        s=s.replaceAll("долари доларiв","");
-        System.out.println(bd.intValue());
+        s = bd.toString();
+        int ss = s.indexOf(".");
+
+        System.out.println(s.substring(ss+1,s.length()));
     }
 }

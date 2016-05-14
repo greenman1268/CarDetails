@@ -114,7 +114,7 @@ public class PrintTableModel extends AbstractTableModel {
                     return DateFormat.getDateInstance(DateFormat.SHORT).format(
                             item.getChangeDate());
                 case 3:
-                    return item.getPrice();
+                    return item.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP);
                 case 4:
                     return item.getIn_stock();
                 case 5:

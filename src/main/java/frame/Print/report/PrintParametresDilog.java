@@ -115,9 +115,7 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
         item.setSold(this.item.getSold()+Integer.parseInt(count.getText()));
         item.setGroupId(this.item.getGroupId());
 
-        BigDecimal pricen = new BigDecimal(0);
-        pricen.setScale(2, BigDecimal.ROUND_HALF_UP);
-        pricen = new BigDecimal(price.getText());
+        BigDecimal pricen = new BigDecimal(price.getText()).setScale(2, BigDecimal.ROUND_HALF_UP);
 
         item.setPrice(pricen.multiply(((Currency) currency.getModel().getSelectedItem()).getValue()));
         for (int i = 0; i < selected.size(); i++) {
@@ -155,7 +153,13 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
                 JOptionPane.showMessageDialog(PrintParametresDilog.this,
                         "Значение \"Количество\" слишком большое");return;}
             try{
-                new BigDecimal(price.getText());
+                BigDecimal bg = new BigDecimal(price.getText());
+                String s = bg.toString();
+                int stry = s.indexOf(".");
+                if(s.substring(stry+1,s.length()).length()>2){
+                    JOptionPane.showMessageDialog(PrintParametresDilog.this,
+                            "Неверное значение \"Цена\"");return;}
+
             }catch (Exception ex){
                 JOptionPane.showMessageDialog(PrintParametresDilog.this,
                         "Неверное значение \"Цена\"");

@@ -504,8 +504,7 @@ public class ExcelGenerateReport {
         int rows = 12;
         int size = itemList.size();
         int count = 0;
-        BigDecimal sum = new BigDecimal(0);
-        sum.setScale(2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal sum = new BigDecimal(0).setScale(2,BigDecimal.ROUND_HALF_UP);
         for (int i = 0; i < size; i++) {
             count++;
             rows++;
@@ -552,7 +551,7 @@ public class ExcelGenerateReport {
             Cell cn_8 = row.createCell(8);
             if(size - i == 1)cn_8.setCellStyle(stBot1R);
             else cn_8.setCellStyle(stMid1R);
-            cn_8.setCellValue(itemList.get(i).getCount());//------------------------------------->Доработать - Количество
+            cn_8.setCellValue(itemList.get(i).getCount());
 
             Cell cn_9 = row.createCell(9);
             Cell cn_10 = row.createCell(10);
@@ -571,13 +570,13 @@ public class ExcelGenerateReport {
             Cell cn_11 = row.createCell(11);
             if(size - i == 1)cn_11.setCellStyle(stBot1R);
             else cn_11.setCellStyle(stMid1R);
-            cn_11.setCellValue(itemList.get(i).getPrice().toString());//------------------------------------->Доработать цена
+            cn_11.setCellValue(itemList.get(i).getPrice().setScale(2, BigDecimal.ROUND_HALF_UP).toString());
 
             Cell cn_12 = row.createCell(12);
             if(size - i == 1)cn_12.setCellStyle(stBot2);
             else cn_12.setCellStyle(stMid2);
-            sum = sum.add(itemList.get(i).getPrice().multiply(new BigDecimal(itemList.get(i).getCount())));
-            cn_12.setCellValue(itemList.get(i).getPrice().multiply(new BigDecimal(itemList.get(i).getCount())).toString());//------------------------------------->Доработать - Сума
+            sum = sum.add((itemList.get(i).getPrice().multiply(new BigDecimal(itemList.get(i).getCount()).setScale(2,BigDecimal.ROUND_HALF_UP))).setScale(2,BigDecimal.ROUND_HALF_UP));
+            cn_12.setCellValue(((itemList.get(i).getPrice().multiply(new BigDecimal(itemList.get(i).getCount()).setScale(2,BigDecimal.ROUND_HALF_UP))).setScale(2,BigDecimal.ROUND_HALF_UP).toString()));//------------------------------------->Доработать - Сума
         }
         //ROWS After table
         //ROW 1
@@ -635,7 +634,7 @@ public class ExcelGenerateReport {
         c15_5.setCellStyle(stTop2);
         Cell c15_6 = row15.createCell(6);
         c15_6.setCellStyle(stTop2);
-        region = new CellRangeAddress(rows, rows, 1, 6);
+        region = new CellRangeAddress(rows, rows, 1, 12);
         sheet.addMergedRegion(region);
         c15_1.setCellValue(sumToWords(sum,itemList.get(0).getCurrency()));//-------->Доработать
         
@@ -808,7 +807,7 @@ public class ExcelGenerateReport {
         String[] Dollar = {"долар","долари","доларiв"}; String[] Cents = {"цент","центи","центiв"};
         String[] Evro = {"євро"}; String[] EvroCents = {"євроцент","євроценти","євроцентiв"};
         System.out.println(sum);
-        int integer = sum.remainder(BigDecimal.ONE).movePointLeft(sum.scale()).abs().toBigInteger().intValue();
+        int integer = sum.intValue();
         int fraction = sum.remainder(BigDecimal.ONE).movePointRight(sum.scale()).abs().toBigInteger().intValue();
         System.out.println(integer+" "+fraction);
 
@@ -844,53 +843,37 @@ public class ExcelGenerateReport {
         if(fraction==0 && currency.equals("UAH")){summa.append(" 00 ").append(Kopeck[2]);}
         else if(fraction==0 && currency.equals("USD")){summa.append(" 00 ").append(Cents[2]);}
         else if(fraction==0 && currency.equals("EUR")){summa.append(" 00 ").append(EvroCents[2]);}
-        
-        else if(fraction/10>0){
-                if(fraction/100>0){
-                    
-                }else {
-                    if(fraction>19 || fraction==10)tensCoins(summa, tens, units, Kopeck, Cents, EvroCents, currency, fraction);
-                    else if(fraction<20 && fraction>10)tens2Coins(summa, tens2, Kopeck, Cents, EvroCents, currency, fraction);
-                }
-            
-        }else {
-            unitsCoins(summa,units,Kopeck,Cents,EvroCents,currency,fraction);
+        else if(fraction==1 || (fraction>20 && fraction%10==1)){
+            if(currency.equals("UAH"))summa.append(" "+fraction+" ").append(Kopeck[0]);
+            else if(currency.equals("USD"))summa.append(" "+fraction+" ").append(Cents[0]);
+            else if(currency.equals("EUR"))summa.append(" "+fraction+" ").append(EvroCents[0]);
+        }
+        else if(fraction>1 && fraction<5 || (fraction>20 && (fraction%10>1 && fraction%10<5))){
+            if(currency.equals("UAH"))summa.append(" "+fraction+" ").append(Kopeck[1]);
+            else if(currency.equals("USD"))summa.append(" "+fraction+" ").append(Cents[1]);
+            else if(currency.equals("EUR"))summa.append(" "+fraction+" ").append(EvroCents[1]);
+        }
+        else if(fraction>4 && fraction<20 || (fraction>20 && (fraction%10>4 && fraction%10<10))){
+            if(currency.equals("UAH"))summa.append(" "+fraction+" ").append(Kopeck[2]);
+            else if(currency.equals("USD"))summa.append(" "+fraction+" ").append(Cents[2]);
+            else if(currency.equals("EUR"))summa.append(" "+fraction+" ").append(EvroCents[2]);
         }
 
         return summa.toString();
     }
 
-    public static StringBuilder unitsCoins(StringBuilder summa,String[] units,String[]Kopeck,String[]Cents,String[]EvroCents,String currency, int fraction){
-        if(currency.equals("UAH")){
-        if(fraction==1)return summa.append(units[(fraction%10)-1]).append(" ").append(Kopeck[0]);
-        else if(fraction>1 && fraction<5)return summa.append(units[(fraction%10)-1]).append(" ").append(Kopeck[1]);
-        else if(fraction>5 && fraction<10)return summa.append(units[(fraction%10)-1]).append(" ").append(Kopeck[2]);
-        else if(fraction==0)return summa.append(Kopeck[2]);
-        }
-        else if(currency.equals("USD")){
-        if(fraction==1)return summa.append(units[(fraction%10)-1]).append(" ").append(Cents[0]);
-        else if(fraction>1 && fraction<5)return summa.append(units[(fraction%10)-1]).append(" ").append(Cents[1]);
-        else if(fraction>5 && fraction<10)return summa.append(units[(fraction%10)-1]).append(" ").append(Cents[2]);
-        else if(fraction==0)return summa.append(Cents[2]);
-        }
-        else if(currency.equals("EUR")){
-        if(fraction==1)return summa.append(units[(fraction%10)-1]).append(" ").append(EvroCents[0]);
-        else if(fraction>1 && fraction<5)return summa.append(units[(fraction%10)-1]).append(" ").append(EvroCents[1]);
-        else if(fraction>5 && fraction<10)return summa.append(units[(fraction%10)-1]).append(" ").append(EvroCents[2]);
-        else if(fraction==0)return summa.append(EvroCents[2]);}
-        return new StringBuilder("SOMETHING WRONG unitsCoins");
-    }
+
     public static StringBuilder units(StringBuilder summa,String[] units,String[]Hryvna,String[]Dollar,String[]Evro,String currency, int integer){
         if(currency.equals("UAH")){
         if(integer==1)return summa.append(units[(integer%10)-1]).append(" ").append(Hryvna[0]);
         else if(integer>1 && integer<5)return summa.append(units[(integer%10)-1]).append(" ").append(Hryvna[1]);
-        else if(integer>5 && integer<10)return summa.append(units[(integer%10)-1]).append(" ").append(Hryvna[2]);
+        else if(integer>4 && integer<10)return summa.append(units[(integer%10)-1]).append(" ").append(Hryvna[2]);
         else if(integer==0)return summa.append(Hryvna[2]);
         }
         else if(currency.equals("USD")){
         if(integer==1)return summa.append(units[(integer%10)-1]).append(" ").append(Dollar[0]);
         else if(integer>1 && integer<5)return summa.append(units[(integer%10)-1]).append(" ").append(Dollar[1]);
-        else if(integer>5 && integer<10)return summa.append(units[(integer%10)-1]).append(" ").append(Dollar[2]);
+        else if(integer>4 && integer<10)return summa.append(units[(integer%10)-1]).append(" ").append(Dollar[2]);
         else if(integer==0)return summa.append(Dollar[2]);
         }
         else if(currency.equals("EUR")){
@@ -907,6 +890,7 @@ public class ExcelGenerateReport {
         else if(t==0 && currency.equals("USD"))return summa.append(Dollar[2]);
         else if(t==0 && currency.equals("EUR"))return summa.append(Evro[2]);
         else if(t>0)return summa.append(tens[t-1]).append(" ").append(units(summa,units,Hryvna,Dollar,Evro,currency,d));
+
         else return new StringBuilder("SOMETHING WRONG tens");
     }
 
@@ -918,26 +902,6 @@ public class ExcelGenerateReport {
         else if(currency.equals("EUR"))
             return summa.append(tens2[(integer/10)-1]).append(" ").append(Evro[1]);
         return new StringBuilder("SOMETHING WRONG tens2");
-    }
-    public static StringBuilder tensCoins(StringBuilder summa,String[] tens,String[] units,String[]Kopeck,String[]Cents,String[]EvroCents,String currency, int fraction){
-        int t = fraction/10;
-        int d = fraction%10;
-
-        if(t==0 && currency.equals("UAH"))return summa.append(Kopeck[2]);
-        else if(t==0 && currency.equals("USD"))return summa.append(Cents[2]);
-        else if(t==0 && currency.equals("EUR"))return summa.append(EvroCents[2]);
-        else if(t>0)return summa.append(tens[t-1]).append(" ").append(units(summa,units,Kopeck,Cents,EvroCents,currency,d));
-        else return new StringBuilder("SOMETHING WRONG tensCoins");
-    }
-
-    public static StringBuilder tens2Coins(StringBuilder summa,String[] tens2,String[]Kopeck,String[]Cents,String[]EvroCents,String currency, int fraction){
-        if(currency.equals("UAH"))
-            return summa.append(tens2[(fraction/10)-1]).append(" ").append(Kopeck[1]);
-        else if(currency.equals("USD"))
-            return summa.append(tens2[(fraction/10)-1]).append(" ").append(Cents[1]);
-        else if(currency.equals("EUR"))
-            return summa.append(tens2[(fraction/10)-1]).append(" ").append(EvroCents[1]);
-        return new StringBuilder("SOMETHING WRONG tens2Coins");
     }
 
     public static StringBuilder hundreds(StringBuilder summa, String[] hundreds, String[] tens,String[] units,String[]Hryvna,String[]Dollar,String[]Evro,String currency, int integer){
@@ -958,7 +922,25 @@ public class ExcelGenerateReport {
         if(ths==0 && currency.equals("UAH"))return summa.append(Hryvna[2]);
         else if(ths==0 && currency.equals("USD"))return summa.append(Dollar[2]);
         else if(ths==0 && currency.equals("EUR"))return summa.append(Evro[2]);
-        else if(ths>0)return summa.append(thousends[ths-1]).append(" ").append(hundreds(summa, hundreds, tens, units, Hryvna, Dollar, Evro, currency, h));
+        else if(ths==1){
+            summa.append(units(summa, units, Hryvna, Dollar, Evro, currency, ths)).append(thousends[0]).append(" ");
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("гривня гривнi гривень долар долари доларiв євро",""));
+            summa.append(hundreds(summa, hundreds, tens, units, Hryvna, Dollar, Evro, currency, h));
+        }
+        else if(ths>1 && ths<5){
+            summa.append(units(summa,units,Hryvna,Dollar,Evro,currency,ths)).append(thousends[2]).append(" ");
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("гривня гривнi гривень долар долари доларiв євро",""));
+            summa.append(hundreds(summa, hundreds, tens, units, Hryvna, Dollar, Evro, currency, h));
+        }
+        else if(ths>4 && ths<10){
+            summa.append(units(summa,units,Hryvna,Dollar,Evro,currency,ths)).append(thousends[1]).append(" ");
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("гривня гривнi гривень долар долари доларiв євро",""));
+            summa.append(hundreds(summa, hundreds, tens, units, Hryvna, Dollar, Evro, currency, h));
+        }
+
         return new StringBuilder("SOMTHING WRONG thouthends");
     }
 
