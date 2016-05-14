@@ -12,6 +12,8 @@ public class test {
         bd.setScale(2, BigDecimal.ROUND_HALF_UP);
         bd = new BigDecimal("103.00");
         BigInteger decimal = bd.remainder(BigDecimal.ONE).movePointRight(bd.scale()).abs().toBigInteger();
-        System.out.println(7%10);
+        String s = "долар долари доларiв цент центи центiв";
+        s=s.replaceAll("долари доларiв","");
+        System.out.println(s);
     }
 }

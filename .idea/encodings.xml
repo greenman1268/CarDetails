@@ -12,6 +12,7 @@
     <file url="file://$PROJECT_DIR$/src/main/java/frame/Print/report/PrintFrame.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/frame/Print/report/PrintParametresDilog.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/frame/Print/report/PrintTableModel.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/frame/Print/report/test.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/frame/Search/ItemTableSearchModel.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/frame/Search/SearchDilog.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/frame/Search/SearchFrame.java" charset="UTF-8" />
