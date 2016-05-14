@@ -11,7 +11,7 @@ public class Currency {
 
     private int currency_id;
     private String name;
-    private BigDecimal value;
+    private BigDecimal value = new BigDecimal(0).setScale(2,BigDecimal.ROUND_HALF_UP);
 
     public Currency(ResultSet rs) throws SQLException {
         setCurrency_id(rs.getInt(1));

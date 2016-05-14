@@ -807,9 +807,10 @@ public class ExcelGenerateReport {
         String[] Hryvna = {"гривня","гривнi","гривень"}; String[] Kopeck = {"копiйка","копiйки","копiйок"};
         String[] Dollar = {"долар","долари","доларiв"}; String[] Cents = {"цент","центи","центiв"};
         String[] Evro = {"євро"}; String[] EvroCents = {"євроцент","євроценти","євроцентiв"};
-
-        int integer = sum.intValue();
+        System.out.println(sum);
+        int integer = sum.remainder(BigDecimal.ONE).movePointLeft(sum.scale()).abs().toBigInteger().intValue();
         int fraction = sum.remainder(BigDecimal.ONE).movePointRight(sum.scale()).abs().toBigInteger().intValue();
+        System.out.println(integer+" "+fraction);
 
         //FOR INTEGER-------------------------
         if(integer==0 && currency.equals("UAH")){summa.append("Нуль ").append(Hryvna[2]);}
@@ -848,8 +849,8 @@ public class ExcelGenerateReport {
                 if(fraction/100>0){
                     
                 }else {
-                    if(fraction>19 || fraction==10)tensCoins(summa, tens, units, Kopeck,Cents,EvroCents, currency, fraction);
-                    else if(fraction<20 && fraction>10)tens2Coins(summa, tens2, Kopeck,Cents,EvroCents, currency,fraction);
+                    if(fraction>19 || fraction==10)tensCoins(summa, tens, units, Kopeck, Cents, EvroCents, currency, fraction);
+                    else if(fraction<20 && fraction>10)tens2Coins(summa, tens2, Kopeck, Cents, EvroCents, currency, fraction);
                 }
             
         }else {

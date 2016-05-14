@@ -18,7 +18,7 @@ public class Item implements Comparable{
     private int groupId;
     private int in_stock;
     private int sold;
-    private BigDecimal price = new BigDecimal(0);
+    private BigDecimal price = new BigDecimal(0).setScale(2,BigDecimal.ROUND_HALF_UP);
     private Boolean print = false;
     private int count = 0;
     private String currency = "UAH";

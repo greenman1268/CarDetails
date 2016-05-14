@@ -10,10 +10,10 @@ public class test {
     public static void main(String[] args) {
         BigDecimal bd = new BigDecimal(0);
         bd.setScale(2, BigDecimal.ROUND_HALF_UP);
-        bd = new BigDecimal("103.00");
+        bd = new BigDecimal("1037.6980");
         BigInteger decimal = bd.remainder(BigDecimal.ONE).movePointRight(bd.scale()).abs().toBigInteger();
         String s = "долар долари доларiв цент центи центiв";
         s=s.replaceAll("долари доларiв","");
-        System.out.println(s);
+        System.out.println(bd.intValue());
     }
 }
