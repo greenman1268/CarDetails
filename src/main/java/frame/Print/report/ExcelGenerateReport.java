@@ -23,6 +23,7 @@ public class ExcelGenerateReport {
     private static ArrayList<Item> itemList;
     private static ArrayList<Item> newItem;
 
+
     private static CellStyle stTop = null;//font 15 bold left border bottom
     private static CellStyle stTop1 = null;//font 12
     private static CellStyle stTop2 = null;//font 12
@@ -804,17 +805,13 @@ public class ExcelGenerateReport {
         String[] thousends = {"тисяча","тисяч","тисячi"};
         String[] millions = {"мiльйон","мiльйони","мiльйонiв"};
         String[] Hryvna = {"гривня","гривнi","гривень"}; String[] Kopeck = {"копiйка","копiйки","копiйок"};
-        String[] Dollar = {"долар","долари","доларiв"}; String[] Cents = {"цент","центи","центiв"};
-        String[] Evro = {"євро"}; String[] EvroCents = {"євроцент","євроценти","євроцентiв"};
         System.out.println(sum);
         int integer = sum.intValue();
         int fraction = sum.remainder(BigDecimal.ONE).movePointRight(sum.scale()).abs().toBigInteger().intValue();
         System.out.println(integer+" "+fraction);
 
         //FOR INTEGER-------------------------
-        if(integer==0 && currency.equals("UAH")){summa.append("Нуль ").append(Hryvna[2]);}
-        else if(integer==0 && currency.equals("USD")){summa.append("Нуль ").append(Dollar[2]);}
-        else if(integer==0 && currency.equals("EUR")){summa.append("Нуль ").append(Evro[2]);}
+        if(integer==0){summa.append("Нуль ").append(Hryvna[2]);}
         else if(integer/10>0) {
             if(integer/100>0){
                 if(integer/1000>0){
@@ -822,144 +819,127 @@ public class ExcelGenerateReport {
                         if(integer/100000>0){
 
                         }else {
-                            tensThouthens(summa, tens, tens2, thousends, hundreds, units, Hryvna,Dollar,Evro,currency,integer);
+                            summa.append(tensThouthens(tens, tens2, thousends, hundreds, units, Hryvna,currency,integer));
                         }
                     }else {
-                        thouthends(summa,thousends,hundreds,tens,units,Hryvna,Dollar,Evro,currency,integer);
+                        summa.append(thouthends(thousends,hundreds,tens,units, Hryvna,currency,integer));
                     }
                 } else {
-                    hundreds(summa, hundreds,tens,units,Hryvna,Dollar,Evro,currency,integer);
+                    System.out.println("hundreds");
+                    summa.append(hundreds(hundreds,tens,units, Hryvna,currency,integer));
                 }
             }else {
-                if(integer>19 || integer==10)tens(summa, tens, units, Hryvna, Dollar, Evro, currency, integer);
-                else if(integer<20 && integer>10)tens2(summa, tens2, Hryvna,Dollar,Evro,currency,integer);
+                System.out.println("tens");
+
+                if(integer>19 || integer==10)summa.append(tens(tens, units, Hryvna, currency, integer));
+                else if(integer<20 && integer>10)summa.append(tens2( tens2, Hryvna,currency,integer));
             }
         }
         else {
-            units(summa,units,Hryvna,Dollar,Evro,currency,integer);
+            System.out.println("units");
+
+            summa.append(units(units, Hryvna,currency,integer));
         }
 
         //FOR DECIMAL-------------------------
-        if(fraction==0 && currency.equals("UAH")){summa.append(" 00 ").append(Kopeck[2]);}
-        else if(fraction==0 && currency.equals("USD")){summa.append(" 00 ").append(Cents[2]);}
-        else if(fraction==0 && currency.equals("EUR")){summa.append(" 00 ").append(EvroCents[2]);}
+        if(fraction==0){summa.append(" 00 ").append(Kopeck[2]);}
         else if(fraction==1 || (fraction>20 && fraction%10==1)){
-            if(currency.equals("UAH"))summa.append(" "+fraction+" ").append(Kopeck[0]);
-            else if(currency.equals("USD"))summa.append(" "+fraction+" ").append(Cents[0]);
-            else if(currency.equals("EUR"))summa.append(" "+fraction+" ").append(EvroCents[0]);
+            summa.append(" "+fraction+" ").append(Kopeck[0]);
         }
         else if(fraction>1 && fraction<5 || (fraction>20 && (fraction%10>1 && fraction%10<5))){
-            if(currency.equals("UAH"))summa.append(" "+fraction+" ").append(Kopeck[1]);
-            else if(currency.equals("USD"))summa.append(" "+fraction+" ").append(Cents[1]);
-            else if(currency.equals("EUR"))summa.append(" "+fraction+" ").append(EvroCents[1]);
+            summa.append(" "+fraction+" ").append(Kopeck[1]);
         }
         else if(fraction>4 && fraction<20 || (fraction>20 && (fraction%10>4 && fraction%10<10))){
-            if(currency.equals("UAH"))summa.append(" "+fraction+" ").append(Kopeck[2]);
-            else if(currency.equals("USD"))summa.append(" "+fraction+" ").append(Cents[2]);
-            else if(currency.equals("EUR"))summa.append(" "+fraction+" ").append(EvroCents[2]);
+            summa.append(" "+fraction+" ").append(Kopeck[2]);
         }
 
         return summa.toString();
     }
 
 
-    public static StringBuilder units(StringBuilder summa,String[] units,String[]Hryvna,String[]Dollar,String[]Evro,String currency, int integer){
-        if(currency.equals("UAH")){
+    public static StringBuilder units(String[] units,String[]Hryvna,String currency, int integer){
+        System.out.println("units method");
+        StringBuilder summa = new StringBuilder();
         if(integer==1)return summa.append(units[(integer%10)-1]).append(" ").append(Hryvna[0]);
         else if(integer>1 && integer<5)return summa.append(units[(integer%10)-1]).append(" ").append(Hryvna[1]);
         else if(integer>4 && integer<10)return summa.append(units[(integer%10)-1]).append(" ").append(Hryvna[2]);
         else if(integer==0)return summa.append(Hryvna[2]);
-        }
-        else if(currency.equals("USD")){
-        if(integer==1)return summa.append(units[(integer%10)-1]).append(" ").append(Dollar[0]);
-        else if(integer>1 && integer<5)return summa.append(units[(integer%10)-1]).append(" ").append(Dollar[1]);
-        else if(integer>4 && integer<10)return summa.append(units[(integer%10)-1]).append(" ").append(Dollar[2]);
-        else if(integer==0)return summa.append(Dollar[2]);
-        }
-        else if(currency.equals("EUR")){
-        if(integer>0)return summa.append(units[(integer%10)-1]).append(" ").append(Evro[0]);
-        else if(integer==0)return summa.append(Evro[2]);}
         return new StringBuilder("SOMETHING WRONG units");
     }
 
-    public static StringBuilder tens(StringBuilder summa,String[] tens,String[] units,String[]Hryvna,String[]Dollar,String[]Evro,String currency, int integer){
+    public static StringBuilder tens(String[] tens,String[] units,String[]Hryvna,String currency, int integer){
+        System.out.println("tens method");
+        StringBuilder summa = new StringBuilder();
         int t = integer/10;
         int d = integer%10;
 
-        if(t==0 && currency.equals("UAH"))return summa.append(Hryvna[2]);
-        else if(t==0 && currency.equals("USD"))return summa.append(Dollar[2]);
-        else if(t==0 && currency.equals("EUR"))return summa.append(Evro[2]);
-        else if(t>0)return summa.append(tens[t-1]).append(" ").append(units(summa,units,Hryvna,Dollar,Evro,currency,d));
+        if(t==0)return summa.append(Hryvna[2]);
+        else if(t>0)return summa.append(tens[t-1]).append(" ").append(units(units,Hryvna,currency,d));
 
         else return new StringBuilder("SOMETHING WRONG tens");
     }
 
-    public static StringBuilder tens2(StringBuilder summa,String[] tens2,String[]Hryvna,String[]Dollar,String[]Evro,String currency, int integer){
-        if(currency.equals("UAH"))
-            return summa.append(tens2[(integer/10)-1]).append(" ").append(Hryvna[1]);
-        else if(currency.equals("USD"))
-            return summa.append(tens2[(integer/10)-1]).append(" ").append(Dollar[1]);
-        else if(currency.equals("EUR"))
-            return summa.append(tens2[(integer/10)-1]).append(" ").append(Evro[1]);
-        return new StringBuilder("SOMETHING WRONG tens2");
+    public static StringBuilder tens2(String[] tens2,String[]Hryvna,String currency, int integer){
+        System.out.println("tens2 method");
+        StringBuilder summa = new StringBuilder();
+        return summa.append(tens2[(integer/10)-1]).append(" ").append(Hryvna[1]);
     }
 
-    public static StringBuilder hundreds(StringBuilder summa, String[] hundreds, String[] tens,String[] units,String[]Hryvna,String[]Dollar,String[]Evro,String currency, int integer){
+    public static StringBuilder hundreds(String[] hundreds, String[] tens,String[] units,String[]Hryvna,String currency, int integer){
+        System.out.println("hundreds method");
         int h = integer/100;
         int t = integer%100;
+        StringBuilder summa = new StringBuilder();
 
-        if(h==0 && currency.equals("UAH"))return summa.append(Hryvna[2]);
-        else if(h==0 && currency.equals("USD"))return summa.append(Dollar[2]);
-        else if(h==0 && currency.equals("EUR"))return summa.append(Evro[2]);
-        else if(h>0)return summa.append(hundreds[h-1]).append(" ").append(tens(summa,tens,units,Hryvna,Dollar,Evro,currency,t));
+        if(h==0 )return summa.append(Hryvna[2]);
+        else if(h>0)return summa.append(hundreds[h-1]).append(" ").append(tens( tens, units, Hryvna, currency, t));
         return new StringBuilder("SOMTHING WRONG hundredsWithTens");
     }
 
-    public static StringBuilder thouthends(StringBuilder summa,String[] thousends, String[] hundreds, String[] tens,String[] units,String[]Hryvna,String[]Dollar,String[]Evro,String currency, int integer){
+    public static StringBuilder thouthends(String[] thousends, String[] hundreds, String[] tens,String[] units,String[]Hryvna,String currency, int integer){
         int ths = integer/1000;
         int h = integer%1000;
+        StringBuilder summa = new StringBuilder();
 
         if(ths==0 && currency.equals("UAH"))return summa.append(Hryvna[2]);
-        else if(ths==0 && currency.equals("USD"))return summa.append(Dollar[2]);
-        else if(ths==0 && currency.equals("EUR"))return summa.append(Evro[2]);
         else if(ths==1){
-            summa.append(units(summa, units, Hryvna, Dollar, Evro, currency, ths)).append(thousends[0]).append(" ");
+            summa.append(units(units, Hryvna, currency, ths)).append(thousends[0]).append(" ");
             String nsumm = summa.toString();
-            summa = new StringBuilder(nsumm.replaceAll("гривня гривнi гривень долар долари доларiв євро",""));
-            summa.append(hundreds(summa, hundreds, tens, units, Hryvna, Dollar, Evro, currency, h));
+            summa = new StringBuilder(nsumm.replaceAll("гривня гривнi гривень",""));
+            summa.append(hundreds(hundreds, tens, units, Hryvna, currency, h));
         }
         else if(ths>1 && ths<5){
-            summa.append(units(summa,units,Hryvna,Dollar,Evro,currency,ths)).append(thousends[2]).append(" ");
+            summa.append(units(units,Hryvna,currency,ths)).append(thousends[2]).append(" ");
             String nsumm = summa.toString();
-            summa = new StringBuilder(nsumm.replaceAll("гривня гривнi гривень долар долари доларiв євро",""));
-            summa.append(hundreds(summa, hundreds, tens, units, Hryvna, Dollar, Evro, currency, h));
+            summa = new StringBuilder(nsumm.replaceAll("гривня гривнi гривень",""));
+            summa.append(hundreds(hundreds, tens, units, Hryvna, currency, h));
         }
         else if(ths>4 && ths<10){
-            summa.append(units(summa,units,Hryvna,Dollar,Evro,currency,ths)).append(thousends[1]).append(" ");
+            summa.append(units(units,Hryvna,currency,ths)).append(thousends[1]).append(" ");
             String nsumm = summa.toString();
-            summa = new StringBuilder(nsumm.replaceAll("гривня гривнi гривень долар долари доларiв євро",""));
-            summa.append(hundreds(summa, hundreds, tens, units, Hryvna, Dollar, Evro, currency, h));
+            summa = new StringBuilder(nsumm.replaceAll("гривня гривнi гривень",""));
+            summa.append(hundreds(hundreds, tens, units, Hryvna, currency, h));
         }
 
         return new StringBuilder("SOMTHING WRONG thouthends");
     }
 
-    public static StringBuilder tensThouthens(StringBuilder summa, String[] tens,String[] tens2,String[] thousends,String[] hundreds,String[] units,String[] Hryvna,String[] Dollar,String[]Evro,String currency, int integer){
+    public static StringBuilder tensThouthens( String[] tens,String[] tens2,String[] thousends,String[] hundreds,String[] units, String[] Hryvna,String currency, int integer){
         int tths = integer/10000;
         int ths = integer%10000;
-        if(tths==0 && currency.equals("UAH"))return summa.append(Hryvna[2]);
-        else if(tths==0 && currency.equals("USD"))return summa.append(Dollar[2]);
-        else if(tths==0 && currency.equals("EUR"))return summa.append(Evro[2]);
+        StringBuilder summa = new StringBuilder();
+
+        if(tths==0)return summa.append(Hryvna[2]);
         if(integer/1000>10 && integer/1000<20){
-            summa.append(tens2(summa,tens2,Hryvna,Dollar,Evro,currency,integer));
+            summa.append(tens2(tens2,Hryvna,currency,integer));
             String nsumm = summa.toString();
-            summa = new StringBuilder(nsumm.replaceAll("гривня гривнi гривень долар долари доларiв євро","").trim());
-            summa.append(thouthends(summa, thousends, hundreds, tens, units, Hryvna, Dollar, Evro, currency, ths));}
+            summa = new StringBuilder(nsumm.replaceAll("гривня гривнi гривень","").trim());
+            summa.append(thouthends( thousends, hundreds, tens, units,Hryvna, currency, ths));}
         else if(integer/1000>19){
-            summa.append(tens(summa, tens, units, Hryvna, Dollar, Evro, currency, integer));
+            summa.append(tens(tens, units,Hryvna, currency, integer));
             String nsumm = summa.toString();
-            summa = new StringBuilder(nsumm.replaceAll("гривня гривнi гривень долар долари доларiв євро","").trim());
-            summa.append(thouthends(summa,thousends,hundreds,tens,units,Hryvna,Dollar,Evro, currency, ths));
+            summa = new StringBuilder(nsumm.replaceAll("гривня гривнi гривень","").trim());
+            summa.append(thouthends(thousends,hundreds,tens,units,Hryvna, currency, ths));
         }
         return new StringBuilder("SOMTHING WRONG tenThouthends");
     }
