@@ -839,16 +839,19 @@ public class ExcelGenerateReport {
         //FOR DECIMAL-------------------------
         if(fraction==0){summa.append(" 00 ").append(Kopeck[2]);}
         else if(fraction==1 || (fraction>20 && fraction%10==1)){
-            summa.append(" "+fraction+" ").append(Kopeck[0]);
+            if(fraction<10)summa.append(" 0"+fraction+" ").append(Kopeck[0]);
+            else summa.append(" "+fraction+" ").append(Kopeck[0]);
         }
         else if(fraction>1 && fraction<5 || (fraction>20 && (fraction%10>1 && fraction%10<5))){
-            summa.append(" "+fraction+" ").append(Kopeck[1]);
+            if(fraction<10)summa.append(" 0"+fraction+" ").append(Kopeck[1]);
+            else summa.append(" "+fraction+" ").append(Kopeck[1]);
         }
         else if(fraction>4 && fraction<20 || (fraction>20 && (fraction%10>4 && fraction%10<10))){
-            summa.append(" "+fraction+" ").append(Kopeck[2]);
+            if(fraction<10)summa.append(" 0"+fraction+" ").append(Kopeck[2]);
+            else summa.append(" "+fraction+" ").append(Kopeck[2]);
         }
 
-        return summa.toString();
+        return summa.replace(0,1,summa.substring(0,1).toUpperCase()).toString();
     }
 
     public static StringBuilder units(String[] units,String[]Hryvna,String currency, int integer){
