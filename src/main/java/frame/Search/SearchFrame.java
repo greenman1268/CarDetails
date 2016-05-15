@@ -3,6 +3,8 @@ package frame.Search;
 import frame.Main.GroupDialog;
 import frame.Main.ItemDialog;
 import frame.Main.MainFrame;
+import frame.Main.RatesDilog;
+import frame.Print.report.PrintFrame;
 import logic.Item;
 import logic.ManagementSystem;
 
@@ -28,6 +30,7 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
     private static final String UPDATE_IT = "updateItem";
     private static final String DELETE_IT = "deleteItem";
     private static final String PRINT = "print";
+    private static final String RATES = "rates";
 
     private MainFrame mainFrame;
     private ManagementSystem ms = null;
@@ -66,9 +69,11 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
         top.add(btnPrint);
 
         //указать курс валют
-        JButton lb = new JButton("Курс");
-        lb.setBounds(100,5,70,20);
-        top.add(lb);
+        JButton btnRt = new JButton("Курс");
+        btnRt.setName(RATES);
+        btnRt.setBounds(100,5,70,20);
+        btnRt.addActionListener(this);
+        top.add(btnRt);
 
         // Создаем нижнюю панель и задаем ей layout
         JPanel bot = new JPanel();
@@ -133,6 +138,12 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
             }
             if (c.getName().equals(DELETE_IT)) {
                 deleteItem();
+            }
+            if (c.getName().equals(PRINT)) {
+                printReport();
+            }
+            if (c.getName().equals(RATES)) {
+                updateRates();
             }
         }
     }
@@ -339,6 +350,53 @@ public class SearchFrame extends JFrame implements ActionListener, ListSelection
         };
         t.start();
     }
+
+    private void printReport(){
+        Thread t = new Thread(){
+
+            public void run() {
+                if (itemList != null){
+                    if(selected.size()>0){
+                        Vector<Item> list = new Vector<>();
+                        for (int i = 0; i < selected.size(); i++) {
+                            if(selected.get(i).getPrint())list.add(selected.get(i));
+                        }
+                        SearchFrame.this.setAlwaysOnTop(false);
+                        PrintFrame pf = new PrintFrame(list, null, SearchFrame.this);
+                        pf.setDefaultCloseOperation(HIDE_ON_CLOSE);
+                        pf.setVisible(true);
+                        pf.reloadItems();
+                        selected.clear();
+                        reloadItems();
+                    }else JOptionPane.showMessageDialog(SearchFrame.this,
+                            "Необходимо отметить деталь в списке");
+                    return;
+                }
+
+            }
+
+        };
+        t.start();
+    }
+
+    private void updateRates(){
+        Thread t = new Thread(){
+
+            public void run(){
+                SearchFrame.this.setAlwaysOnTop(false);
+                RatesDilog rd = new RatesDilog();
+                rd.setModal(true);
+                rd.setVisible(true);
+                if (rd.getResult()) {
+                    SearchFrame.this.setAlwaysOnTop(false);
+                    reloadItems();
+                }
+
+            }
+        };
+        t.start();
+    }
+    public Vector<Item> getSelected(){return selected;}
 
     private class TableSearchRenderer extends DefaultTableCellRenderer {
 

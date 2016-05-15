@@ -2,6 +2,7 @@ package frame.Print.report;
 
 import frame.Main.MainFrame;
 import frame.Main.RatesDilog;
+import frame.Search.SearchFrame;
 import logic.Item;
 import logic.ManagementSystem;
 
@@ -26,13 +27,15 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
     private Vector<Item> selected;
     private Vector<Item> resetList;
     private MainFrame mf;
+    private SearchFrame sf;
     private boolean result = false;
 
-    public PrintFrame(Vector<Item> selected, MainFrame mf) {
+    public PrintFrame(Vector<Item> selected, MainFrame mf, SearchFrame sf) {
 
         this.mf = mf;
         this.selected = new Vector<>(selected);
         this.resetList = new Vector<>();
+        this.sf = sf;
 
         try {
             ms = ManagementSystem.getInstance();
@@ -52,7 +55,7 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
         //указать курс валют
         JButton lb = new JButton("Курс");
         lb.setName("Rates");
-        lb.setBounds(100, 5, 70, 20);
+        lb.setBounds(5, 5, 70, 20);
         lb.addActionListener(this);
         top.add(lb);
 
@@ -197,8 +200,14 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
                             e.printStackTrace();
                         }
                     }
-                    mf.getSelected().clear();
-                    mf.reloadItems();
+                    if(mf!=null){
+                        mf.getSelected().clear();
+                        mf.reloadItems();}
+                    else if(sf!=null){
+                        sf.setAlwaysOnTop(true);
+                        sf.getSize();
+                        sf.reloadItems();
+                    }
                 } else {
                     JOptionPane.showMessageDialog(PrintFrame.this,
                             "Необходимо отметить деталь в списке");

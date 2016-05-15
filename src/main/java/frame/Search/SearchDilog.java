@@ -144,7 +144,7 @@ public class SearchDilog extends JDialog implements ActionListener {
 
                  try {
                      if(name.isSelected()) {
-                         if(name.getText().equals("")) {
+                         if(itemName.getText().equals("")) {
                              JOptionPane.showMessageDialog(SearchDilog.this, "Введите имя");return;}
                          SF = new SearchFrame(true,false,false,false,owner, SearchDilog.this);
                          SF.setDefaultCloseOperation(HIDE_ON_CLOSE);

@@ -819,26 +819,21 @@ public class ExcelGenerateReport {
                         if(integer/100000>0){
 
                         }else {
-                            summa.append(tensThouthens(tens, tens2, thousends, hundreds, units, Hryvna,currency,integer));
+                            summa.append(tensThouthens(tens, tens2, thousends, hundreds, units, Hryvna, currency, integer));
                         }
                     }else {
-                        summa.append(thouthends(thousends,hundreds,tens,units, Hryvna,currency,integer));
+                        summa.append(thouthends(thousends, hundreds, tens,tens2, units, Hryvna, currency, integer));
                     }
                 } else {
-                    System.out.println("hundreds");
-                    summa.append(hundreds(hundreds,tens,units, Hryvna,currency,integer));
+                    summa.append(hundreds(hundreds, tens,tens2, units, Hryvna, currency, integer));
                 }
             }else {
-                System.out.println("tens");
-
                 if(integer>19 || integer==10)summa.append(tens(tens, units, Hryvna, currency, integer));
-                else if(integer<20 && integer>10)summa.append(tens2( tens2, Hryvna,currency,integer));
+                else if(integer<20 && integer>10)summa.append(tens2(tens2, Hryvna, currency, integer));
             }
         }
         else {
-            System.out.println("units");
-
-            summa.append(units(units, Hryvna,currency,integer));
+            summa.append(units(units, Hryvna, currency, integer));
         }
 
         //FOR DECIMAL-------------------------
@@ -856,9 +851,8 @@ public class ExcelGenerateReport {
         return summa.toString();
     }
 
-
     public static StringBuilder units(String[] units,String[]Hryvna,String currency, int integer){
-        System.out.println("units method");
+
         StringBuilder summa = new StringBuilder();
         if(integer==1)return summa.append(units[(integer%10)-1]).append(" ").append(Hryvna[0]);
         else if(integer>1 && integer<5)return summa.append(units[(integer%10)-1]).append(" ").append(Hryvna[1]);
@@ -868,7 +862,7 @@ public class ExcelGenerateReport {
     }
 
     public static StringBuilder tens(String[] tens,String[] units,String[]Hryvna,String currency, int integer){
-        System.out.println("tens method");
+
         StringBuilder summa = new StringBuilder();
         int t = integer/10;
         int d = integer%10;
@@ -880,45 +874,56 @@ public class ExcelGenerateReport {
     }
 
     public static StringBuilder tens2(String[] tens2,String[]Hryvna,String currency, int integer){
-        System.out.println("tens2 method");
+
         StringBuilder summa = new StringBuilder();
-        return summa.append(tens2[(integer/10)-1]).append(" ").append(Hryvna[1]);
+        return summa.append(tens2[(integer%10)-1]).append(" ").append(Hryvna[2]);
     }
 
-    public static StringBuilder hundreds(String[] hundreds, String[] tens,String[] units,String[]Hryvna,String currency, int integer){
-        System.out.println("hundreds method");
+    public static StringBuilder hundreds(String[] hundreds, String[] tens, String[] tens2, String[] units,String[]Hryvna,String currency, int integer){
+
         int h = integer/100;
         int t = integer%100;
+        if(t==0)t=integer%10;
         StringBuilder summa = new StringBuilder();
 
         if(h==0 )return summa.append(Hryvna[2]);
-        else if(h>0)return summa.append(hundreds[h-1]).append(" ").append(tens( tens, units, Hryvna, currency, t));
+        else if(h>0 && t>19 || t==10)return summa.append(hundreds[h-1]).append(" ").append(tens( tens, units, Hryvna, currency, t));
+        else if(h>0 && t<20 && t>10)return summa.append(hundreds[h-1]).append(" ").append(tens2(tens2, Hryvna, currency, t));
+        else if(h>0 && t<10)return summa.append(hundreds[h-1]).append(" ").append(units(units, Hryvna, currency, t));
         return new StringBuilder("SOMTHING WRONG hundredsWithTens");
     }
 
-    public static StringBuilder thouthends(String[] thousends, String[] hundreds, String[] tens,String[] units,String[]Hryvna,String currency, int integer){
+    public static StringBuilder thouthends(String[] thousends, String[] hundreds, String[] tens,String[] tens2, String[] units,String[]Hryvna,String currency, int integer){
+
         int ths = integer/1000;
         int h = integer%1000;
+        if(h==0)h=integer%100;
+        if(h==0)h=integer%10;
+
         StringBuilder summa = new StringBuilder();
 
-        if(ths==0 && currency.equals("UAH"))return summa.append(Hryvna[2]);
+        if(ths==0)return summa.append(Hryvna[2]);
         else if(ths==1){
-            summa.append(units(units, Hryvna, currency, ths)).append(thousends[0]).append(" ");
+            summa.append(units(units, Hryvna, currency, ths)).append(" ").append(thousends[0]).append(" ");
+            System.out.println(summa);
             String nsumm = summa.toString();
-            summa = new StringBuilder(nsumm.replaceAll("гривня гривнi гривень",""));
-            summa.append(hundreds(hundreds, tens, units, Hryvna, currency, h));
+            summa = new StringBuilder(nsumm.replaceAll("гри[а-я]+", ""));
+            System.out.println(summa);
+            summa.append(hundreds(hundreds, tens, tens2, units, Hryvna, currency, h));
+            System.out.println(summa);
+            return summa;
         }
         else if(ths>1 && ths<5){
-            summa.append(units(units,Hryvna,currency,ths)).append(thousends[2]).append(" ");
+            summa.append(units(units,Hryvna,currency,ths)).append(" ").append(thousends[2]).append(" ");
             String nsumm = summa.toString();
-            summa = new StringBuilder(nsumm.replaceAll("гривня гривнi гривень",""));
-            summa.append(hundreds(hundreds, tens, units, Hryvna, currency, h));
+            summa = new StringBuilder(nsumm.replaceAll("гри[а-я]+", ""));
+           return summa.append(hundreds(hundreds, tens,tens2, units, Hryvna, currency, h));
         }
         else if(ths>4 && ths<10){
-            summa.append(units(units,Hryvna,currency,ths)).append(thousends[1]).append(" ");
+            summa.append(units(units,Hryvna,currency,ths)).append(" ").append(thousends[1]).append(" ");
             String nsumm = summa.toString();
-            summa = new StringBuilder(nsumm.replaceAll("гривня гривнi гривень",""));
-            summa.append(hundreds(hundreds, tens, units, Hryvna, currency, h));
+            summa = new StringBuilder(nsumm.replaceAll("гри[а-я]+", ""));
+           return summa.append(hundreds(hundreds, tens,tens2, units, Hryvna, currency, h));
         }
 
         return new StringBuilder("SOMTHING WRONG thouthends");
@@ -931,15 +936,15 @@ public class ExcelGenerateReport {
 
         if(tths==0)return summa.append(Hryvna[2]);
         if(integer/1000>10 && integer/1000<20){
-            summa.append(tens2(tens2,Hryvna,currency,integer));
+            summa.append(tens2(tens2,Hryvna,currency,tths));
             String nsumm = summa.toString();
-            summa = new StringBuilder(nsumm.replaceAll("гривня гривнi гривень","").trim());
-            summa.append(thouthends( thousends, hundreds, tens, units,Hryvna, currency, ths));}
+            summa = new StringBuilder(nsumm.replaceAll("гри[а-я]+","").trim());
+           return summa.append(thouthends( thousends, hundreds, tens, tens2, units,Hryvna, currency, ths));}
         else if(integer/1000>19){
-            summa.append(tens(tens, units,Hryvna, currency, integer));
+            summa.append(tens(tens, units,Hryvna, currency, tths));
             String nsumm = summa.toString();
-            summa = new StringBuilder(nsumm.replaceAll("гривня гривнi гривень","").trim());
-            summa.append(thouthends(thousends,hundreds,tens,units,Hryvna, currency, ths));
+            summa = new StringBuilder(nsumm.replaceAll("гри[а-я]+","").trim());
+            return summa.append(thouthends(thousends,hundreds,tens,tens2,units,Hryvna, currency, ths));
         }
         return new StringBuilder("SOMTHING WRONG tenThouthends");
     }

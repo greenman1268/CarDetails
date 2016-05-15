@@ -12,10 +12,9 @@ public class test {
         bd.setScale(2, BigDecimal.ROUND_HALF_UP);
         bd = new BigDecimal("1037.6980");
         BigInteger decimal = bd.remainder(BigDecimal.ONE).movePointRight(bd.scale()).abs().toBigInteger();
-        String s = "долар долари доларiв цент центи центiв";
-        s = bd.toString();
-        int ss = s.indexOf(".");
-
-        System.out.println(s.substring(ss+1,s.length()));
+        StringBuilder sb = new StringBuilder("одна гривня тисяча сто сiмдесят п'ять гривень");
+        String s = sb.toString();
+        sb = new StringBuilder(s.replaceAll("гри[а-я]+","").trim());
+        System.out.println(sb);
     }
 }

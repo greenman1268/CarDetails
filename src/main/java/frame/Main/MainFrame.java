@@ -643,17 +643,17 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                         for (int i = 0; i < selected.size(); i++) {
                             if(selected.get(i).getPrint())list.add(selected.get(i));
                         }
-                        PrintFrame pf = new PrintFrame(list, MainFrame.this);
+                        PrintFrame pf = new PrintFrame(list, MainFrame.this,null);
                         pf.setDefaultCloseOperation(HIDE_ON_CLOSE);
                         pf.setVisible(true);
                         pf.reloadItems();
                         selected.clear();
                         reloadItems();
-                        }
-                    }
-                    else JOptionPane.showMessageDialog(MainFrame.this,
+                        }else JOptionPane.showMessageDialog(MainFrame.this,
                             "Необходимо отметить деталь в списке");
                     return;
+                    }
+
             }
 
         };
