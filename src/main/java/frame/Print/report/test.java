@@ -13,8 +13,9 @@ public class test {
         bd = new BigDecimal("1037.6980");
         BigInteger decimal = bd.remainder(BigDecimal.ONE).movePointRight(bd.scale()).abs().toBigInteger();
         StringBuilder sb = new StringBuilder("одна гривня тисяча сто сiмдесят п'ять гривень");
+        StringBuilder sb1 = new StringBuilder("сiмдесят чотири гривнi тисячi");
         String s = sb.toString();
-        sb = new StringBuilder(s.replaceAll("гри[а-я]+","").trim());
+        sb = new StringBuilder(s.replaceAll("\\bгрив.*?\\b","").trim());
         System.out.println(sb);
     }
 }

@@ -873,7 +873,7 @@ public class ExcelGenerateReport {
         else return new StringBuilder("SOMETHING WRONG tens");
     }
 
-    public static StringBuilder tens2(String[] tens2,String[]Hryvna,String currency, int integer){
+    public static StringBuilder tens2(String[] tens2,String[] Hryvna,String currency, int integer){
 
         StringBuilder summa = new StringBuilder();
         return summa.append(tens2[(integer%10)-1]).append(" ").append(Hryvna[2]);
@@ -887,13 +887,13 @@ public class ExcelGenerateReport {
         StringBuilder summa = new StringBuilder();
 
         if(h==0 )return summa.append(Hryvna[2]);
-        else if(h>0 && t>19 || t==10)return summa.append(hundreds[h-1]).append(" ").append(tens( tens, units, Hryvna, currency, t));
-        else if(h>0 && t<20 && t>10)return summa.append(hundreds[h-1]).append(" ").append(tens2(tens2, Hryvna, currency, t));
+        else if(h>0 && (t>19 || t==10))return summa.append(hundreds[h-1]).append(" ").append(tens( tens, units, Hryvna, currency, t));
+        else if(h>0 && (t<20 && t>10))return summa.append(hundreds[h-1]).append(" ").append(tens2(tens2, Hryvna, currency, t));
         else if(h>0 && t<10)return summa.append(hundreds[h-1]).append(" ").append(units(units, Hryvna, currency, t));
         return new StringBuilder("SOMTHING WRONG hundredsWithTens");
     }
 
-    public static StringBuilder thouthends(String[] thousends, String[] hundreds, String[] tens,String[] tens2, String[] units,String[]Hryvna,String currency, int integer){
+    public static StringBuilder thouthends(String[] thousends, String[] hundreds, String[] tens,String[] tens2, String[] units,String[] Hryvna,String currency, int integer){
 
         int ths = integer/1000;
         int h = integer%1000;
@@ -903,50 +903,155 @@ public class ExcelGenerateReport {
         StringBuilder summa = new StringBuilder();
 
         if(ths==0)return summa.append(Hryvna[2]);
-        else if(ths==1){
+        else if(ths==1 && h>99){
             summa.append(units(units, Hryvna, currency, ths)).append(" ").append(thousends[0]).append(" ");
-            System.out.println(summa);
             String nsumm = summa.toString();
-            summa = new StringBuilder(nsumm.replaceAll("гри[а-я]+", ""));
-            System.out.println(summa);
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b", ""));
             summa.append(hundreds(hundreds, tens, tens2, units, Hryvna, currency, h));
-            System.out.println(summa);
             return summa;
         }
-        else if(ths>1 && ths<5){
+        else if(ths==1 && ((h>19 && h<100) || h==10)){
+            summa.append(units(units, Hryvna, currency, ths)).append(" ").append(thousends[0]).append(" ");
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b", ""));
+            summa.append(tens(tens, units, Hryvna, currency, h));
+            return summa;
+        }
+        else if(ths==1 && (h>10 && h<20)){
+            summa.append(units(units, Hryvna, currency, ths)).append(" ").append(thousends[0]).append(" ");
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b", ""));
+            summa.append(tens2(tens2, Hryvna, currency, h));
+            return summa;
+        }
+        else if(ths==1 && h<10){
+            summa.append(units(units, Hryvna, currency, ths)).append(" ").append(thousends[0]).append(" ");
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b", ""));
+            summa.append(units(units, Hryvna, currency, h));
+            return summa;
+        }
+        else if(ths>1 && ths<5 && h>99){
             summa.append(units(units,Hryvna,currency,ths)).append(" ").append(thousends[2]).append(" ");
             String nsumm = summa.toString();
-            summa = new StringBuilder(nsumm.replaceAll("гри[а-я]+", ""));
-           return summa.append(hundreds(hundreds, tens,tens2, units, Hryvna, currency, h));
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b", ""));
+            return summa.append(hundreds(hundreds, tens, tens2, units, Hryvna, currency, h));
         }
-        else if(ths>4 && ths<10){
+        else if(ths>1 && ths<5 && ((h>19 && h<100) || h==10)){
+            summa.append(units(units,Hryvna,currency,ths)).append(" ").append(thousends[2]).append(" ");
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b", ""));
+           return summa.append(tens(tens, units, Hryvna, currency, h));
+        }
+        else if(ths>1 && ths<5 && (h>10 && h<20)){
+            summa.append(units(units,Hryvna,currency,ths)).append(" ").append(thousends[2]).append(" ");
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b", ""));
+           return summa.append(tens2(tens2, Hryvna, currency, h));
+        }
+        else if(ths>1 && ths<5 && h<10){
+            summa.append(units(units,Hryvna,currency,ths)).append(" ").append(thousends[2]).append(" ");
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b", ""));
+           return summa.append(units(units, Hryvna, currency, h));
+        }
+        else if(ths>4 && ths<10 && h>99) {
+            summa.append(units(units, Hryvna, currency, ths)).append(" ").append(thousends[1]).append(" ");
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b", ""));
+            return summa.append(hundreds(hundreds, tens, tens2, units, Hryvna, currency, h));
+        }
+        else if(ths>4 && ths<10 && ((h>19 && h<100) || h==10)) {
+            summa.append(units(units, Hryvna, currency, ths)).append(" ").append(thousends[1]).append(" ");
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b", ""));
+            return summa.append(tens(tens, units, Hryvna, currency, h));
+        }
+        else if(ths>4 && ths<10 && (h>10 && h<20)){
             summa.append(units(units,Hryvna,currency,ths)).append(" ").append(thousends[1]).append(" ");
             String nsumm = summa.toString();
-            summa = new StringBuilder(nsumm.replaceAll("гри[а-я]+", ""));
-           return summa.append(hundreds(hundreds, tens,tens2, units, Hryvna, currency, h));
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b", ""));
+           return summa.append(tens2(tens2, Hryvna, currency, h));
+        }
+        else if(ths>4 && ths<10 && h<10){
+            summa.append(units(units,Hryvna,currency,ths)).append(" ").append(thousends[1]).append(" ");
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b", ""));
+           return summa.append(units(units, Hryvna, currency, h));
         }
 
         return new StringBuilder("SOMTHING WRONG thouthends");
     }
 
     public static StringBuilder tensThouthens( String[] tens,String[] tens2,String[] thousends,String[] hundreds,String[] units, String[] Hryvna,String currency, int integer){
-        int tths = integer/10000;
-        int ths = integer%10000;
+        int tths = integer/1000;
+        int ths = integer%1000;
+        if(ths==0)ths = integer%100;
+        if(ths==0)ths = integer%10;
         StringBuilder summa = new StringBuilder();
 
         if(tths==0)return summa.append(Hryvna[2]);
-        if(integer/1000>10 && integer/1000<20){
-            summa.append(tens2(tens2,Hryvna,currency,tths));
+        if(tths>10 && tths<20 && ths>99){
+            summa.append(tens2(tens2,Hryvna,currency,tths)).append(" ").append(thousends[1]).append(" ");
             String nsumm = summa.toString();
-            summa = new StringBuilder(nsumm.replaceAll("гри[а-я]+","").trim());
-           return summa.append(thouthends( thousends, hundreds, tens, tens2, units,Hryvna, currency, ths));}
-        else if(integer/1000>19){
-            summa.append(tens(tens, units,Hryvna, currency, tths));
-            String nsumm = summa.toString();
-            summa = new StringBuilder(nsumm.replaceAll("гри[а-я]+","").trim());
-            return summa.append(thouthends(thousends,hundreds,tens,tens2,units,Hryvna, currency, ths));
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b", ""));
+           return summa.append(hundreds(hundreds, tens, tens2, units,Hryvna, currency, ths));
         }
-        return new StringBuilder("SOMTHING WRONG tenThouthends");
+        if(tths>10 && tths<20 && ((ths>19 && ths<100) || ths==10)){
+            summa.append(tens2(tens2,Hryvna,currency,tths)).append(" ").append(thousends[1]).append(" ");
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b", ""));
+           return summa.append(tens(tens, units,Hryvna, currency, ths));
+        }
+        if(tths>10 && tths<20 && (ths>10 && ths<20)){
+            summa.append(tens2(tens2,Hryvna,currency,tths).append(" ").append(thousends[1]).append(" "));
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b", ""));
+           return summa.append(tens2(tens2, Hryvna, currency, ths));
+        }
+        if(tths>10 && tths<20 && ths<10){
+            summa.append(tens2(tens2, Hryvna, currency,tths).append(" ").append(thousends[1]).append(" "));
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b", ""));
+           return summa.append(units(units, Hryvna, currency, ths));
+        }
+        else if(tths>19 || tths==10 && ths>99){
+            if(tths%10==0 || (tths%10>4 && tths%10<10))summa.append(tens(tens, units,Hryvna, currency, tths).append(" ").append(thousends[1]).append(" "));
+            else if(tths%10==1)summa.append(tens(tens, units,Hryvna, currency, tths).append(" ").append(thousends[0]).append(" "));
+            else if(tths%10>1 && tths%10<5)summa.append(tens(tens, units,Hryvna, currency, tths).append(" ").append(thousends[2]).append(" "));
+            System.out.println(summa);
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b",""));
+            System.out.println(summa);
+            summa.append(hundreds(hundreds, tens, tens2, units, Hryvna, currency, ths));
+            System.out.println(summa);
+            return summa;
+        }
+        else if(tths>19 || tths==10 && ((ths>19 && ths<100) || ths==10)){
+            if(tths%10==0 || (tths%10>4 && tths%10<10))summa.append(tens(tens, units,Hryvna, currency, tths).append(" ").append(thousends[1]).append(" "));
+            else if(tths%10==1)summa.append(tens(tens, units,Hryvna, currency, tths).append(" ").append(thousends[0]).append(" "));
+            else if(tths%10>1 && tths%10<5)summa.append(tens(tens, units,Hryvna, currency, tths).append(" ").append(thousends[2]).append(" "));
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b",""));
+            return summa.append(tens(tens,units,Hryvna, currency, ths));
+        }
+        else if(tths>19 || tths==10 && (ths>10 && ths<20)){
+            if(tths%10==0 || (tths%10>4 && tths%10<10))summa.append(tens(tens, units,Hryvna, currency, tths).append(" ").append(thousends[1]).append(" "));
+            else if(tths%10==1)summa.append(tens(tens, units,Hryvna, currency, tths).append(" ").append(thousends[0]).append(" "));
+            else if(tths%10>1 && tths%10<5)summa.append(tens(tens, units,Hryvna, currency, tths).append(" ").append(thousends[2]).append(" "));
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b",""));
+            return summa.append(tens2(tens2,Hryvna, currency, ths));
+        }
+        else if(tths>19 || tths==10 && ths<10){
+            if(tths%10==0 || (tths%10>4 && tths%10<10))summa.append(tens(tens, units,Hryvna, currency, tths).append(" ").append(thousends[1]).append(" "));
+            else if(tths%10==1)summa.append(tens(tens, units,Hryvna, currency, tths).append(" ").append(thousends[0]).append(" "));
+            else if(tths%10>1 && tths%10<5)summa.append(tens(tens, units,Hryvna, currency, tths).append(" ").append(thousends[2]).append(" "));
+            String nsumm = summa.toString();
+            summa = new StringBuilder(nsumm.replaceAll("\\bгрив.*?\\b",""));
+            return summa.append(units(units,Hryvna, currency, ths));
+        }
+        return new StringBuilder("SOMTHING WRONG tensThouthends");
     }
 
     public static void putPicture(String name){

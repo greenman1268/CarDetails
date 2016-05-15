@@ -156,7 +156,7 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
                 BigDecimal bg = new BigDecimal(price.getText());
                 String s = bg.toString();
                 int stry = s.indexOf(".");
-                if(s.substring(stry+1,s.length()).length()>2){
+                if(stry!=-1)if(s.substring(stry+1,s.length()).length()>2){
                     JOptionPane.showMessageDialog(PrintParametresDilog.this,
                             "Неверное значение \"Цена\"");return;}
 

@@ -205,7 +205,7 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
                         mf.reloadItems();}
                     else if(sf!=null){
                         sf.setAlwaysOnTop(true);
-                        sf.getSize();
+                        sf.getSelected().clear();
                         sf.reloadItems();
                     }
                 } else {
