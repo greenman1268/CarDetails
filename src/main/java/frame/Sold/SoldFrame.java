@@ -37,9 +37,9 @@ public class SoldFrame extends JFrame implements ActionListener, ListSelectionLi
         top.setPreferredSize(new Dimension(500,30));
 
         //кнопка печать
-        JButton btnPrint = new JButton("Удалить");
+        JButton btnPrint = new JButton("Удалить отмеченные");
         btnPrint.setName(DELETE);
-        btnPrint.setBounds(5,5,90,20);
+        btnPrint.setBounds(5,5,170,20);
         btnPrint.addActionListener(this);
         top.add(btnPrint);
         // Создаем нижнюю панель и задаем ей layout
@@ -163,11 +163,11 @@ public class SoldFrame extends JFrame implements ActionListener, ListSelectionLi
                 else {JOptionPane.showMessageDialog(SoldFrame.this,
                         "Необходимо отметить деталь в списке");
                 return;}
-
+                reloadItems();
             }
         };
         t.start();
-        reloadItems();
+
     }
 
     private class TableSearchRenderer extends DefaultTableCellRenderer {

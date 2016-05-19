@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Vector;
 
 /**
@@ -103,6 +104,7 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
 
         count.setText(Integer.toString(this.item.getIn_stock()));
         price.setText(this.item.getPrice().toString());
+        currency.setSelectedIndex(2);
 
     }
 
@@ -126,6 +128,7 @@ public class PrintParametresDilog extends JDialog implements ActionListener {
                 selected.get(i).setCount(Integer.parseInt(count.getText()));
                 selected.get(i).setCurrency(((Currency) currency.getModel().getSelectedItem()).getName());
                 selected.get(i).setGroupId(item.getGroupId());
+                selected.get(i).setChangeDate(new Date());
 
             }
         }

@@ -18,7 +18,7 @@ import java.util.Vector;
 
 public class ItemDialog extends JDialog implements ActionListener {
 
-    private static final int D_HEIGHT = 240;   // высота окна
+    private static final int D_HEIGHT = 200;   // высота окна
     private final static int D_WIDTH = 450;   // ширина окна
     private final static int L_X = 10;      // левая граница метки для поля
     private final static int L_W = 100;     // ширина метки для поля
@@ -55,12 +55,6 @@ public class ItemDialog extends JDialog implements ActionListener {
         itemName.setBounds(L_X + L_W + 10, 30, C_W, 20);
         getContentPane().add(itemName);
 
-       /* l = new JLabel("Цена:", JLabel.RIGHT);
-        l.setBounds(L_X, 60, L_W, 20);
-        getContentPane().add(l);
-        price.setBounds(L_X + L_W + 10, 60, C_W, 20);
-        getContentPane().add(price);*/
-
         l = new JLabel("В наличии:", JLabel.RIGHT);
         l.setBounds(L_X, 60, L_W, 20);
         getContentPane().add(l);
@@ -72,12 +66,6 @@ public class ItemDialog extends JDialog implements ActionListener {
         getContentPane().add(l);
         sold.setBounds(L_X + L_W + 10, 90, C_W, 20);
         getContentPane().add(sold);
-
-        l = new JLabel("Дата изменения:", JLabel.RIGHT);
-        l.setBounds(L_X, 120, L_W, 20);
-        getContentPane().add(l);
-        changeDate.setBounds(L_X + L_W + 10, 120, C_W, 20);
-        getContentPane().add(changeDate);
 
         JButton btnOk = new JButton("ОК");
         btnOk.setName("OK");
@@ -105,7 +93,7 @@ public class ItemDialog extends JDialog implements ActionListener {
     public void setItem(Item item) {
         itemId = item.getItemId();
         itemName.setText(item.getItemName());
-        changeDate.getModel().setValue(item.getChangeDate());
+       // changeDate.getModel().setValue(item.getChangeDate());
         in_stock.setText(Integer.toString(item.getIn_stock()));
         sold.setText(Integer.toString(item.getSold()));
         //price.setText(item.getPrice().toString());
@@ -124,8 +112,8 @@ public class ItemDialog extends JDialog implements ActionListener {
         Item item = new Item();
         item.setItemId(itemId);
         item.setItemName(itemName.getText());
-        Date d = ((SpinnerDateModel) changeDate.getModel()).getDate();
-        item.setChangeDate(d);
+        //Date d = ((SpinnerDateModel) changeDate.getModel()).getDate();
+        item.setChangeDate(new Date());
        /* if(price.getText().equals("")){item.setPrice(new BigDecimal(0));}
         else {
             BigDecimal bg = new BigDecimal(0);

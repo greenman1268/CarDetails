@@ -649,7 +649,11 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                     if(selected.size()>0){
                         Vector<Item> list = new Vector<>();
                         for (int i = 0; i < selected.size(); i++) {
-                            if(selected.get(i).getPrint())list.add(selected.get(i));
+                            if(selected.get(i).getPrint()){
+                                Item it = selected.get(i);
+                                it.setPrint(false);
+                                list.add(selected.get(i));
+                            }
                         }
                         PrintFrame pf = new PrintFrame(list, MainFrame.this,null);
                         pf.setDefaultCloseOperation(HIDE_ON_CLOSE);
