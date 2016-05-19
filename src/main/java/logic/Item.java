@@ -33,6 +33,7 @@ public class Item implements Comparable{
         setIn_stock(rs.getInt(5));
         setSold(rs.getInt(6));
         setPrice(rs.getBigDecimal(7));
+        if(getPrice()==null)setPrice(new BigDecimal("0.0").setScale(2,BigDecimal.ROUND_HALF_UP));
     }
 
     public int getIn_stock() { return in_stock; }

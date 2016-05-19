@@ -428,6 +428,28 @@ public class ManagementSystem {
             return items;
         }
 
+    public void insertSold(Item item)throws SQLException{
+        PreparedStatement stmt = con.prepareStatement("INSERT INTO soldItems "
+                + "(itemName, changeDate, group_id, in_stock, sold, price)"
+                + "VALUES(?, ?, ?, ?, ?, ?)");
+        stmt.setString(1, item.getItemName());
+        stmt.setDate(2, new Date(item.getChangeDate().getTime()));
+        stmt.setInt(3, item.getGroupId());
+        stmt.setInt(4, item.getIn_stock());
+        stmt.setInt(5, item.getSold());
+        stmt.setBigDecimal(6, item.getPrice());
+        stmt.execute();
+    }
+
+    public void deleteSold(Item item)throws SQLException{
+        PreparedStatement stmt = con.prepareStatement("DELETE FROM soldItems WHERE item_id = ? AND itemName = ? AND changeDate = ? AND group_id = ? AND price = ? ");
+        stmt.setInt(1, item.getItemId());
+        stmt.setString(2, item.getItemName());
+        stmt.setDate(3, new Date(item.getChangeDate().getTime()));
+        stmt.setInt(4, item.getGroupId());
+        stmt.setBigDecimal(5, item.getPrice());
+        stmt.execute();
+    }
 
     public static void makeDB() throws SQLException{
         String query;

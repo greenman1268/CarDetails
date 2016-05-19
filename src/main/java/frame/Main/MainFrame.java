@@ -7,6 +7,7 @@ package frame.Main;
 import frame.Print.report.PrintFrame;
 import frame.Search.SearchDilog;
 import frame.Search.SearchFrame;
+import frame.Sold.SoldFrame;
 import logic.Group;
 import logic.Item;
 import logic.ManagementSystem;
@@ -621,11 +622,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                 if(itemList != null){
 
                         try {
-                            // Исправляем данные на деталь - поэтому false
-                            // Также заметим, что необходимо указать не просто this, а MainFrame.this
-                            // Иначе класс не будет воспринят - он же другой - анонимный
                             SearchDilog sd = new SearchDilog(MainFrame.this);
-                            SearchFrame sf;
                             sd.setModal(true);
                             sd.setVisible(true);
                             if (sd.getResult()) {
@@ -691,7 +688,14 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         Thread t = new Thread(){
 
             public void run(){
-
+                try{
+                    SoldFrame sf = new SoldFrame();
+                    sf.setDefaultCloseOperation(HIDE_ON_CLOSE);
+                    sf.setVisible(true);
+                    sf.reloadItems();}
+                catch (Exception ex){
+                    ex.printStackTrace();
+                }
             }
         };
         t.start();

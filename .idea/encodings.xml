@@ -16,6 +16,8 @@
     <file url="file://$PROJECT_DIR$/src/main/java/frame/Search/ItemTableSearchModel.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/frame/Search/SearchDilog.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/frame/Search/SearchFrame.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/frame/Sold/ItemTableSoldModel.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/frame/Sold/SoldFrame.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/logic/Group.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/logic/Item.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/logic/ManagementSystem.java" charset="UTF-8" />

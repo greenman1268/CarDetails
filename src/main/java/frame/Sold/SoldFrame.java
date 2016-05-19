@@ -1,6 +1,5 @@
 package frame.Sold;
 
-import frame.Search.ItemTableSearchModel;
 import logic.Item;
 import logic.ManagementSystem;
 
@@ -23,36 +22,42 @@ import java.util.Vector;
 public class SoldFrame extends JFrame implements ActionListener, ListSelectionListener, ChangeListener {
     private ManagementSystem ms = null;
     private JTable itemList;
-
+    private static final String DELETE = "delete";
     private ArrayList<Item> vector;
     private Vector<Item> selected = new Vector<>();
 
     public SoldFrame()throws Exception{
         ms = ManagementSystem.getInstance();
 
-        // Создаем верхнюю панель
+        // РЎРѕР·РґР°РµРј РІРµСЂС…РЅСЋСЋ РїР°РЅРµР»СЊ
         JPanel top = new JPanel();
-        // Устанавливаем для нее layout
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РґР»СЏ РЅРµРµ layout
         top.setLayout(null);
         top.setPreferredSize(new Dimension(500,30));
 
-        // Создаем нижнюю панель и задаем ей layout
+        //РєРЅРѕРїРєР° РїРµС‡Р°С‚СЊ
+        JButton btnPrint = new JButton("РЈРґР°Р»РёС‚СЊ");
+        btnPrint.setName(DELETE);
+        btnPrint.setBounds(5,5,90,20);
+        btnPrint.addActionListener(this);
+        top.add(btnPrint);
+        // РЎРѕР·РґР°РµРј РЅРёР¶РЅСЋСЋ РїР°РЅРµР»СЊ Рё Р·Р°РґР°РµРј РµР№ layout
         JPanel bot = new JPanel();
         bot.setLayout(new BorderLayout());
 
-        // Создаем правую панель для вывода списка деталей
+        // РЎРѕР·РґР°РµРј РїСЂР°РІСѓСЋ РїР°РЅРµР»СЊ РґР»СЏ РІС‹РІРѕРґР° СЃРїРёСЃРєР° РґРµС‚Р°Р»РµР№
         JPanel right = new JPanel();
-        // Задаем layout и задаем "бордюр" вокруг панели
+        // Р—Р°РґР°РµРј layout Рё Р·Р°РґР°РµРј "Р±РѕСЂРґСЋСЂ" РІРѕРєСЂСѓРі РїР°РЅРµР»Рё
         right.setLayout(new BorderLayout());
         right.setBorder(new BevelBorder(BevelBorder.LOWERED));
-        // Создаем надпись
-        right.add(new JLabel("Детали:"), BorderLayout.NORTH);
+        // РЎРѕР·РґР°РµРј РЅР°РґРїРёСЃСЊ
+        right.add(new JLabel("Р”РµС‚Р°Р»Рё:"), BorderLayout.NORTH);
 
         itemList = new JTable(1, 6);
         right.add(new JScrollPane(itemList), BorderLayout.CENTER);
         bot.add(right, BorderLayout.CENTER);
         bot.add(top, BorderLayout.NORTH);
-        // Вставляем  нижнюю панель в форму
+        // Р’СЃС‚Р°РІР»СЏРµРј  РЅРёР¶РЅСЋСЋ РїР°РЅРµР»СЊ РІ С„РѕСЂРјСѓ
         getContentPane().add(bot, BorderLayout.CENTER);
         vector =(ArrayList<Item>) ms.getAllItems();
         TableSearchRenderer tsr = new TableSearchRenderer();
@@ -61,13 +66,17 @@ public class SoldFrame extends JFrame implements ActionListener, ListSelectionLi
         JTableHeader header = itemList.getTableHeader();
         header.setDefaultRenderer(new MyTableHeaderRenderer(header.getDefaultRenderer()));
 
-        // Задаем границы формы
+        // Р—Р°РґР°РµРј РіСЂР°РЅРёС†С‹ С„РѕСЂРјС‹
         setBounds(200, 100, 1000, 500);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        if (e.getSource() instanceof Component) {
+            Component c = (Component) e.getSource();
+            if (c.getName().equals(DELETE)) {
+                deleteItems();
+            }}
     }
 
     @Override
@@ -82,19 +91,18 @@ public class SoldFrame extends JFrame implements ActionListener, ListSelectionLi
         }
     }
 
-    // метод для обновления списка деталей для определенной группы
+    // РјРµС‚РѕРґ РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ СЃРїРёСЃРєР° РґРµС‚Р°Р»РµР№ РґР»СЏ РѕРїСЂРµРґРµР»РµРЅРЅРѕР№ РіСЂСѓРїРїС‹
     public void reloadItems() {
-        // Создаем анонимный класс для потока
+        // РЎРѕР·РґР°РµРј Р°РЅРѕРЅРёРјРЅС‹Р№ РєР»Р°СЃСЃ РґР»СЏ РїРѕС‚РѕРєР°
         Thread t = new Thread(){// SwingUtilities.invokeLater(new Runnable() {// Thread t = new Thread() {
-            // Переопределяем в нем метод run
+            // РџРµСЂРµРѕРїСЂРµРґРµР»СЏРµРј РІ РЅРµРј РјРµС‚РѕРґ run
 
             public void run() {
                 if (itemList != null) {
-                    // Получаем выделенную группу
+                    // РџРѕР»СѓС‡Р°РµРј РІС‹РґРµР»РµРЅРЅСѓСЋ РіСЂСѓРїРїСѓ
 
                     try {
-                        // Получаем список деталей
-
+                        // РџРѕР»СѓС‡Р°РµРј СЃРїРёСЃРѕРє РґРµС‚Р°Р»РµР№
                         Collection<Item> s = ms.getSold();//ms.getItemsFromGroup(g);
 
                         final Vector<Item> v = new Vector(s);
@@ -106,8 +114,8 @@ public class SoldFrame extends JFrame implements ActionListener, ListSelectionLi
                                 }
                             }
                         }
-                        // И устанавливаем модель для таблицы с новыми данными
-                        itemList.setModel(new ItemTableSearchModel(v));
+                        // Р СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј РјРѕРґРµР»СЊ РґР»СЏ С‚Р°Р±Р»РёС†С‹ СЃ РЅРѕРІС‹РјРё РґР°РЅРЅС‹РјРё
+                        itemList.setModel(new ItemTableSoldModel(v));
                         itemList.getModel().addTableModelListener(new TableModelListener() {
                             @Override
                             public void tableChanged(TableModelEvent tableModelEvent) {
@@ -129,14 +137,36 @@ public class SoldFrame extends JFrame implements ActionListener, ListSelectionLi
                     } catch (SQLException e) {
                         e.printStackTrace();
                         JOptionPane.showMessageDialog(SoldFrame.this, e.getMessage());
-                    }}//}}
+                    }}
             }
 
-            // Окончание нашего метода run
+            // РћРєРѕРЅС‡Р°РЅРёРµ РЅР°С€РµРіРѕ РјРµС‚РѕРґР° run
         };
-        // Окончание определения анонимного класса
-        // И теперь мы запускаем наш поток
+        // РћРєРѕРЅС‡Р°РЅРёРµ РѕРїСЂРµРґРµР»РµРЅРёСЏ Р°РЅРѕРЅРёРјРЅРѕРіРѕ РєР»Р°СЃСЃР°
+        // Р С‚РµРїРµСЂСЊ РјС‹ Р·Р°РїСѓСЃРєР°РµРј РЅР°С€ РїРѕС‚РѕРє
         t.start();
+    }
+
+    public void deleteItems(){
+        Thread t = new Thread(){
+
+            public void run(){
+                if(selected.size()!=0){
+                for (int i = 0; i < selected.size(); i++) {
+                   if(selected.get(i).getPrint()) try {
+                       ms.deleteSold(selected.get(i));
+                   } catch (SQLException e) {
+                       e.printStackTrace();
+                   }
+                }}
+                else {JOptionPane.showMessageDialog(SoldFrame.this,
+                        "РќРµРѕР±С…РѕРґРёРјРѕ РѕС‚РјРµС‚РёС‚СЊ РґРµС‚Р°Р»СЊ РІ СЃРїРёСЃРєРµ");
+                return;}
+
+            }
+        };
+        t.start();
+        reloadItems();
     }
 
     private class TableSearchRenderer extends DefaultTableCellRenderer {
