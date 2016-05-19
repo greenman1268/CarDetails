@@ -38,6 +38,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     private static final String DELETE_GR = "deleteGroup";
     private static final String PRINT = "print";
     private static final String RATES = "rates";
+    private static final String BASE = "base";
 
     private ManagementSystem ms = null;
     private JList grpList;
@@ -81,6 +82,13 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         btnRates.setBounds(290, 5, 70, 20);
         btnRates.addActionListener(this);
         top.add(btnRates);
+
+        //показать базу проданных деталей
+        JButton btnSold = new JButton("БАЗА");
+        btnSold.setName(BASE);
+        btnSold.setBounds(900, 5, 70, 20);
+        btnSold.addActionListener(this);
+        top.add(btnSold);
 
         // Создаем нижнюю панель и задаем ей layout
         JPanel bot = new JPanel();
@@ -236,6 +244,9 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
             }
             if (c.getName().equals(RATES)){
                 updateRates();
+            }
+            if (c.getName().equals(BASE)){
+                soldBase();
             }
 }}
 
@@ -670,6 +681,16 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                 if (rd.getResult()) {
                     reloadItems();
                 }
+
+            }
+        };
+        t.start();
+    }
+
+    private void soldBase(){
+        Thread t = new Thread(){
+
+            public void run(){
 
             }
         };

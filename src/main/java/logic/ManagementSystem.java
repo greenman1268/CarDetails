@@ -138,7 +138,7 @@ public class ManagementSystem {
         ResultSet rs = null;
         try {
             stmt = con.createStatement();
-            rs = stmt.executeQuery("SELECT item_id, itemName, changeDate, group_id, in_stock, sold FROM items " +
+            rs = stmt.executeQuery("SELECT item_id, itemName, changeDate, group_id, in_stock, sold, price FROM items " +
                             "ORDER BY item_id");
             while (rs.next()) {
                 Item item = new Item(rs);
@@ -161,7 +161,7 @@ public class ManagementSystem {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = con.prepareStatement("SELECT item_id, itemName, changeDate, group_id, in_stock, sold FROM items " +
+            stmt = con.prepareStatement("SELECT item_id, itemName, changeDate, group_id, in_stock, sold, price FROM items " +
                             "WHERE group_id= ? " +
                             "ORDER BY item_id");
             stmt.setInt(1, group.getGroup_id());
@@ -185,7 +185,7 @@ public class ManagementSystem {
 
     public Item getItemByName(String itemName) throws SQLException {
         Item item = null;
-        PreparedStatement stmt = con.prepareStatement("SELECT item_id, itemName, changeDate, group_id, in_stock, sold FROM items WHERE itemName = ?");
+        PreparedStatement stmt = con.prepareStatement("SELECT item_id, itemName, changeDate, group_id, in_stock, sold, price FROM items WHERE itemName = ?");
         stmt.setString(1, itemName);
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
@@ -198,7 +198,7 @@ public class ManagementSystem {
 
     public Item getItemByNameGidIid(Item m) throws SQLException {
         Item item = null;
-        PreparedStatement stmt = con.prepareStatement("SELECT item_id, itemName, changeDate, group_id, in_stock, sold FROM items WHERE itemName=? AND item_id=? AND group_id=?");
+        PreparedStatement stmt = con.prepareStatement("SELECT item_id, itemName, changeDate, group_id, in_stock, sold, price FROM items WHERE itemName=? AND item_id=? AND group_id=?");
         stmt.setString(1, m.getItemName());
         stmt.setInt(2, m.getItemId());
         stmt.setInt(3, m.getGroupId());
@@ -227,28 +227,28 @@ public class ManagementSystem {
 
     public void insertItem(Item item) throws SQLException {
         PreparedStatement stmt = con.prepareStatement("INSERT INTO items "
-                + "(itemName, changeDate, group_id, in_stock, sold)"
-                + "VALUES(?, ?, ?, ?, ?)");
+                + "(itemName, changeDate, group_id, in_stock, sold, price)"
+                + "VALUES(?, ?, ?, ?, ?, ?)");
         stmt.setString(1, item.getItemName());
         stmt.setDate(2, new Date(item.getChangeDate().getTime()));
         stmt.setInt(3, item.getGroupId());
         stmt.setInt(4, item.getIn_stock());
         stmt.setInt(5, item.getSold());
-       // stmt.setBigDecimal(6, item.getPrice());
+        stmt.setBigDecimal(6, item.getPrice());
         stmt.execute();
     }
 
     public void updateItem(Item item) throws SQLException {
         PreparedStatement stmt = con.prepareStatement("UPDATE items "
-                + "SET itemName=?, changeDate=?, group_id=? , in_stock=?, sold=? WHERE item_id=?");
+                + "SET itemName=?, changeDate=?, group_id=? , in_stock=?, sold=?, price=? WHERE item_id=?");
 
         stmt.setString(1, item.getItemName());
         stmt.setDate(2, new Date(item.getChangeDate().getTime()));
         stmt.setInt(3, item.getGroupId());
         stmt.setInt(4, item.getIn_stock());
         stmt.setInt(5, item.getSold());
-      //  stmt.setBigDecimal(6, item.getPrice());
-        stmt.setInt(6, item.getItemId());
+        stmt.setBigDecimal(6, item.getPrice());
+        stmt.setInt(7, item.getItemId());
         stmt.execute();
     }
 
@@ -264,7 +264,7 @@ public class ManagementSystem {
         ResultSet rs = null;
 
         try {
-            stmt = con.prepareStatement("SELECT item_id, itemName, changeDate, group_id, in_stock, sold FROM items " +
+            stmt = con.prepareStatement("SELECT item_id, itemName, changeDate, group_id, in_stock, sold, price FROM items " +
                     "WHERE itemName= ? " +
                     "ORDER BY item_id");
             stmt.setString(1, itemName);
@@ -292,7 +292,7 @@ public class ManagementSystem {
         ResultSet rs = null;
 
         try {
-            stmt = con.prepareStatement("SELECT DISTINCT item_id, itemName, changeDate, group_id, in_stock, sold FROM items " +
+            stmt = con.prepareStatement("SELECT DISTINCT item_id, itemName, changeDate, group_id, in_stock, sold, price FROM items " +
                     "WHERE in_stock BETWEEN ? AND ? ");
             stmt.setInt(1, from);
             stmt.setInt(2, to);
@@ -320,7 +320,7 @@ public class ManagementSystem {
         ResultSet rs = null;
 
         try {
-            stmt = con.prepareStatement("SELECT DISTINCT item_id, itemName, changeDate, group_id, in_stock, sold FROM items " +
+            stmt = con.prepareStatement("SELECT DISTINCT item_id, itemName, changeDate, group_id, in_stock, sold, price FROM items " +
                     "WHERE changeDate BETWEEN ? AND ? ");
             stmt.setDate(1, new java.sql.Date(from.getTime()));
             stmt.setDate(2, new java.sql.Date(to.getTime()));
@@ -380,30 +380,53 @@ public class ManagementSystem {
         stmt.execute();
     }
 
-    public Collection<Currency> getRateList()throws SQLException{
+    public Collection<Currency> getRateList()throws SQLException {
         Collection<Currency> list = new ArrayList<>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
-            stmt = con.prepareStatement("SELECT currency_id, currency_name, currency_val FROM rates " +
-                    "WHERE currency_name=? ");
-            stmt.setString(1,"USD");
-            rs = stmt.executeQuery();
-            while (rs.next())list.add(new Currency(rs));
-            stmt = con.prepareStatement("SELECT currency_id, currency_name, currency_val FROM rates " +
-                    "WHERE currency_name=? ");
-            stmt.setString(1,"EUR");
-            rs = stmt.executeQuery();
-            while (rs.next())list.add(new Currency(rs));
-            stmt = con.prepareStatement("SELECT currency_id, currency_name, currency_val FROM rates " +
-                    "WHERE currency_name=? ");
-            stmt.setString(1,"UAH");
-            rs = stmt.executeQuery();
-            while (rs.next()) list.add(new Currency(rs));
+        stmt = con.prepareStatement("SELECT currency_id, currency_name, currency_val FROM rates " +
+                "WHERE currency_name=? ");
+        stmt.setString(1, "USD");
+        rs = stmt.executeQuery();
+        while (rs.next()) list.add(new Currency(rs));
+        stmt = con.prepareStatement("SELECT currency_id, currency_name, currency_val FROM rates " +
+                "WHERE currency_name=? ");
+        stmt.setString(1, "EUR");
+        rs = stmt.executeQuery();
+        while (rs.next()) list.add(new Currency(rs));
+        stmt = con.prepareStatement("SELECT currency_id, currency_name, currency_val FROM rates " +
+                "WHERE currency_name=? ");
+        stmt.setString(1, "UAH");
+        rs = stmt.executeQuery();
+        while (rs.next()) list.add(new Currency(rs));
 
         return list;
-
     }
+
+    public Collection<Item> getSold()throws SQLException {
+            Collection<Item> items = new ArrayList<Item>();
+
+            Statement stmt = null;
+            ResultSet rs = null;
+            try {
+                stmt = con.createStatement();
+                rs = stmt.executeQuery("SELECT item_id, itemName, changeDate, group_id, in_stock, sold, price FROM soldItems " +
+                        "ORDER BY item_id");
+                while (rs.next()) {
+                    Item item = new Item(rs);
+                    items.add(item);
+                }
+            } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+            }
+            return items;
+        }
 
 
     public static void makeDB() throws SQLException{
@@ -429,7 +452,19 @@ public class ManagementSystem {
                 "group_id int not null, " +
                 "in_stock int not null, " +
                 "sold int not null, " +
-               // "price decimal(7,2), " +
+                "price decimal(7,2), " +
+                "primary key (item_id)" +
+                ") engine=InnoDB";
+        stmt.executeUpdate(query);
+        query = "CREATE TABLE soldItems " +
+                "(" +
+                "item_id int unsigned not null auto_increment, " +
+                "itemName varchar(255) not null, " +
+                "changeDate date not null, " +
+                "group_id int not null, " +
+                "in_stock int not null, " +
+                "sold int not null, " +
+                "price decimal(7,2), " +
                 "primary key (item_id)" +
                 ") engine=InnoDB";
         stmt.executeUpdate(query);

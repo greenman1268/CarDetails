@@ -32,7 +32,7 @@ public class Item implements Comparable{
         setGroupId(rs.getInt(4));
         setIn_stock(rs.getInt(5));
         setSold(rs.getInt(6));
-        //setPrice(rs.getBigDecimal(7));
+        setPrice(rs.getBigDecimal(7));
     }
 
     public int getIn_stock() { return in_stock; }
