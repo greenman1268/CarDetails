@@ -16,6 +16,6 @@ public class test {
         StringBuilder sb1 = new StringBuilder("сiмдесят чотири гривнi тисячi");
         String s = sb.toString();
         sb = new StringBuilder(s.replaceAll("\\bгрив.*?\\b","").trim());
-        System.out.println(105346%1000);
+        System.out.println(125%10);
     }
 }

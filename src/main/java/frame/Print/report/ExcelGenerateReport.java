@@ -618,7 +618,7 @@ public class ExcelGenerateReport {
         c14_6.setCellStyle(stTop3);
         region = new CellRangeAddress(rows, rows, 1, 6);
         sheet.addMergedRegion(region);
-        c14_1.setCellValue("Всього найменувань 1, на суму "+sum.toString());
+        c14_1.setCellValue("Всього найменувань "+itemList.size()+", на суму "+sum.toString());
         
         //ROW 3
         rows++;
@@ -1069,7 +1069,10 @@ public class ExcelGenerateReport {
         if(ths==0)ths = integer%10;
         StringBuilder summa = new StringBuilder();
         summa.append(hundreds(hundreds,tens,tens2,units,Hryvna,currency,hths));
-        summa = new StringBuilder(new String(summa).replaceAll("\\bгрив.*?\\b","")).append(" ").append(thousends[1]).append(" ");
+        if(hths%100==1 || (hths%100>19 && hths%10==1))summa = new StringBuilder(new String(summa).replaceAll("\\bгрив.*?\\b","")).append(" ").append(thousends[0]).append(" ");
+        else if((hths%100>1 && hths%100<5) || (hths%100>19 && (hths%10>1 && hths%10<5)))summa = new StringBuilder(new String(summa).replaceAll("\\bгрив.*?\\b","")).append(" ").append(thousends[2]).append(" ");
+        else if((hths%100>4 && hths%100<11)|| hths%100==10 || (hths%100>19 && ((hths%10>4 && hths%10<10)||hths%10==0)))summa = new StringBuilder(new String(summa).replaceAll("\\bгрив.*?\\b","")).append(" ").append(thousends[1]).append(" ");
+        else if(hths%100>10 && hths%100<20)summa = new StringBuilder(new String(summa).replaceAll("\\bгрив.*?\\b","")).append(" ").append(thousends[1]).append(" ");
         if(ths==0)return summa.append(Hryvna[2]);
         else if(ths>99)return summa.append(hundreds(hundreds,tens,tens2,units,Hryvna,currency,ths));
         else if((ths>19 && ths<100) || ths==10)return summa.append(tens(tens,units,Hryvna,currency,ths));

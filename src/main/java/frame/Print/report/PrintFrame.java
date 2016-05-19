@@ -198,6 +198,7 @@ public class PrintFrame extends JFrame implements ActionListener, ListSelectionL
                             ms.updateItem(selec.get(j));
                             Item m = selec.get(j);
                             m.setSold(selec.get(j).getCount());
+                            m.setPrint(false);
                             ms.insertSold(m);
                         } catch (SQLException e) {
                             e.printStackTrace();

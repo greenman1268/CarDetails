@@ -442,12 +442,11 @@ public class ManagementSystem {
     }
 
     public void deleteSold(Item item)throws SQLException{
-        PreparedStatement stmt = con.prepareStatement("DELETE FROM soldItems WHERE item_id = ? AND itemName = ? AND changeDate = ? AND group_id = ? AND price = ? ");
+        PreparedStatement stmt = con.prepareStatement("DELETE FROM soldItems WHERE item_id = ? AND itemName = ? AND changeDate = ? AND group_id = ? ");
         stmt.setInt(1, item.getItemId());
         stmt.setString(2, item.getItemName());
         stmt.setDate(3, new Date(item.getChangeDate().getTime()));
         stmt.setInt(4, item.getGroupId());
-        stmt.setBigDecimal(5, item.getPrice());
         stmt.execute();
     }
 
@@ -474,7 +473,7 @@ public class ManagementSystem {
                 "group_id int not null, " +
                 "in_stock int not null, " +
                 "sold int not null, " +
-                "price decimal(7,2), " +
+                "price decimal(10,2), " +
                 "primary key (item_id)" +
                 ") engine=InnoDB";
         stmt.executeUpdate(query);
@@ -486,7 +485,7 @@ public class ManagementSystem {
                 "group_id int not null, " +
                 "in_stock int not null, " +
                 "sold int not null, " +
-                "price decimal(7,2), " +
+                "price decimal(10,2), " +
                 "primary key (item_id)" +
                 ") engine=InnoDB";
         stmt.executeUpdate(query);
@@ -494,7 +493,7 @@ public class ManagementSystem {
                 "(" +
                 "currency_id int unsigned not null auto_increment, " +
                 "currency_name varchar(255) not null, " +
-                "currency_val decimal(7,2), " +
+                "currency_val decimal(10,2), " +
                 "PRIMARY KEY (currency_id)" +
                 ") engine=InnoDB";
         stmt.execute(query);

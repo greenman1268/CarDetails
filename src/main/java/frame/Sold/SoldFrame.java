@@ -25,6 +25,7 @@ public class SoldFrame extends JFrame implements ActionListener, ListSelectionLi
     private static final String DELETE = "delete";
     private ArrayList<Item> vector;
     private Vector<Item> selected = new Vector<>();
+    private Vector<Item> v = new Vector<>();
 
     public SoldFrame()throws Exception{
         ms = ManagementSystem.getInstance();
@@ -103,9 +104,9 @@ public class SoldFrame extends JFrame implements ActionListener, ListSelectionLi
 
                     try {
                         // Получаем список деталей
-                        Collection<Item> s = ms.getSold();//ms.getItemsFromGroup(g);
+                        Collection<Item> s = ms.getSold();
 
-                        final Vector<Item> v = new Vector(s);
+                         v = new Vector(s);
                         if(selected!=null){
                             for (int i = 0; i < v.size(); i++) {
                                 for (int j = 0; j < selected.size(); j++) {
