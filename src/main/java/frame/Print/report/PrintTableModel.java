@@ -90,7 +90,7 @@ public class PrintTableModel extends AbstractTableModel {
 
     // Вернем наименование колонки
     public String getColumnName(int column) {
-        String[] colNames = {"Номер", "Группа", "Дата последнего изменения", "Цена", "В наличии", "Количество", "Валюта", "Печать"};
+        String[] colNames = {"Название", "Группа", "Дата последнего изменения", "Цена", "В наличии", "Количество", "Валюта", "Печать"};
         return colNames[column];
     }
 

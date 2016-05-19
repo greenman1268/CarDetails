@@ -46,7 +46,7 @@ public class ItemTableSoldModel extends AbstractTableModel {
 
     // Вернем наименование колонки
     public String getColumnName(int column) {
-        String[] colNames = {"Номер", "Группа", "Дата последнего изменения", "Цена", "Количество", "*"};
+        String[] colNames = {"Название", "Группа", "Дата последнего изменения", "Цена", "Количество", "*"};
         return colNames[column];
     }
 
