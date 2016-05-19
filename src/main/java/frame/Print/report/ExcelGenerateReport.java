@@ -817,6 +817,11 @@ public class ExcelGenerateReport {
                 if(integer/1000>0){
                     if(integer/10000>0){
                         if(integer/100000>0){
+                            if(integer/1000000>0){
+                                summa.append(sum).append(" ").append(Hryvna[2]);
+                            }else {
+                                summa.append(hundredsThouthens());
+                            }
 
                         }else {
                             summa.append(tensThouthens(tens, tens2, thousends, hundreds, units, Hryvna, currency, integer));
@@ -871,7 +876,7 @@ public class ExcelGenerateReport {
         int d = integer%10;
 
         if(t==0)return summa.append(Hryvna[2]);
-        else if(t>0)return summa.append(tens[t-1]).append(" ").append(units(units,Hryvna,currency,d));
+        else if(t>0)return summa.append(tens[t-1]).append(" ").append(units(units, Hryvna, currency, d));
 
         else return new StringBuilder("SOMETHING WRONG tens");
     }
@@ -890,7 +895,7 @@ public class ExcelGenerateReport {
         StringBuilder summa = new StringBuilder();
 
         if(h==0 )return summa.append(Hryvna[2]);
-        else if(h>0 && (t>19 || t==10))return summa.append(hundreds[h-1]).append(" ").append(tens( tens, units, Hryvna, currency, t));
+        else if(h>0 && (t>19 || t==10))return summa.append(hundreds[h-1]).append(" ").append(tens(tens, units, Hryvna, currency, t));
         else if(h>0 && (t<20 && t>10))return summa.append(hundreds[h-1]).append(" ").append(tens2(tens2, Hryvna, currency, t));
         else if(h>0 && t<10)return summa.append(hundreds[h-1]).append(" ").append(units(units, Hryvna, currency, t));
         return new StringBuilder("SOMTHING WRONG hundredsWithTens");
@@ -1055,6 +1060,11 @@ public class ExcelGenerateReport {
             return summa.append(units(units,Hryvna, currency, ths));
         }
         return new StringBuilder("SOMTHING WRONG tensThouthends");
+    }
+
+    public static StringBuilder hundredsThouthens(){
+
+        return new StringBuilder("SOMTHING WRONG hundredsThouthens");
     }
 
     public static void putPicture(String name){
