@@ -818,9 +818,9 @@ public class ExcelGenerateReport {
                     if(integer/10000>0){
                         if(integer/100000>0){
                             if(integer/1000000>0){
-                                summa.append(sum).append(" ").append(Hryvna[2]);
+                                summa.append(integer).append(" ").append(Hryvna[2]);
                             }else {
-                                summa.append(hundredsThouthens());
+                                summa.append(hundredsThouthens(tens, tens2, thousends, hundreds, units, Hryvna, currency, integer));
                             }
 
                         }else {
@@ -1062,7 +1062,19 @@ public class ExcelGenerateReport {
         return new StringBuilder("SOMTHING WRONG tensThouthends");
     }
 
-    public static StringBuilder hundredsThouthens(){
+    public static StringBuilder hundredsThouthens(String[] tens,String[] tens2,String[] thousends,String[] hundreds,String[] units, String[] Hryvna,String currency, int integer){
+        int hths = integer/1000;
+        int ths = integer%1000;
+        if(ths==0)ths = integer%100;
+        if(ths==0)ths = integer%10;
+        StringBuilder summa = new StringBuilder();
+        summa.append(hundreds(hundreds,tens,tens2,units,Hryvna,currency,hths));
+        summa = new StringBuilder(new String(summa).replaceAll("\\bгрив.*?\\b","")).append(" ").append(thousends[1]).append(" ");
+        if(ths==0)return summa.append(Hryvna[2]);
+        else if(ths>99)return summa.append(hundreds(hundreds,tens,tens2,units,Hryvna,currency,ths));
+        else if((ths>19 && ths<100) || ths==10)return summa.append(tens(tens,units,Hryvna,currency,ths));
+        else if(ths>10 && ths<20)return summa.append(tens2(tens2,Hryvna,currency,ths));
+        else if(ths<10)return summa.append(units(units,Hryvna,currency,ths));
 
         return new StringBuilder("SOMTHING WRONG hundredsThouthens");
     }

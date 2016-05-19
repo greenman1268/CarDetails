@@ -10,12 +10,12 @@ public class test {
     public static void main(String[] args) {
         BigDecimal bd = new BigDecimal(0);
         bd.setScale(2, BigDecimal.ROUND_HALF_UP);
-        bd = new BigDecimal("1037.6980");
+        bd = new BigDecimal("105346.12");
         BigInteger decimal = bd.remainder(BigDecimal.ONE).movePointRight(bd.scale()).abs().toBigInteger();
         StringBuilder sb = new StringBuilder("одна гривня тисяча сто сiмдесят п'ять гривень");
         StringBuilder sb1 = new StringBuilder("сiмдесят чотири гривнi тисячi");
         String s = sb.toString();
         sb = new StringBuilder(s.replaceAll("\\bгрив.*?\\b","").trim());
-        System.out.println(sb);
+        System.out.println(105346%1000);
     }
 }
