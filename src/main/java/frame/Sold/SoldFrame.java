@@ -29,7 +29,7 @@ public class SoldFrame extends JFrame implements ActionListener, ListSelectionLi
 
     public SoldFrame()throws Exception{
         ms = ManagementSystem.getInstance();
-
+        setTitle("Список проданных деталей");
         // Создаем верхнюю панель
         JPanel top = new JPanel();
         // Устанавливаем для нее layout

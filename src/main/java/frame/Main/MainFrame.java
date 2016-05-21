@@ -50,6 +50,8 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
     public MainFrame() throws Exception{
 
+
+        setTitle("CarDetails");
         // Создаем верхнюю панель
         JPanel top = new JPanel();
         // Устанавливаем для нее layout
