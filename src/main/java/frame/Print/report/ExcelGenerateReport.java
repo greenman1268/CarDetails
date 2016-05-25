@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.IOUtils;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.math.BigDecimal;
@@ -1084,7 +1085,7 @@ public class ExcelGenerateReport {
 
     public static void putPicture(String name){
         try {
-            InputStream my_banner_image = new FileInputStream("src/main/java/frame/Print/report/resources/1.jpg");
+            InputStream my_banner_image = test.class.getClass().getResourceAsStream("/resources/1.jpg");//new FileInputStream(ExcelGenerateReport.class.getClass().getResource("/resources/1.jpg").getPath());
             byte[] bytes = IOUtils.toByteArray(my_banner_image);
             int my_picture_id = wb.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
             XSSFDrawing drawing = (XSSFDrawing) sheet.createDrawingPatriarch();
@@ -1100,6 +1101,15 @@ public class ExcelGenerateReport {
             wb.write(out);
             out.close();
         } catch (FileNotFoundException e) {
+            try {
+                File out = new File(System.getProperty("user.home") + "/Desktop/log.txt");
+                PrintStream ps = new PrintStream(out);
+               e.printStackTrace(ps);
+
+            } catch (FileNotFoundException e1) {
+                e1.printStackTrace();
+            }
+
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
